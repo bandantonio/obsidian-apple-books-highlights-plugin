@@ -1,16 +1,30 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "obsidian-apple-books-highlights-plugin",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "Import highlights and notes from your Apple Books to Obsidian",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
-	"keywords": [],
-	"author": "",
+	"keywords": [
+		"obsidian",
+		"plugin",
+		"apple",
+		"books",
+		"applebooks",
+		"iBooks",
+		"highlights",
+		"notes",
+		"importer"
+	],
+	"author": "bandantonio",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bandantonio/obsidian-apple-books-highlights-plugin.git"
+	},
 	"devDependencies": {
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
@@ -20,5 +34,9 @@
 		"obsidian": "latest",
 		"tslib": "2.4.0",
 		"typescript": "4.7.4"
+	},
+	"dependencies": {
+		"handlebars": "^4.7.8",
+		"sqlite3": "^5.1.7-rc.0"
 	}
 }
