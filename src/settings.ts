@@ -49,9 +49,6 @@ class IBookHighlightsSettingTab extends PluginSettingTab {
             .setDesc('Template for highlight files')
             .setClass("ibooks-highlights-template")
             .addTextArea((text) => {
-                text.inputEl.style.width = '100%';
-                text.inputEl.style.height = '300px';
-                text.inputEl.style.overflow = 'auto';
                 text
                     .setPlaceholder('Template')
                     .setValue(this.plugin.settings.template)

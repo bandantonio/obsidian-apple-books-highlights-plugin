@@ -17,7 +17,7 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
-		const ribbonIconEl = this.addRibbonIcon('book-open', pluginName, async () => {
+		this.addRibbonIcon('book-open', pluginName, async () => {
 			await this.importHighlights().then(() => {
 				new Notice('Apple Books highlights imported successfully');
 			}).catch((error) => {
@@ -25,8 +25,6 @@ export default class IBookHighlightsPlugin extends Plugin {
 				console.error(`Error importing Apple Books highlights: ${error}`);
 			});
 		});
-
-		ribbonIconEl.addClass('my-plugin-ribbon-class');
 
 		this.addSettingTab(new IBookHighlightsSettingTab(this.app, this));
 
