@@ -3,7 +3,6 @@ import * as Handlebars from 'handlebars';
 import { normalizePath, Notice, Plugin } from 'obsidian';
 import * as path from 'path';
 import { promisify } from 'util';
-import { name as pluginName } from './manifest.json';
 import { DEFAULT_SETTINGS, IBookHighlightsSettingTab } from './src/settings';
 import {
 	CombinedHighlight,
@@ -17,7 +16,7 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
-		this.addRibbonIcon('book-open', pluginName, async () => {
+		this.addRibbonIcon('book-open', this.manifest.name, async () => {
 			await this.importHighlights().then(() => {
 				new Notice('Apple Books highlights imported successfully');
 			}).catch((error) => {
