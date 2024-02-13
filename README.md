@@ -9,8 +9,8 @@ This plugin aims to be a **fast**, **customizable**, **reliable**, and **up-to-d
 - **Fast**: It takes less than 1 second to import ~1000 highlights.
 - **Customizable**: Use Handlebars and Markdown to customize the output of your highlights the way you want. All the variables to use are available in the default template.
 - **Reliable**:
-  - Import actual highlights with only metadata you need. No visual noise with the deleted but still exported highlights, or, on the contrary, highlight and notes that make no sense without the context.
-  - Backup your highlights before each import to avoid accidental data loss (optional, but recommended).
+  - Import actual highlights with only the metadata you need. No visual noise with the deleted but still exported highlights, or, on the contrary, highlights and notes that make no sense without the context.
+  - Back up your highlights before each import to avoid accidental data loss (optional, but recommended).
 - **Dataview-ready**: The default template creates highlights in a format that is compatible with [Dataview](https://blacksmithgu.github.io/obsidian-dataview/), so you can use your highlights in Dataview queries to unleash possible use cases even further (for example, to create a list of books you've read).
 - **Up-to-date**: The plugin is updated regularly to support the latest versions of Obsidian, and Apple Books, as well as react to the users' feedback.
 
@@ -36,4 +36,6 @@ Check Obsidian Help for more information about [Community plugins](https://help.
 
 ## Contributing
 
-If you have any question, feedback, or issue, feel free to open an issue on GitHub.
+Your feedback and ideas are more than welcome and highly appreciated! Join the discussion in the [Obsidian Forum](https://forum.obsidian.md/t/new-plugin-apple-books-import-highlights/76856).
+
+If you have any question, feedback, or issue, feel free to open an issue. 
