@@ -18,6 +18,7 @@ Number of annotations:: {{annotations.length}}
 - 🎯 Highlight:: {{highlight}}
 - 📝 Note:: {{#if note}}{{note}}{{else}}N/A{{/if}}
 - 📅 Date:: {{#if annotationDate}}{{annotationDate}}{{else}}N/A{{/if}}
+- 🔧 Modified:: {{#if modificationDate}}{{modificationDate}}{{else}}N/A{{/if}}
 - 🎨 Style:: {{annotationStyle}} 
 
 {{/each}}
