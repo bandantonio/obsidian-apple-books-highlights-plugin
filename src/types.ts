@@ -9,6 +9,9 @@ export interface IBook {
     ZTITLE: string;
     ZAUTHOR: string;
     ZGENRE: string;
+    ZLANGUAGE: string;
+    ZLASTOPENDATE: string;
+    ZCOVERURL: string;
 }
 
 export interface IBookAnnotation {
@@ -24,6 +27,8 @@ export interface Highlight {
     contextualText: string;
     highlight: string;
     note: string;
+    annotationDate: string;
+    annotationStyle: number;
 }
 export interface CombinedHighlight {
     bookTitle: string;

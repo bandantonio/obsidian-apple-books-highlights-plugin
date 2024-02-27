@@ -49,7 +49,7 @@ export default class IBookHighlightsPlugin extends Plugin {
 	async getBooks(): Promise<IBook[]> {
 		const IBOOK_LIBRARY = '~/Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary/BKLibrary-1-091020131601.sqlite';
 		const booksSql = `
-		SELECT ZASSETID, ZTITLE, ZAUTHOR, ZGENRE
+		SELECT ZASSETID, ZTITLE, ZAUTHOR, ZGENRE, ZLANGUAGE, ZLASTOPENDATE, ZCOVERURL
 		FROM ZBKLIBRARYASSET
 		WHERE ZPURCHASEDATE IS NOT NULL`;
 
@@ -68,7 +68,7 @@ export default class IBookHighlightsPlugin extends Plugin {
 	async getAnnotations(): Promise<IBookAnnotation[]> {
 		const IBOOK_ANNOTATION_DB = '~/Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite';
 		const annotationsSql = `
-		SELECT ZANNOTATIONASSETID, ZFUTUREPROOFING5, ZANNOTATIONREPRESENTATIVETEXT, ZANNOTATIONSELECTEDTEXT, ZANNOTATIONNOTE
+		SELECT ZANNOTATIONASSETID, ZFUTUREPROOFING5, ZANNOTATIONREPRESENTATIVETEXT, ZANNOTATIONSELECTEDTEXT, ZANNOTATIONNOTE, ZANNOTATIONCREATIONDATE, ZANNOTATIONSTYLE
 		FROM ZAEANNOTATION
 		WHERE ZANNOTATIONSELECTEDTEXT IS NOT NULL
 		AND ZANNOTATIONDELETED IS 0`;
@@ -96,12 +96,17 @@ export default class IBookHighlightsPlugin extends Plugin {
 					bookTitle: book.ZTITLE,
 					bookId: book.ZASSETID,
 					bookAuthor: book.ZAUTHOR,
+					bookLanguage: book.ZLANGUAGE,
+					bookLastOpened: book.ZLASTOPENDATE,
+					bookCoverUrl: book.ZCOVERURL,
 					annotations: bookRelatedAnnotations.map(annotation => {
 						return {
 							chapter: annotation.ZFUTUREPROOFING5,
 							contextualText: annotation.ZANNOTATIONREPRESENTATIVETEXT,
 							highlight: annotation.ZANNOTATIONSELECTEDTEXT,
 							note: annotation.ZANNOTATIONNOTE,
+							annotationStyle: annotation.ZANNOTATIONSTYLE,
+							annotationDate: annotation.ZANNOTATIONCREATIONDATE,
 						}
 					})
 				})
