@@ -4,6 +4,7 @@ import { normalizePath, Notice, Plugin } from 'obsidian';
 import * as path from 'path';
 import { promisify } from 'util';
 import { DEFAULT_SETTINGS, IBookHighlightsSettingTab } from './src/settings';
+import { IBookHighlightsPluginSearchModal } from './src/search';
 import {
 	CombinedHighlight,
 	IBook,
@@ -15,9 +16,14 @@ export default class IBookHighlightsPlugin extends Plugin {
 	settings: IBookHighlightsPluginSettings;
 
 	async onload() {
-		await this.loadSettings();
+		let settings = await this.loadSettings();
+		
+		if (settings.importOnStart) {
+			await this.importAndSaveHighlights();
+		}
+		
 		this.addRibbonIcon('book-open', this.manifest.name, async () => {
-			await this.importHighlights().then(() => {
+			await this.importAndSaveHighlights().then(() => {
 				new Notice('Apple Books highlights imported successfully');
 			}).catch((error) => {
 				new Notice('Error while importing Apple Books highlights. Check console for details');
@@ -29,9 +35,17 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'import-all-highlights',
-			name: 'Import all highlights',
+			name: 'Import all',
 			callback: async () => {
-				await this.importHighlights();
+				await this.importAndSaveHighlights();
+			},
+		});
+		
+		this.addCommand({
+			id: 'import-single-highlights',
+			name: 'From a specific book...',
+			callback: () => {
+				new IBookHighlightsPluginSearchModal(this.app, this).open();
 			},
 		});
 	}
@@ -40,6 +54,8 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		
+		return this.settings;
 	}
 
 	async saveSettings() {
@@ -84,7 +100,7 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 		return JSON.parse(stdout);
 	}
-	async importHighlights(): Promise<void> {
+	async importHighlights(): Promise<CombinedHighlight[]> {
 		const books = await this.getBooks();
 		const annotations = await this.getAnnotations();
 
@@ -109,10 +125,16 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 			return highlights;
 		}, []);
-
-		await this.saveHighlightsToVault(resultingHighlights);
+		
+		return resultingHighlights;
 	}
-
+	
+	async importAndSaveHighlights(): Promise<void> {
+		const highlights = await this.importHighlights();
+		
+		await this.saveHighlightsToVault(highlights);
+	}
+	
 	async saveHighlightsToVault(highlights: CombinedHighlight[]) {
 		const highlightsFolderPath = this.app.vault.getAbstractFileByPath(this.settings.highlightsFolder);
 		const isBackupEnabled = this.settings.backup;

@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from 'obsidian';
+import { App, Notice, PluginSettingTab, Setting } from 'obsidian';
 import IBookHighlightsPlugin from '../main';
 import defaultTemplate from './template';
 import { IBookHighlightsPluginSettings } from './types';
@@ -6,6 +6,7 @@ import { IBookHighlightsPluginSettings } from './types';
 export const DEFAULT_SETTINGS: IBookHighlightsPluginSettings = {
     highlightsFolder: 'ibooks-highlights',
     backup: false,
+    importOnStart: false,
     template: defaultTemplate,
 }
 
@@ -34,11 +35,25 @@ class IBookHighlightsSettingTab extends PluginSettingTab {
                 }));
 
         new Setting(containerEl)
+            .setName('Import highlights on start')
+            .setDesc('Import all hightlights from all your books when Obsidian starts')
+            .addToggle((toggle) => {
+                toggle.setValue(this.plugin.settings.importOnStart)
+                    .onChange(async (value) => {
+                        this.plugin.settings.importOnStart = value;
+                        await this.plugin.saveSettings();
+                    });
+            });
+              
+        new Setting(containerEl)
             .setName('Backup highlights')
             .setDesc('Backup highlights folder before import. Backup folder template: <highlights-folder>-bk-<timestamp> (For example, ibooks-highlights-bk-1704060001)')
             .addToggle((toggle) => {
                 toggle.setValue(this.plugin.settings.backup)
                     .onChange(async (value) => {
+                        if (!value) {
+                            new Notice('Disabling backups imposes a risk of data loss. Please use with caution.', 0);
+                        }
                         this.plugin.settings.backup = value;
                         await this.plugin.saveSettings();
                     });

@@ -7,7 +7,8 @@ Import all your Apple Books highlights to Obsidian.
 This plugin aims to be a **fast**, **customizable**, **reliable**, and **up-to-date** solution to import your Apple Books highlights to Obsidian:
 
 - **Fast**: It takes less than 1 second to import ~1000 highlights.
-- **Customizable**: Use Handlebars and Markdown to customize the output of your highlights the way you want. All the variables to use are available in the default template.
+- **Customizable**: Use Handlebars and Markdown to customize the output of your highlights the way you want. All the variables to use are available in the default template. Check the `Template variables` section below for more information.
+
 - **Reliable**:
   - Import actual highlights with only the metadata you need. No visual noise with the deleted but still exported highlights, or, on the contrary, highlights and notes that make no sense without the context.
   - Back up your highlights before each import to avoid accidental data loss (optional, but recommended).
@@ -31,8 +32,23 @@ Check Obsidian Help for more information about [Community plugins](https://help.
 
 ## How to use
 
-- **Command palette**: `Cmd+P > Apple Books - Import Highlights: Import all highlights`
+- **Command palette**:
+  - `Cmd+P > Apple Books - Import Highlights: Import all`
+  - `Cmd+P > Apple Books - Import Highlights: From a specific book...`
 - **Ribbon**: Select the plugin icon in the Ribbon (left sidebar)
+
+## Template variables
+
+- `{{bookTitle}}` - The title of the book.
+- `{{bookId}}` - A unique identifier of the book. It is used to create a link to the book in Apple Books: `[Apple Books Link](ibooks://assetid/{{bookId}})`.
+- `{{bookAuthor}}` - The author of the book.
+- `{{annotations}}` - An array of all the annotations in the book. You can use `{{annotations.length}}` to get the total number of annotations you made in the book. Each annotation has the following properties:
+  - `{{chapter}}` - The chapter of the highlight in the book. It may not be available for all highlights due to the initial formatting of the book.
+  - `{{contextualText}}` - The text surrounding the highlight to give you more context. For example:
+    - If you highlight a part of a sentence, the - `contextualText` will contain the whole sentence.
+    - If you highlight parts of two adjacent sentences, the `contextualText` will contain both sentences.
+  - `{{highlight}}` - The highlighted text.
+  - `{{note}}` - A note you added for the highlight.
 
 ## Contributing
 
