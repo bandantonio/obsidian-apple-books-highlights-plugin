@@ -108,8 +108,12 @@ export default class IBookHighlightsPlugin extends Plugin {
 			const bookRelatedAnnotations: IBookAnnotation[] = annotations.filter(annotation => annotation.ZANNOTATIONASSETID === book.ZASSETID);
 
 			if (bookRelatedAnnotations.length > 0) {
+				// Obsidian forbids adding certain characters to the title of a note, so they must be replaced with a dash (-)
+				// | # ^ [] \ / :
+				const normalizedBookTitle = book.ZTITLE.replace(/[|#\^\[\]\\\/:]+/g, ' -');
+				
 				highlights.push({
-					bookTitle: book.ZTITLE,
+					bookTitle: normalizedBookTitle,
 					bookId: book.ZASSETID,
 					bookAuthor: book.ZAUTHOR,
 					annotations: bookRelatedAnnotations.map(annotation => {
@@ -147,7 +151,7 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 				await this.app.vault.createFolder(highlightsBackupFolder);
 
-				highlightsFilesToBackup.forEach(async (file: any) => {
+				highlightsFilesToBackup.forEach(async (file: string) => {
 					const fileName = path.basename(file);
 					await this.app.vault.adapter.copy(normalizePath(file), normalizePath(path.join(highlightsBackupFolder, fileName)));
 				});
@@ -157,14 +161,12 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 		await this.app.vault.createFolder(this.settings.highlightsFolder);
 
-		highlights.forEach(async (highlight: any) => {
-			const bookFileName = highlight.bookTitle.replace(/:/g, ' -');
-
+		highlights.forEach(async (highlight: CombinedHighlight) => {			
 			const template = Handlebars.compile(this.settings.template);
 			const renderedTemplate = template(highlight);
 
 			await this.app.vault.create(
-				normalizePath(path.join(this.settings.highlightsFolder, `${bookFileName}.md`)),
+				normalizePath(path.join(this.settings.highlightsFolder, `${highlight.bookTitle}.md`)),
 				renderedTemplate
 			);
 		});
