@@ -39,16 +39,21 @@ Check Obsidian Help for more information about [Community plugins](https://help.
 
 ## Template variables
 
-- `{{bookTitle}}` - The title of the book.
+- `{{{bookTitle}}}` - The title of the book.
 - `{{bookId}}` - A unique identifier of the book. It is used to create a link to the book in Apple Books: `[Apple Books Link](ibooks://assetid/{{bookId}})`.
-- `{{bookAuthor}}` - The author of the book.
+- `{{{bookAuthor}}}` - The author of the book.
 - `{{annotations}}` - An array of all the annotations in the book. You can use `{{annotations.length}}` to get the total number of annotations you made in the book. Each annotation has the following properties:
-  - `{{chapter}}` - The chapter of the highlight in the book. It may not be available for all highlights due to the initial formatting of the book.
-  - `{{contextualText}}` - The text surrounding the highlight to give you more context. For example:
+  - `{{{chapter}}}` - The chapter of the highlight in the book. It may not be available for all highlights due to the initial formatting of the book.
+  - `{{{contextualText}}}` - The text surrounding the highlight to give you more context. For example:
     - If you highlight a part of a sentence, the - `contextualText` will contain the whole sentence.
     - If you highlight parts of two adjacent sentences, the `contextualText` will contain both sentences.
-  - `{{highlight}}` - The highlighted text.
-  - `{{note}}` - A note you added for the highlight.
+  - `{{{highlight}}}` - The highlighted text.
+  - `{{{note}}}` - A note you added for the highlight.
+
+> [!NOTE]
+> When customizing the template, make sure to wrap variables with triple curly braces (`{{{variable}}}`) to avoid escaping the HTML characters in Markdown files (default behavior).
+>
+> If you want escaped output, use double curly braces: `{{variable}}`.
 
 ## Contributing
 
