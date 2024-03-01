@@ -1,4 +1,4 @@
-import { App, Notice, SuggestModal } from 'obsidian';
+import { App, SuggestModal } from 'obsidian';
 import IBookHighlightsPlugin from '../main';
 import { CombinedHighlight } from './types';
 
@@ -28,6 +28,7 @@ export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSugge
         el.createEl('small', { text: value.bookAuthor });
     }
 
+    //eslint-disable-next-line
     onChooseSuggestion(item: CombinedHighlight, event: MouseEvent | KeyboardEvent) {
         this.plugin.saveHighlightsToVault([item]);
         
