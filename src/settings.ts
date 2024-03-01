@@ -68,7 +68,7 @@ class IBookHighlightsSettingTab extends PluginSettingTab {
                     .setPlaceholder('Template')
                     .setValue(this.plugin.settings.template)
                     .onChange(async (value) => {
-                        let valueToSet = (value === '') ? defaultTemplate : value;
+                        const valueToSet = (value === '') ? defaultTemplate : value;
                         this.plugin.settings.template = valueToSet;
                         await this.plugin.saveSettings();
                     });

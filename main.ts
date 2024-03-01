@@ -16,7 +16,7 @@ export default class IBookHighlightsPlugin extends Plugin {
 	settings: IBookHighlightsPluginSettings;
 
 	async onload() {
-		let settings = await this.loadSettings();
+		const settings = await this.loadSettings();
 		
 		if (settings.importOnStart) {
 			await this.importAndSaveHighlights();
@@ -50,6 +50,7 @@ export default class IBookHighlightsPlugin extends Plugin {
 		});
 	}
 
+	//eslint-disable-next-line
 	onunload() { }
 
 	async loadSettings() {
@@ -110,7 +111,8 @@ export default class IBookHighlightsPlugin extends Plugin {
 			if (bookRelatedAnnotations.length > 0) {
 				// Obsidian forbids adding certain characters to the title of a note, so they must be replaced with a dash (-)
 				// | # ^ [] \ / :
-				const normalizedBookTitle = book.ZTITLE.replace(/[|#\^\[\]\\\/:]+/g, ' -');
+				//eslint-disable-next-line
+				const normalizedBookTitle = book.ZTITLE.replace(/[\|\#\^\[\]\\\/\:]+/g, ' -');
 				
 				highlights.push({
 					bookTitle: normalizedBookTitle,

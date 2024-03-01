@@ -1,34 +1,62 @@
-name: Release Obsidian plugin
+name: Release Obsidian Plugin
+on: [push]
 
-on:
-  push:
-    tags:
-      - "*"
-
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+  
 jobs:
-  build:
+  node-setup:
+    name: ⚙️ Setup Node.js
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/node-cache
+        id: cache-node-modules
         with:
-          node-version: "18.x"
+          node-version: '20'
+      - run: npm i
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
 
-      - name: Build plugin
-        run: |
-          npm install
-          npm run build
+  run-lint:
+    name: ✅ Linter
+    needs: node-setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/node-cache
+        id: cache-node-modules
+        with:
+          node-version: '20'
 
-      - name: Create release
+      - name: ✅ Run code style linter
+        id: linter
+        run: npm run lint
+
+  release-plugin:
+    name: 📦 Release Obsidian Plugin
+    needs: run-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/node-cache
+        id: cache-node-modules
+        with:
+          node-version: '20'
+      
+      - name: 📗 Build plugin
+        id: build_plugin
+        if: steps.cache-node-modules.outcome == 'success'
+        run: npm run build
+
+      - name: 📦 Create release
+        if: steps.build_plugin.outcome == 'success' && contains(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag="${GITHUB_REF#refs/tags/}"
+          tag='${GITHUB_REF#refs/tags/}'
 
-          gh release create "$tag" \
-            --title="$tag" \
+          gh release create '$tag' \
+            --title='$tag' \
             --draft \
             main.js manifest.json styles.css
