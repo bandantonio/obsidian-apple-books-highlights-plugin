@@ -11,6 +11,7 @@
     "importHelpers": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "strictNullChecks": true,
     "lib": [
       "DOM",
