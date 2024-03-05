@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-apple-books-highlights-plugin",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Import highlights and notes from your Apple Books to Obsidian",
 	"main": "main.js",
 	"scripts": {

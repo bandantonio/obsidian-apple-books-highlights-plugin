@@ -1,7 +1,7 @@
 {
 	"id": "apple-books-import-highlights",
 	"name": "Apple Books - Import Highlights",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"minAppVersion": "0.15.0",
 	"description": "Import your Apple Books highlights and notes to Obsidian.",
 	"author": "bandantonio",
