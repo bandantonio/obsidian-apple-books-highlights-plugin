@@ -2,8 +2,9 @@
 
 Import all your Apple Books highlights to Obsidian.
 
-![GitHub Downloads](https://img.shields.io/github/downloads/bandantonio/obsidian-apple-books-highlights-plugin/total?style=for-the-badge&logo=github&color=573e7a)
+![Plugin banner](plugin-banner.png)
 
+![GitHub Downloads](https://img.shields.io/github/downloads/bandantonio/obsidian-apple-books-highlights-plugin/total?style=for-the-badge&logo=github&color=573e7a)
 
 ## Overview
 
