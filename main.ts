@@ -73,7 +73,9 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 		const command = `echo "${booksSql}" | sqlite3 ${IBOOK_LIBRARY} -json`;
 		const exec = promisify(child_process.exec);
-		const { stdout, stderr } = await exec(command);
+		// Issue #11 - Temporary set maxBuffer to 100MB
+		// TODO: Need a more efficient solution to handle large data
+		const { stdout, stderr } = await exec(command, { maxBuffer: 100 * 1024 * 1024 });
 
 		if (stderr) {
 			new Notice(stderr);
@@ -93,7 +95,9 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 		const command = `echo "${annotationsSql}" | sqlite3 ${IBOOK_ANNOTATION_DB} -json`;
 		const exec = promisify(child_process.exec);
-		const { stdout, stderr } = await exec(command);
+		// Issue #11 - Temporary set maxBuffer to 100MB
+		// TODO: Need a more efficient solution to handle large data
+		const { stdout, stderr } = await exec(command, { maxBuffer: 100 * 1024 * 1024 });
 
 		if (stderr) {
 			new Notice(stderr);
