@@ -26,9 +26,8 @@ export default class IBookHighlightsPlugin extends Plugin {
 		this.addRibbonIcon('book-open', this.manifest.name, async () => {
 			await this.importAndSaveHighlights().then(() => {
 				new Notice('Apple Books highlights imported successfully');
-			}).catch((error) => {
-				new Notice('Error while importing Apple Books highlights. Check console for details');
-				console.error(`Error importing Apple Books highlights: ${error}`);
+			}).catch(() => {
+				new Notice(`[${this.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
 			});
 		});
 
@@ -38,7 +37,11 @@ export default class IBookHighlightsPlugin extends Plugin {
 			id: 'import-all-highlights',
 			name: 'Import all',
 			callback: async () => {
-				await this.importAndSaveHighlights();
+				try {
+					await this.importAndSaveHighlights();
+				} catch (error) {
+					new Notice(`[${this.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
+				}
 			},
 		});
 		
@@ -65,46 +68,58 @@ export default class IBookHighlightsPlugin extends Plugin {
 	}
 
 	async getBooks(): Promise<IBook[]> {
-		const IBOOK_LIBRARY = '~/Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary/BKLibrary-1-091020131601.sqlite';
-		const booksSql = `
-		SELECT ZASSETID, ZTITLE, ZAUTHOR, ZGENRE, ZLANGUAGE, ZLASTOPENDATE, ZCOVERURL
-		FROM ZBKLIBRARYASSET
-		WHERE ZPURCHASEDATE IS NOT NULL`;
+		try {
+			// const IBOOK_LIBRARY = '~/Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary/BKLibrary-1-091020131601.sqlite';
+			const IBOOK_LIBRARY = '~/Downloads/test-BKLibrary.sqlite';
+			// const IBOOK_LIBRARY = '~/Downloads/empty-BKLibrary.sqlite';
+			const booksSql = `
+			SELECT ZASSETID, ZTITLE, ZAUTHOR, ZGENRE, ZLANGUAGE, ZLASTOPENDATE, ZCOVERURL
+			FROM ZBKLIBRARYASSET
+			WHERE ZPURCHASEDATE IS NOT NULL`;
 
-		const command = `echo "${booksSql}" | sqlite3 ${IBOOK_LIBRARY} -json`;
-		const exec = promisify(child_process.exec);
-		// Issue #11 - Temporary set maxBuffer to 100MB
-		// TODO: Need a more efficient solution to handle large data
-		const { stdout, stderr } = await exec(command, { maxBuffer: 100 * 1024 * 1024 });
-
-		if (stderr) {
-			new Notice(stderr);
+			const command = `echo "${booksSql}" | sqlite3 ${IBOOK_LIBRARY} -json`;
+			const exec = promisify(child_process.exec);
+			// Issue #11 - Temporary set maxBuffer to 100MB
+			// TODO: Need a more efficient solution to handle large data
+			const { stdout } = await exec(command, { maxBuffer: 100 * 1024 * 1024 });
+			
+			if (!stdout) {
+				throw('No books found. Looks like your Apple Books library is empty.');
+			}
+			
+			return JSON.parse(stdout);
+		} catch (error) {			
+			console.warn(`[${this.manifest.name}]:`, error);
 			return [];
 		}
-
-		return JSON.parse(stdout);
 	}
 
 	async getAnnotations(): Promise<IBookAnnotation[]> {
-		const IBOOK_ANNOTATION_DB = '~/Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite';
-		const annotationsSql = `
-		SELECT ZANNOTATIONASSETID, ZFUTUREPROOFING5, ZANNOTATIONREPRESENTATIVETEXT, ZANNOTATIONSELECTEDTEXT, ZANNOTATIONNOTE, ZANNOTATIONCREATIONDATE, ZANNOTATIONMODIFICATIONDATE, ZANNOTATIONSTYLE
-		FROM ZAEANNOTATION
-		WHERE ZANNOTATIONSELECTEDTEXT IS NOT NULL
-		AND ZANNOTATIONDELETED IS 0`;
-
-		const command = `echo "${annotationsSql}" | sqlite3 ${IBOOK_ANNOTATION_DB} -json`;
-		const exec = promisify(child_process.exec);
-		// Issue #11 - Temporary set maxBuffer to 100MB
-		// TODO: Need a more efficient solution to handle large data
-		const { stdout, stderr } = await exec(command, { maxBuffer: 100 * 1024 * 1024 });
-
-		if (stderr) {
-			new Notice(stderr);
+		try {
+			// const IBOOK_ANNOTATION_DB = '~/Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite';
+			const IBOOK_ANNOTATION_DB = '~/Downloads/empty-AEAnnotation_v10312011_1727_local.sqlite';
+			const annotationsSql = `
+			SELECT ZANNOTATIONASSETID, ZFUTUREPROOFING5, ZANNOTATIONREPRESENTATIVETEXT, ZANNOTATIONSELECTEDTEXT, ZANNOTATIONNOTE, ZANNOTATIONCREATIONDATE, ZANNOTATIONMODIFICATIONDATE, ZANNOTATIONSTYLE
+			FROM ZAEANNOTATION
+			WHERE ZANNOTATIONSELECTEDTEXT IS NOT NULL
+			AND ZANNOTATIONDELETED IS 0`;
+	
+			const command = `echo "${annotationsSql}" | sqlite3 ${IBOOK_ANNOTATION_DB} -json`;
+			const exec = promisify(child_process.exec);
+			// Issue #11 - Temporary set maxBuffer to 100MB
+			// TODO: Need a more efficient solution to handle large data
+			const { stdout } = await exec(command, { maxBuffer: 100 * 1024 * 1024 });
+			
+			if (stdout.length === 0) {
+				throw('No highlights found. Make sure you made some highlights in your Apple Books.');
+			}
+			
+			return JSON.parse(stdout);
+		} catch (error) {
+			console.warn(`[${this.manifest.name}]:`, error);
 			return [];
 		}
 
-		return JSON.parse(stdout);
 	}
 	async importHighlights(): Promise<CombinedHighlight[]> {
 		const books = await this.getBooks();
@@ -149,6 +164,10 @@ export default class IBookHighlightsPlugin extends Plugin {
 	
 	async importAndSaveHighlights(): Promise<void> {
 		const highlights = await this.importHighlights();
+		
+		if (highlights.length === 0) {
+			throw ('No highlights found. Make sure you made some highlights in your Apple Books.');
+		}
 		
 		await this.saveHighlightsToVault(highlights);
 	}
