@@ -69,9 +69,7 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 	async getBooks(): Promise<IBook[]> {
 		try {
-			// const IBOOK_LIBRARY = '~/Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary/BKLibrary-1-091020131601.sqlite';
-			const IBOOK_LIBRARY = '~/Downloads/test-BKLibrary.sqlite';
-			// const IBOOK_LIBRARY = '~/Downloads/empty-BKLibrary.sqlite';
+			const IBOOK_LIBRARY = '~/Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary/BKLibrary-1-091020131601.sqlite';
 			const booksSql = `
 			SELECT ZASSETID, ZTITLE, ZAUTHOR, ZGENRE, ZLANGUAGE, ZLASTOPENDATE, ZCOVERURL
 			FROM ZBKLIBRARYASSET
@@ -96,8 +94,7 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 	async getAnnotations(): Promise<IBookAnnotation[]> {
 		try {
-			// const IBOOK_ANNOTATION_DB = '~/Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite';
-			const IBOOK_ANNOTATION_DB = '~/Downloads/empty-AEAnnotation_v10312011_1727_local.sqlite';
+			const IBOOK_ANNOTATION_DB = '~/Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite';
 			const annotationsSql = `
 			SELECT ZANNOTATIONASSETID, ZFUTUREPROOFING5, ZANNOTATIONREPRESENTATIVETEXT, ZANNOTATIONSELECTEDTEXT, ZANNOTATIONNOTE, ZANNOTATIONCREATIONDATE, ZANNOTATIONMODIFICATIONDATE, ZANNOTATIONSTYLE
 			FROM ZAEANNOTATION
