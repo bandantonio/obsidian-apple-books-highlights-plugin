@@ -7,7 +7,10 @@
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"lint": "eslint . --ext .ts",
-		"version": "node version-bump.mjs"
+		"version": "node version-bump.mjs",
+		"db:generate": "drizzle-kit generate:sqlite",
+		"db:migrate": "npx tsx src/db/migrate.ts",
+		"db:seed": "npx tsx src/db/seed.ts"
 	},
 	"keywords": [
 		"obsidian",
@@ -27,10 +30,14 @@
 		"url": "git+https://github.com/bandantonio/obsidian-apple-books-highlights-plugin.git"
 	},
 	"devDependencies": {
+		"@types/better-sqlite3": "^7.6.10",
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
 		"@typescript-eslint/parser": "5.29.0",
+		"better-sqlite3": "^9.5.0",
 		"builtin-modules": "3.3.0",
+		"drizzle-kit": "^0.20.17",
+		"drizzle-orm": "^0.30.9",
 		"esbuild": "0.17.3",
 		"eslint": "^8.57.0",
 		"obsidian": "latest",

@@ -1,0 +1,144 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "id": "9ab8f1f7-710a-4b2c-9ba7-b286cb403847",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "ZAEANNOTATION": {
+      "name": "ZAEANNOTATION",
+      "columns": {
+        "ZANNOTATIONASSETID": {
+          "name": "ZANNOTATIONASSETID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZFUTUREPROOFING5": {
+          "name": "ZFUTUREPROOFING5",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZANNOTATIONREPRESENTATIVETEXT": {
+          "name": "ZANNOTATIONREPRESENTATIVETEXT",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZANNOTATIONSELECTEDTEXT": {
+          "name": "ZANNOTATIONSELECTEDTEXT",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ZANNOTATIONNOTE": {
+          "name": "ZANNOTATIONNOTE",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZANNOTATIONCREATIONDATE": {
+          "name": "ZANNOTATIONCREATIONDATE",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZANNOTATIONMODIFICATIONDATE": {
+          "name": "ZANNOTATIONMODIFICATIONDATE",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZANNOTATIONSTYLE": {
+          "name": "ZANNOTATIONSTYLE",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZANNOTATIONDELETED": {
+          "name": "ZANNOTATIONDELETED",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ZBKLIBRARYASSET": {
+      "name": "ZBKLIBRARYASSET",
+      "columns": {
+        "ZASSETID": {
+          "name": "ZASSETID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZTITLE": {
+          "name": "ZTITLE",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZAUTHOR": {
+          "name": "ZAUTHOR",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZGENRE": {
+          "name": "ZGENRE",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZLANGUAGE": {
+          "name": "ZLANGUAGE",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZLASTOPENDATE": {
+          "name": "ZLASTOPENDATE",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ZCOVERURL": {
+          "name": "ZCOVERURL",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}
