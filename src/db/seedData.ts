@@ -5,7 +5,7 @@ export const defaultBooks = [{
 	"ZGENRE": "Technology",
 	"ZLANGUAGE": "EN",
 	"ZLASTOPENDATE": 726602576.413094,
-	"ZCOVERURL": null
+	"ZCOVERURL": ''
 }, {
 	"ZASSETID": "THBFYNJKTGFTTVCGSAE2",
 	"ZTITLE": "iPad User Guide",
@@ -13,23 +13,23 @@ export const defaultBooks = [{
 	"ZGENRE": "Technology",
 	"ZLANGUAGE": "EN",
 	"ZLASTOPENDATE": 726602576.413094,
-	"ZCOVERURL": null
-},{
+	"ZCOVERURL": ''
+}, {
 	"ZASSETID": "THBFYNJKTGFTTVCGSAE3",
 	"ZTITLE": "Mac User Guide",
 	"ZAUTHOR": "Apple Inc.",
 	"ZGENRE": "Technology",
 	"ZLANGUAGE": "EN",
 	"ZLASTOPENDATE": 726602576.413094,
-	"ZCOVERURL": null
-},{
+	"ZCOVERURL": ''
+}, {
 	"ZASSETID": "THBFYNJKTGFTTVCGSAE4",
 	"ZTITLE": "Apple Watch User Guide",
 	"ZAUTHOR": "Apple Inc.",
 	"ZGENRE": "Technology",
 	"ZLANGUAGE": "EN",
 	"ZLASTOPENDATE": 726602576.413094,
-	"ZCOVERURL": null
+	"ZCOVERURL": ''
 }];
 
 export const defaultAnnotations = [{
@@ -52,7 +52,7 @@ export const defaultAnnotations = [{
 	"ZANNOTATIONMODIFICATIONDATE": 685151385.91602,
 	"ZANNOTATIONSTYLE": 3,
 	"ZANNOTATIONDELETED": 0
-},{
+}, {
 	"ZANNOTATIONASSETID": "THBFYNJKTGFTTVCGSAE3",
 	"ZFUTUREPROOFING5": "Introduction",
 	"ZANNOTATIONREPRESENTATIVETEXT": "This is a contextual text for the hightlight from the Mac User Guide",
@@ -62,7 +62,7 @@ export const defaultAnnotations = [{
 	"ZANNOTATIONMODIFICATIONDATE": 685151385.91602,
 	"ZANNOTATIONSTYLE": 3,
 	"ZANNOTATIONDELETED": 0
-},{
+}, {
 	"ZANNOTATIONASSETID": "THBFYNJKTGFTTVCGSAE4",
 	"ZFUTUREPROOFING5": "Introduction",
 	"ZANNOTATIONREPRESENTATIVETEXT": "This is a contextual text for the hightlight from the Apple Watch User Guide",
@@ -92,7 +92,7 @@ export const defaultAnnotations = [{
 	"ZANNOTATIONMODIFICATIONDATE": 685151385.91602,
 	"ZANNOTATIONSTYLE": 3,
 	"ZANNOTATIONDELETED": 1
-},{
+}, {
 	"ZANNOTATIONASSETID": "THBFYNJKTGFTTVCGSAE3",
 	"ZFUTUREPROOFING5": "Introduction",
 	"ZANNOTATIONREPRESENTATIVETEXT": "This is a contextual text for the hightlight from the Mac User Guide",
@@ -102,7 +102,7 @@ export const defaultAnnotations = [{
 	"ZANNOTATIONMODIFICATIONDATE": 685151385.91602,
 	"ZANNOTATIONSTYLE": 3,
 	"ZANNOTATIONDELETED": 1
-},{
+}, {
 	"ZANNOTATIONASSETID": "THBFYNJKTGFTTVCGSAE4",
 	"ZFUTUREPROOFING5": "Introduction",
 	"ZANNOTATIONREPRESENTATIVETEXT": "This is a contextual text for the hightlight from the Apple Watch User Guide",

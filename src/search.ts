@@ -1,7 +1,7 @@
 import { App, Notice, SuggestModal } from 'obsidian';
 import IBookHighlightsPlugin from '../main';
 import { ICombinedBooksAndHighlights } from './types';
-
+import { aggregateBookAndHighlightDetails } from './methods/aggregateDetails';
 abstract class IBookHighlightsPluginSuggestModal extends SuggestModal<ICombinedBooksAndHighlights> {
     plugin: IBookHighlightsPlugin;
     constructor(
@@ -9,19 +9,18 @@ abstract class IBookHighlightsPluginSuggestModal extends SuggestModal<ICombinedB
         plugin: IBookHighlightsPlugin) {
         super(app);
         this.plugin = plugin;
-    } 
+    }
 }
 
 export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSuggestModal {
     async getSuggestions(query: string): Promise<ICombinedBooksAndHighlights[] > {
 		try {
-			const allBooks = await this.plugin.aggregateBookAndHighlightDetails();
-			console.log('allbooks', allBooks);
-			
+			const allBooks = await aggregateBookAndHighlightDetails();
+
 			return allBooks.filter(book => {
 				const titleMatch = book.bookTitle.toLowerCase().includes(query.toLowerCase());
 				const authorMatch = book.bookAuthor.toLowerCase().includes(query.toLowerCase());
-				
+
 				return titleMatch || authorMatch;
 			});
 		} catch (error) {
