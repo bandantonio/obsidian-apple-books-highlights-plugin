@@ -30,6 +30,10 @@
 		"type": "git",
 		"url": "git+https://github.com/bandantonio/obsidian-apple-books-highlights-plugin.git"
 	},
+	"engines": {
+		"node": ">=20.8.0",
+		"npm": ">=10.0.0"
+	},
 	"devDependencies": {
 		"@types/better-sqlite3": "^7.6.10",
 		"@types/node": "^18.4.1",

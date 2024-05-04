@@ -37,6 +37,6 @@ export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSugge
 
     //eslint-disable-next-line
     onChooseSuggestion(item: ICombinedBooksAndHighlights, event: MouseEvent | KeyboardEvent) {
-		this.plugin.saveHighlightsToVault([item]);
+		this.plugin.saveHighlights.saveHighlightsToVault([item]);
     }
 }

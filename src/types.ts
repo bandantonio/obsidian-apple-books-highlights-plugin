@@ -1,10 +1,3 @@
-export interface IBookHighlightsPluginSettings {
-    highlightsFolder: string;
-    template: string;
-    backup: boolean;
-    importOnStart: boolean;
-}
-
 export interface IBook {
     ZASSETID: string;
     ZTITLE: string;
