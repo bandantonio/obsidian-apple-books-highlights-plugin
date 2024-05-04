@@ -3,10 +3,10 @@ import IBookHighlightsPlugin from '../main';
 import defaultTemplate from './template';
 
 export class AppleBooksHighlightsImportPluginSettings {
-	highlightsFolder: string = 'ibooks-highlights';
-	backup: boolean = false;
-	importOnStart: boolean = false;
-	template: string = defaultTemplate;
+	highlightsFolder = 'ibooks-highlights';
+	backup = false;
+	importOnStart = false;
+	template = defaultTemplate;
 }
 
 export class IBookHighlightsSettingTab extends PluginSettingTab {

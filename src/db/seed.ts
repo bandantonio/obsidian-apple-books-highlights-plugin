@@ -5,6 +5,7 @@ import { bookLibrary, annotations } from './schemas';
 const sqlite = new Database('./test/mocks/testDatabase.sqlite');
 const db = drizzle(sqlite);
 
+// eslint-disable-next-line
 export const seedDatabase = async (table: typeof bookLibrary | typeof annotations, seed: any[]) => {
 	const tableName = (table === bookLibrary) ? 'books' : 'annotations';
 	console.log(`Seeding ${tableName} database...`);

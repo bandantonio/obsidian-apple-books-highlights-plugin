@@ -1,6 +1,6 @@
 export const booksToAggregate = [{
 	"ZASSETID": "THBFYNJKTGFTTVCGSAE5",
-	"ZTITLE": "Apple iPhone: User Guide | Instructions ^ with # restricted [ symbols ] in \ / title",
+	"ZTITLE": "Apple iPhone: User Guide | Instructions ^ with # restricted [ symbols ] in \ / title",	// eslint-disable-line
 	"ZAUTHOR": "Apple Inc.",
 	"ZGENRE": "Technology",
 	"ZLANGUAGE": "EN",

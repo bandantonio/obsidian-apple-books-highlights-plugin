@@ -11,7 +11,8 @@
 		"test": "vitest",
 		"db:generate": "drizzle-kit generate:sqlite",
 		"db:migrate": "npx tsx src/db/migrate.ts",
-		"db:seed": "npx tsx src/db/seed.ts"
+		"db:seed": "npx tsx src/db/seed.ts",
+		"prepare": "husky"
 	},
 	"keywords": [
 		"obsidian",
@@ -46,6 +47,7 @@
 		"drizzle-orm": "^0.30.9",
 		"esbuild": "0.17.3",
 		"eslint": "^8.57.0",
+		"husky": "^9.0.11",
 		"obsidian": "latest",
 		"tslib": "2.4.0",
 		"typescript": "4.7.4",
