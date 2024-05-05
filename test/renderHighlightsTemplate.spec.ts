@@ -2,7 +2,7 @@ import Handlebars from 'handlebars';
 import { describe, expect, test } from 'vitest';
 import { renderHighlightsTemplate } from '../src/methods/renderHighlightsTemplate';
 import { aggregatedHighlights } from './mocks/aggregatedDetailsData';
-import { rawCustomTemplate } from './mocks/rawTemplates';
+import { rawCustomTemplateMock } from './mocks/rawTemplates';
 import { defaultTemplateMock, renderedCustomTemplateMock } from './mocks/renderedTemplate';
 import defaultTemplate from '../src/template';
 
@@ -14,14 +14,14 @@ describe('renderHighlightsTemplate', () => {
 	});
 
 	test('Should render a custom template with the provided data', async () => {
-		const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlights[0], rawCustomTemplate);
+		const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlights[0], rawCustomTemplateMock);
 
 		expect(renderedTemplate).toEqual(renderedCustomTemplateMock);
 	});
 });
 
 describe('Custom Handlebars helpers', () => {
-	let helpers = Handlebars.helpers;
+	const helpers = Handlebars.helpers;
 
 	describe('eq', () => {
 		test('Should properly compare two values', async () => {

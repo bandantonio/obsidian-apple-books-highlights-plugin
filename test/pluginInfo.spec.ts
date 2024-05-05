@@ -1,7 +1,6 @@
 import os from 'os';
 import path from 'path';
-import { beforeEach } from 'vitest';
-import { describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 
 declare module 'vitest' {
 	export interface TestContext {
@@ -25,47 +24,44 @@ import {
 	BOOKS_LIBRARY_COLUMNS,
 	HIGHLIGHTS_LIBRARY_COLUMNS
 } from '../src/db/constants';
+import * as packageJson from '../package.json';
 
 describe('Plugin information', () => {
 	beforeEach(async (context) => {
 		context.manifest = require('../manifest.json');
 	});
-	
-	test(`Check that versions in package.json and manifest.json match`, ({ manifest }) => {
-		const packageJson = require('../package.json');
 
+	test(`Check that versions in package.json and manifest.json match`, ({ manifest }) => {
 		expect(packageJson.version).toEqual(manifest.version);
 	});
-	
-	test(`check minimum Obsidian version`, ({ manifest }) => {		
+
+	test(`check minimum Obsidian version`, ({ manifest }) => {
 		expect(manifest.minAppVersion).toEqual('0.15.0');
 	});
-	
+
 	test(`Check plugin id, name and description`, ({ manifest }) => {
 		expect(manifest.id).toEqual('apple-books-import-highlights');
 		expect(manifest.name).toEqual('Apple Books - Import Highlights');
 		expect(manifest.description).toEqual('Import your Apple Books highlights and notes to Obsidian.');
 	});
-	
+
 	test(`Check author information`, ({ manifest }) => {
-		const packageJson = require('../package.json');
-		
 		expect(packageJson.author).toEqual(manifest.author);
 		expect(manifest.authorUrl).toEqual('https://github.com/bandantonio');
 	});
 });
 
 describe('Plugin constants', () => {
-	test('Check database paths', () => {	
+	test('Check database paths', () => {
 		expect(BOOKS_DB_PATH).toEqual(path.join(os.homedir(), 'Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary/BKLibrary-1-091020131601.sqlite'));
 		expect(HIGHLIGHTS_DB_PATH).toEqual(path.join(os.homedir(), 'Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite'));
 	});
-	
+
 	test('Check database table names', () => {
 		expect(BOOKS_LIBRARY_NAME).toEqual('ZBKLIBRARYASSET');
 		expect(HIGHLIGHTS_LIBRARY_NAME).toEqual('ZAEANNOTATION');
 	});
-	
+
 	test('Check database columns', () => {
 		expect(BOOKS_LIBRARY_COLUMNS).toEqual([
 			'ZASSETID',
@@ -76,7 +72,7 @@ describe('Plugin constants', () => {
 			'ZLASTOPENDATE',
 			'ZCOVERURL'
 		]);
-		
+
 		expect(HIGHLIGHTS_LIBRARY_COLUMNS).toEqual([
 			'ZANNOTATIONASSETID',
 			'ZFUTUREPROOFING5',

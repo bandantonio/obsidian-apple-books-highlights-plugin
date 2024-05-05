@@ -10,7 +10,7 @@ import { seedDatabase } from '../src/db/seed';
 import { defaultBooks, defaultAnnotations } from '../src/db/seedData';
 
 afterEach(async () => {
-	let dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
+	const dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
 
 	const sqlite = new Database(dbPath);
 	const db = drizzle(sqlite);
@@ -22,7 +22,7 @@ afterEach(async () => {
 describe('Empty database', () => {
 	test('Should throw an error when books library is empty', async () => {
 		try {
-			let dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
+			const dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
 
 			await dbRequest(dbPath, `SELECT * FROM ${BOOKS_LIBRARY_NAME}`);
 		} catch (error) {
@@ -34,7 +34,7 @@ describe('Empty database', () => {
 		try {
 			await seedDatabase(bookLibrary, defaultBooks);
 
-			let dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
+			const dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
 
 			await annotationsRequest(dbPath, `SELECT * FROM ${HIGHLIGHTS_LIBRARY_NAME}`);
 		} catch (error) {
@@ -47,7 +47,7 @@ describe('Database operations', () => {
 	test('Should return a list of books when books library is not empty', async () => {
 		await seedDatabase(bookLibrary, defaultBooks);
 
-		let dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
+		const dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
 		const books = await dbRequest(dbPath, `SELECT * FROM ${BOOKS_LIBRARY_NAME}`);
 
 		expect(books).toEqual(defaultBooks);
@@ -56,7 +56,7 @@ describe('Database operations', () => {
 	test('Should return a list of highlights when highlights library is not empty', async () => {
 		await seedDatabase(annotations, defaultAnnotations);
 
-		let dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
+		const dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
 		const highlights = await annotationsRequest(dbPath, `SELECT * FROM ${HIGHLIGHTS_LIBRARY_NAME} WHERE ZANNOTATIONDELETED = 0`);
 
 		expect(highlights.length).toEqual(4);
@@ -68,8 +68,8 @@ describe('Database operations', () => {
 describe('Database load testing', () => {
 	test('Should return 1000 books and  in less than 500ms', async () => {
 
-		let oneThousandBooks = [];
-		let threeThousandsAnnotations = [];
+		const oneThousandBooks = [];
+		const threeThousandsAnnotations = [];
 
 		// create 1000 books and 3 annotations for each book
 		for (let i = 0; i < 1000; i++) {
@@ -98,7 +98,7 @@ describe('Database load testing', () => {
 			}
 		}
 
-		let dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
+		const dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
 		await seedDatabase(bookLibrary, oneThousandBooks);
 		await seedDatabase(annotations, threeThousandsAnnotations);
 

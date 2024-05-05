@@ -1,4 +1,4 @@
-export const rawCustomTemplate = `Title:: 📕 {{{bookTitle}}}
+export const rawCustomTemplateMock = `Title:: 📕 {{{bookTitle}}}
 Author:: {{{bookAuthor}}}
 Genre:: {{#if bookGenre}}{{{bookGenre}}}{{else}}N/A{{/if}}
 Language:: {{#if bookLanguage}}{{bookLanguage}}{{else}}N/A{{/if}}
