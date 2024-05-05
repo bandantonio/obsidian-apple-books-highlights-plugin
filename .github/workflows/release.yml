@@ -4,7 +4,7 @@ on: [push]
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
-  
+
 jobs:
   node-setup:
     name: ⚙️ Setup Node.js
@@ -33,9 +33,9 @@ jobs:
         id: linter
         run: npm run lint
 
-  release-plugin:
-    name: 📦 Release Obsidian Plugin
-    needs: run-lint
+  run-tests:
+    name: 🧪 Tests
+    needs: node-setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +43,29 @@ jobs:
         id: cache-node-modules
         with:
           node-version: '20'
-      
+
+      - name: 🧪 Run tests
+        id: tests
+        run: npm run coverage
+
+      - name: 📈 Send test coverage to Coveralls
+        id: coverage
+        if: steps.tests.outcome == 'success'
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  release-plugin:
+    name: 📦 Release Obsidian Plugin
+    needs: [run-lint, run-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/node-cache
+        id: cache-node-modules
+        with:
+          node-version: '20'
+
       - name: 📗 Build plugin
         id: build_plugin
         if: steps.cache-node-modules.outcome == 'success'
