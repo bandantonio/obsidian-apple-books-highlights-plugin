@@ -18,6 +18,16 @@ export const annotationsToAggregate = [{
 	"ZANNOTATIONMODIFICATIONDATE": 731876693.002279,
 	"ZANNOTATIONSTYLE": 3,
 	"ZANNOTATIONDELETED": 0
+}, {
+	"ZANNOTATIONASSETID": "THBFYNJKTGFTTVCGSAE5",
+	"ZFUTUREPROOFING5": "Another aggregated Introduction",
+	"ZANNOTATIONREPRESENTATIVETEXT": "This is a contextual text for the aggregated hightlight from the Apple iPhone User Guide\n\ncontaining a new line to test the preservation of indentation",
+	"ZANNOTATIONSELECTEDTEXT": "aggregated hightlight from the Apple iPhone User Guide\n\ncontaining a new line to test the preservation of indentation",
+	"ZANNOTATIONNOTE": "Test note for the aggregated hightlight from the Apple iPhone User Guide\n\nalong with a new line to test the preservation of indentation",
+	"ZANNOTATIONCREATIONDATE": 731876693.002279,
+	"ZANNOTATIONMODIFICATIONDATE": 731876693.002279,
+	"ZANNOTATIONSTYLE": 3,
+	"ZANNOTATIONDELETED": 0
 }];
 
 export const aggregatedHighlights = [{
@@ -33,6 +43,14 @@ export const aggregatedHighlights = [{
 		"contextualText": "This is a contextual text for the aggregated hightlight from the Apple iPhone User Guide",
 		"highlight": "aggregated hightlight from the Apple iPhone User Guide",
 		"note": "Test note for the aggregated hightlight from the Apple iPhone User Guide",
+		"highlightStyle": 3,
+		"highlightCreationDate": 731876693.002279,
+		"highlightModificationDate": 731876693.002279
+	}, {
+		"chapter": "Another aggregated Introduction",
+		"contextualText": "This is a contextual text for the aggregated hightlight from the Apple iPhone User Guide\ncontaining a new line to test the preservation of indentation",
+		"highlight": "aggregated hightlight from the Apple iPhone User Guide\ncontaining a new line to test the preservation of indentation",
+		"note": "Test note for the aggregated hightlight from the Apple iPhone User Guide\nalong with a new line to test the preservation of indentation",
 		"highlightStyle": 3,
 		"highlightCreationDate": 731876693.002279,
 		"highlightModificationDate": 731876693.002279
