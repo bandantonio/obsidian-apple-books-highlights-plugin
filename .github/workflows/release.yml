@@ -71,6 +71,17 @@ jobs:
         if: steps.cache-node-modules.outcome == 'success'
         run: npm run build
 
+      - name: Upload build assets
+        uses: actions/upload-artifact@v4
+        if: steps.build_plugin.outcome == 'success'
+        with:
+          name: build-assets
+          path: |
+            main.js
+            manifest.json
+            styles.css
+          retention-days: 3
+
       - name: 📦 Create release
         uses: softprops/action-gh-release@v1
         if: steps.build_plugin.outcome == 'success' && contains(github.ref, 'refs/tags/')
