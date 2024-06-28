@@ -25,11 +25,14 @@ export const aggregateBookAndHighlightDetails = async (): Promise<ICombinedBooks
 				bookLastOpenedDate: book.ZLASTOPENDATE,
 				bookCoverUrl: book.ZCOVERURL,
 				annotations: bookRelatedAnnotations.map(annotation => {
+					const textForContext = annotation.ZANNOTATIONREPRESENTATIVETEXT;
+					const userNote = annotation.ZANNOTATIONNOTE;
+
 					return {
 						chapter: annotation.ZFUTUREPROOFING5,
-						contextualText: annotation.ZANNOTATIONREPRESENTATIVETEXT,
-						highlight: annotation.ZANNOTATIONSELECTEDTEXT,
-						note: annotation.ZANNOTATIONNOTE,
+						contextualText: textForContext ? preserveNewlineIndentation(textForContext) : textForContext,
+						highlight: preserveNewlineIndentation(annotation.ZANNOTATIONSELECTEDTEXT),
+						note: userNote ? preserveNewlineIndentation(userNote) : userNote,
 						highlightStyle: annotation.ZANNOTATIONSTYLE,
 						highlightCreationDate: annotation.ZANNOTATIONCREATIONDATE,
 						highlightModificationDate: annotation.ZANNOTATIONMODIFICATIONDATE
@@ -43,3 +46,8 @@ export const aggregateBookAndHighlightDetails = async (): Promise<ICombinedBooks
 
 	return resultingHighlights;
 };
+
+// Handler of double new line characters (\n\n) to preserve proper indentation in text blocks
+const preserveNewlineIndentation = (textBlock: string): string => {
+	return textBlock.includes('\n\n') ? textBlock.replace(/\n\n/g, '<br>\n') : textBlock;
+}
