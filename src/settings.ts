@@ -1,16 +1,15 @@
 import { App, Notice, PluginSettingTab, Setting } from 'obsidian';
 import IBookHighlightsPlugin from '../main';
 import defaultTemplate from './template';
-import { IBookHighlightsPluginSettings } from './types';
 
-export const DEFAULT_SETTINGS: IBookHighlightsPluginSettings = {
-    highlightsFolder: 'ibooks-highlights',
-    backup: false,
-    importOnStart: false,
-    template: defaultTemplate,
+export class AppleBooksHighlightsImportPluginSettings {
+	highlightsFolder = 'ibooks-highlights';
+	backup = false;
+	importOnStart = false;
+	template = defaultTemplate;
 }
 
-class IBookHighlightsSettingTab extends PluginSettingTab {
+export class IBookHighlightsSettingTab extends PluginSettingTab {
     plugin: IBookHighlightsPlugin;
 
     constructor(app: App, plugin: IBookHighlightsPlugin) {
@@ -23,16 +22,24 @@ class IBookHighlightsSettingTab extends PluginSettingTab {
 
         containerEl.empty();
 
-        new Setting(containerEl)
+        const folder = new Setting(containerEl)
             .setName('Highlights folder')
             .setDesc('A folder (within the root of your vault) where you want to save imported highlights')
-            .addText(text => text
-                .setPlaceholder('Folder to save highlights')
-                .setValue(this.plugin.settings.highlightsFolder)
-                .onChange(async (value) => {
-                    this.plugin.settings.highlightsFolder = value;
-                    await this.plugin.saveSettings();
-                }));
+			.setClass('ibooks-highlights-folder')
+
+		folder.addText(text => text
+			.setPlaceholder('Folder to save highlights')
+			.setValue(this.plugin.settings.highlightsFolder)
+			.onChange(async (value) => {
+				if (!value) {
+					folder.controlEl.addClass('setting-error');
+					return;
+				}
+
+				folder.controlEl.removeClass('setting-error');
+				this.plugin.settings.highlightsFolder = value;
+				await this.plugin.saveSettings();
+			}));
 
         new Setting(containerEl)
             .setName('Import highlights on start')
@@ -44,7 +51,7 @@ class IBookHighlightsSettingTab extends PluginSettingTab {
                         await this.plugin.saveSettings();
                     });
             });
-              
+
         new Setting(containerEl)
             .setName('Backup highlights')
             .setDesc('Backup highlights folder before import. Backup folder template: <highlights-folder>-bk-<timestamp> (For example, ibooks-highlights-bk-1704060001)')
@@ -62,7 +69,7 @@ class IBookHighlightsSettingTab extends PluginSettingTab {
         new Setting(containerEl)
             .setName('Template')
             .setDesc('Template for highlight files')
-            .setClass("ibooks-highlights-template")
+            .setClass('ibooks-highlights-template')
             .addTextArea((text) => {
                 text
                     .setPlaceholder('Template')
@@ -97,4 +104,3 @@ class IBookHighlightsSettingTab extends PluginSettingTab {
     }
 }
 
-export { IBookHighlightsSettingTab }

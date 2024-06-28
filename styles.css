@@ -3,3 +3,7 @@
     height: 350px;
     overflow: auto;
 }
+
+.ibooks-highlights-folder > .setting-item-control.setting-error > input {
+	border-color: #b00;
+}

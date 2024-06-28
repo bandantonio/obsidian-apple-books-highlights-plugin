@@ -1,10 +1,3 @@
-export interface IBookHighlightsPluginSettings {
-    highlightsFolder: string;
-    template: string;
-    backup: boolean;
-    importOnStart: boolean;
-}
-
 export interface IBook {
     ZASSETID: string;
     ZTITLE: string;
@@ -26,13 +19,13 @@ export interface IBookAnnotation {
     ZANNOTATIONSTYLE: 0 | 1 | 2 | 3 | 4 | 5;
 }
 
-export interface Highlight {
+export interface IHighlight {
     chapter: string;
     contextualText: string;
     highlight: string;
     note: string;
 }
-export interface CombinedHighlight {
+export interface ICombinedBooksAndHighlights {
     bookTitle: string;
     bookId: string;
     bookAuthor: string;
@@ -40,5 +33,5 @@ export interface CombinedHighlight {
     bookLanguage: string;
     bookLastOpenedDate: number;
     bookCoverUrl: string;
-    annotations: Highlight[];
+    annotations: IHighlight[];
 }

@@ -1,0 +1,22 @@
+import { describe, expect, test } from 'vitest';
+import { AppleBooksHighlightsImportPluginSettings } from '../src/settings';
+import defaultTemplate from '../src/template';
+const settings = new AppleBooksHighlightsImportPluginSettings();
+
+describe('Plugin default settings', () => {
+	test("Highlights folder", () => {
+		expect(settings.highlightsFolder).toEqual('ibooks-highlights');
+	});
+
+	test("Import highlights on start", () => {
+		expect(settings.importOnStart).toBeFalsy();
+	});
+
+	test("Backup highlights", () => {
+		expect(settings.backup).toBeFalsy();
+	});
+
+	test('Template', () => {
+		expect(settings.template).toEqual(defaultTemplate);
+	});
+})
