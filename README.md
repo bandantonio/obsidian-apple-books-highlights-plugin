@@ -4,8 +4,12 @@ Import all your Apple Books highlights to Obsidian.
 
 ![Plugin banner](plugin-banner.png)
 
-![GitHub Downloads](https://img.shields.io/github/downloads/bandantonio/obsidian-apple-books-highlights-plugin/total?style=for-the-badge&logo=github&color=573e7a)
-[![Coveralls](https://img.shields.io/coverallsCoverage/github/bandantonio/obsidian-apple-books-highlights-plugin?branch=master&style=for-the-badge&label=Test%20coverage)](https://coveralls.io/github/bandantonio/obsidian-apple-books-highlights-plugin?branch=master)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/bandantonio/obsidian-apple-books-highlights-plugin/release.yml?branch=master&style=for-the-badge&logo=github)
+![GitHub manifest version](https://img.shields.io/github/manifest-json/v/bandantonio/obsidian-apple-books-highlights-plugin?style=for-the-badge&logo=obsidian&color=%230082FC)
+![GitHub Downloads](https://img.shields.io/github/downloads/bandantonio/obsidian-apple-books-highlights-plugin/total?style=for-the-badge&logo=github&color=%237C3AED)
+[![Coveralls](https://img.shields.io/coverallsCoverage/github/bandantonio/obsidian-apple-books-highlights-plugin?branch=master&style=for-the-badge&logo=coveralls&label=Test%20coverage&color=%233F5767)](https://coveralls.io/github/bandantonio/obsidian-apple-books-highlights-plugin?branch=master)
+[![Plugin's page on Obsidian forum](https://img.shields.io/badge/obsidian_forum-blue?style=for-the-badge&color=%237C3AED&logo=obsidian)](https://forum.obsidian.md/t/new-plugin-apple-books-import-highlights/76856/21)
+
 
 ## Overview
 
