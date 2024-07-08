@@ -30,9 +30,9 @@ export const aggregateBookAndHighlightDetails = async (): Promise<ICombinedBooks
 
 					return {
 						chapter: annotation.ZFUTUREPROOFING5,
-						contextualText: textForContext ? preserveNewlineIndentation(textForContext) : textForContext,
-						highlight: preserveNewlineIndentation(annotation.ZANNOTATIONSELECTEDTEXT),
-						note: userNote ? preserveNewlineIndentation(userNote) : userNote,
+						contextualText: textForContext ? removeAllLastNewlines(preserveNewlineIndentation(textForContext)) : textForContext,
+						highlight: removeAllLastNewlines(preserveNewlineIndentation(annotation.ZANNOTATIONSELECTEDTEXT)),
+						note: userNote ? removeAllLastNewlines(preserveNewlineIndentation(userNote)) : userNote,
 						highlightLocation: annotation.ZANNOTATIONLOCATION,
 						highlightStyle: annotation.ZANNOTATIONSTYLE,
 						highlightCreationDate: annotation.ZANNOTATIONCREATIONDATE,
@@ -53,4 +53,11 @@ const preserveNewlineIndentation = (textBlock: string): string => {
 	const stringWithNewLines = /\n+\s*/g;
 
 	return stringWithNewLines.test(textBlock) ? textBlock.replace(stringWithNewLines, '\n') : textBlock;
+}
+
+// Handler of all new line characters (\n) at the end of text blocks to prevent new lines appearing at the end of text blocks
+const removeAllLastNewlines = (textBlock: string): string => {
+	const stringAllLastNewLines = /\n+$/;
+
+	return stringAllLastNewLines.test(textBlock) ? textBlock.replace(stringAllLastNewLines, "") : textBlock;
 }
