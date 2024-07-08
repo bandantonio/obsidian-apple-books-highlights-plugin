@@ -66,6 +66,7 @@ The plugin uses Handlebars and Markdown to customize the output of your highligh
     - If you highlight parts of two adjacent sentences, the `contextualText` will contain both sentences.
   - `{{{highlight}}}` - The highlighted text.
   - `{{{note}}}` - A note you added for the highlight.
+  - `{{{highlightLocation}}}` - The EPUB CFI of the highlighted text. It is used to create a link to the highlighted text in Apple Books: `[Apple Books Highlight Link](ibooks://assetid/{{bookId}}#{{highlightLocation}})`.
   - `{{highlightStyle}}` - The style of the highlight. It can be one of the following values:
     - `0` (underline)
     - `1` (green)
@@ -132,6 +133,7 @@ Number of annotations:: {{annotations.length}}
 {{#if (eq highlightStyle "4")}}- 🎯 Highlight:: <mark style="background:rgb(242,178,188); color:#000; padding:2px;">{{{highlight}}}</mark>{{/if}}
 {{#if (eq highlightStyle "5")}}- 🎯 Highlight:: <mark style="background:rgb(214,192,238); color:#000; padding:2px;">{{{highlight}}}</mark>{{/if}}
 - 📝 Note:: {{#if note}}{{{note}}}{{else}}N/A{{/if}}
+- 📙 Highlight Link:: {{#if highlightLocation}}[Apple Books Highlight Link](ibooks://assetid/{{../bookId}}#{{highlightLocation}}){{else}}N/A{{/if}}
 - <small>📅 Highlight taken on:: {{dateFormat highlightCreationDate "YYYY-MM-DD hh:mm:ss A Z"}}</small>
 - <small>📅 Highlight modified on:: {{dateFormat highlightModificationDate "YYYY-MM-DD hh:mm:ss A Z"}}</small>
 

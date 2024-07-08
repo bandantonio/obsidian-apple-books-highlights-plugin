@@ -43,7 +43,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Import highlights on start')
-            .setDesc('Import all hightlights from all your books when Obsidian starts')
+            .setDesc('Import all highlights from all your books when Obsidian starts')
             .addToggle((toggle) => {
                 toggle.setValue(this.plugin.settings.importOnStart)
                     .onChange(async (value) => {

@@ -13,6 +13,7 @@ Number of annotations:: {{annotations.length}}
 - 🔖 Context:: {{#if contextualText}}{{{contextualText}}}{{else}}N/A{{/if}}
 - 🎯 Highlight:: {{{highlight}}}
 - 📝 Note:: {{#if note}}{{{note}}}{{else}}N/A{{/if}}
+- 📙 Highlight Link:: {{#if highlightLocation}}[Apple Books Highlight Link](ibooks://assetid/{{../bookId}}#{{highlightLocation}}){{else}}N/A{{/if}}
 
 {{/each}}
 `;

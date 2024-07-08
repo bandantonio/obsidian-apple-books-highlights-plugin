@@ -13,6 +13,7 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "strictNullChecks": true,
+    "skipLibCheck": true,
     "lib": [
       "DOM",
       "ES5",
@@ -21,6 +22,9 @@
     ]
   },
   "include": [
-    "**/*.ts"
+    "src/**/*",
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

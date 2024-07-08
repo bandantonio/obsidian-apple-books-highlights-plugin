@@ -13,6 +13,7 @@ export interface IBookAnnotation {
     ZFUTUREPROOFING5: string;
     ZANNOTATIONREPRESENTATIVETEXT: string;
     ZANNOTATIONSELECTEDTEXT: string;
+    ZANNOTATIONLOCATION: string;
     ZANNOTATIONNOTE: string;
     ZANNOTATIONCREATIONDATE: number;
     ZANNOTATIONMODIFICATIONDATE: number;
@@ -23,6 +24,7 @@ export interface IHighlight {
     chapter: string;
     contextualText: string;
     highlight: string;
+    highlightLocation: string;
     note: string;
 }
 export interface ICombinedBooksAndHighlights {

@@ -60,8 +60,21 @@ describe('Database operations', () => {
 		const highlights = await annotationsRequest(dbPath, `SELECT * FROM ${HIGHLIGHTS_LIBRARY_NAME} WHERE ZANNOTATIONDELETED = 0`);
 
 		expect(highlights.length).toEqual(4);
-		expect(highlights[0].ZANNOTATIONNOTE).toEqual('Test note for the hightlight from the iPhone User Guide');
-		expect(highlights[3].ZANNOTATIONREPRESENTATIVETEXT).toEqual('This is a contextual text for the hightlight from the Apple Watch User Guide');
+		expect(highlights[0].ZANNOTATIONNOTE).toEqual('Test note for the highlight from the iPhone User Guide');
+		expect(highlights[3].ZANNOTATIONREPRESENTATIVETEXT).toEqual('This is a contextual text for the highlight from the Apple Watch User Guide');
+	});
+
+	test('Should return a highlight link for each highlight when highlights library is not empty', async () => {
+		await seedDatabase(annotations, defaultAnnotations);
+
+		const dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
+		const highlights = await annotationsRequest(dbPath, `SELECT * FROM ${HIGHLIGHTS_LIBRARY_NAME} WHERE ZANNOTATIONDELETED = 0`);
+
+		expect(highlights.length).toEqual(4);
+		expect(highlights[0].ZANNOTATIONLOCATION).toEqual('test-highlight-link-from-the-iphone-user-guide');
+		expect(highlights[1].ZANNOTATIONLOCATION).toEqual('test-highlight-link-from-the-ipad-user-guide');
+		expect(highlights[2].ZANNOTATIONLOCATION).toEqual('test-highlight-link-from-the-mac-user-guide');
+		expect(highlights[3].ZANNOTATIONLOCATION).toEqual('test-highlight-link-from-the-apple-watch-user-guide');
 	});
 });
 
@@ -87,9 +100,10 @@ describe('Database load testing', () => {
 				threeThousandsAnnotations.push({
 					ZANNOTATIONASSETID: `THBFYNJKTGFTTVCGSAE${i}`,
 					ZFUTUREPROOFING5: `Introduction ${j}`,
-					ZANNOTATIONREPRESENTATIVETEXT: `This is a contextual text for the hightlight from the Book ${i}`,
-					ZANNOTATIONSELECTEDTEXT: `hightlight from the Book ${i}`,
-					ZANNOTATIONNOTE: `Test note for the hightlight from the Book ${i}`,
+					ZANNOTATIONREPRESENTATIVETEXT: `This is a contextual text for the highlight from the Book ${i}`,
+					ZANNOTATIONSELECTEDTEXT: `highlight from the Book ${i}`,
+					ZANNOTATIONLOCATION: `test-highlight-link-from-the-book-${i}`,
+					ZANNOTATIONNOTE: `Test note for the highlight from the Book ${i}`,
 					ZANNOTATIONCREATIONDATE: 685151385.91602,
 					ZANNOTATIONMODIFICATIONDATE: 685151385.91602,
 					ZANNOTATIONSTYLE: 3,
@@ -109,6 +123,9 @@ describe('Database load testing', () => {
 
 		expect(dbBooks.length).toEqual(1000);
 		expect(dbAnnotations.length).toEqual(3000);
+
+		const dbAnnotationLocations = dbAnnotations.filter(({ZANNOTATIONLOCATION}) => ZANNOTATIONLOCATION !== null && ZANNOTATIONLOCATION !== undefined);
+		expect(dbAnnotationLocations.length).toEqual(3000);
 
 		expect(endTime - startTime).toBeLessThan(500);
 	});

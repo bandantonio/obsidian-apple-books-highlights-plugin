@@ -23,6 +23,7 @@ describe('Plugin documentation', () => {
 		expect(readme).toContain('{{{contextualText}}}');
 		expect(readme).toContain('{{{highlight}}}');
 		expect(readme).toContain('{{{note}}}');
+		expect(readme).toContain('{{{highlightLocation}}}');
 		expect(readme).toContain('{{highlightStyle}}');
 		expect(readme).toContain('{{highlightCreationDate}}');
 		expect(readme).toContain('{{highlightModificationDate}}');
