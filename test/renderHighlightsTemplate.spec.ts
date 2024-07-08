@@ -8,7 +8,6 @@ import { aggregatedHighlights } from './mocks/aggregatedDetailsData';
 import { rawCustomTemplateMock } from './mocks/rawTemplates';
 import { defaultTemplateMock, renderedCustomTemplateMock } from './mocks/renderedTemplate';
 import defaultTemplate from '../src/template';
-import '../src/utils/helpers';
 
 describe('renderHighlightsTemplate', () => {
 	const helpers = Handlebars.helpers;
