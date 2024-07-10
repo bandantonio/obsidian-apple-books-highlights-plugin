@@ -66,6 +66,7 @@ The plugin uses Handlebars and Markdown to customize the output of your highligh
     - If you highlight parts of two adjacent sentences, the `contextualText` will contain both sentences.
   - `{{{highlight}}}` - The highlighted text.
   - `{{{note}}}` - A note you added for the highlight.
+  - `{{{highlightLocation}}}` - A unique identifier of the highlighted text. It is used to create a link to the highlighted text in Apple Books. For example: `[Apple Books Highlight Link](ibooks://assetid/{{bookId}}#{{highlightLocation}})`.
   - `{{highlightStyle}}` - The style of the highlight. It can be one of the following values:
     - `0` (underline)
     - `1` (green)

@@ -13,6 +13,7 @@ export const annotationsToAggregate = [{
 	"ZFUTUREPROOFING5": "Aggregated Introduction",
 	"ZANNOTATIONREPRESENTATIVETEXT": "This is a contextual text for the aggregated hightlight from the Apple iPhone User Guide",
 	"ZANNOTATIONSELECTEDTEXT": "aggregated hightlight from the Apple iPhone User Guide",
+	"ZANNOTATIONLOCATION": "aggregated-highlight-link-from-the-apple-iphone-user-guide",
 	"ZANNOTATIONNOTE": "Test note for the aggregated hightlight from the Apple iPhone User Guide",
 	"ZANNOTATIONCREATIONDATE": 731876693.002279,
 	"ZANNOTATIONMODIFICATIONDATE": 731876693.002279,
@@ -23,6 +24,7 @@ export const annotationsToAggregate = [{
 	"ZFUTUREPROOFING5": "Another aggregated Introduction",
 	"ZANNOTATIONREPRESENTATIVETEXT": "This is a contextual text for the aggregated hightlight from the Apple iPhone User Guide\n\ncontaining a new line to test the preservation of indentation",
 	"ZANNOTATIONSELECTEDTEXT": "aggregated hightlight from the Apple iPhone User Guide\n\ncontaining a new line to test the preservation of indentation",
+	"ZANNOTATIONLOCATION": "aggregated-highlight-link-from-the-apple-iphone-user-guide",
 	"ZANNOTATIONNOTE": "Test note for the aggregated hightlight from the Apple iPhone User Guide\n\nalong with a new line to test the preservation of indentation",
 	"ZANNOTATIONCREATIONDATE": 731876693.002279,
 	"ZANNOTATIONMODIFICATIONDATE": 731876693.002279,
@@ -43,6 +45,7 @@ export const aggregatedHighlights = [{
 		"contextualText": "This is a contextual text for the aggregated hightlight from the Apple iPhone User Guide",
 		"highlight": "aggregated hightlight from the Apple iPhone User Guide",
 		"note": "Test note for the aggregated hightlight from the Apple iPhone User Guide",
+		"highlightLocation": "aggregated-highlight-link-from-the-apple-iphone-user-guide",
 		"highlightStyle": 3,
 		"highlightCreationDate": 731876693.002279,
 		"highlightModificationDate": 731876693.002279
@@ -51,6 +54,7 @@ export const aggregatedHighlights = [{
 		"contextualText": "This is a contextual text for the aggregated hightlight from the Apple iPhone User Guide\ncontaining a new line to test the preservation of indentation",
 		"highlight": "aggregated hightlight from the Apple iPhone User Guide\ncontaining a new line to test the preservation of indentation",
 		"note": "Test note for the aggregated hightlight from the Apple iPhone User Guide\nalong with a new line to test the preservation of indentation",
+		"highlightLocation": "aggregated-highlight-link-from-the-apple-iphone-user-guide",
 		"highlightStyle": 3,
 		"highlightCreationDate": 731876693.002279,
 		"highlightModificationDate": 731876693.002279
