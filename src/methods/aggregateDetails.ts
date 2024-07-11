@@ -33,6 +33,7 @@ export const aggregateBookAndHighlightDetails = async (): Promise<ICombinedBooks
 						contextualText: textForContext ? preserveNewlineIndentation(textForContext) : textForContext,
 						highlight: preserveNewlineIndentation(annotation.ZANNOTATIONSELECTEDTEXT),
 						note: userNote ? preserveNewlineIndentation(userNote) : userNote,
+						highlightLocation: annotation.ZANNOTATIONLOCATION,
 						highlightStyle: annotation.ZANNOTATIONSTYLE,
 						highlightCreationDate: annotation.ZANNOTATIONCREATIONDATE,
 						highlightModificationDate: annotation.ZANNOTATIONMODIFICATIONDATE
