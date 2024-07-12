@@ -1,0 +1,85 @@
+name: Bug Report
+description: If you encountered an error or faulty behavior
+title: "[Bug]: <Summary of your issue>"
+labels: [ "bug" ]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to fill out this bug report! 🙏
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Bug Report Checklist
+      description: Please check the following items before submitting your report.
+      options:
+        - label: I have searched the [existing issues](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/issues?q=is%3Aopen+is%3Aissue+label%3Abug) to avoid duplicates
+          required: true
+        - label: I have checked the plugin's [documentation](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/blob/master/README.md)
+          required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      description: What version of the plugin are you using?
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: obsidian-version
+    attributes:
+      label: Obsidian version
+      description: What version of Obsidian are you using?
+      placeholder: 0.15.0
+    validations:
+      required: true
+  - type: dropdown
+    id: macos-version
+    attributes:
+      label: macOS version
+      options:
+        - macOS Sequoia
+        - macOS Sonoma
+        - macOS Ventura
+        - macOS Monterey
+      default: 1
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also, include screenshots, console output errors (if any), and any other related information.
+      placeholder: Please provide an explicit description of your issue, steps to reproduce, and what was the expected behavior.
+    validations:
+      required: true
+  - type: dropdown
+    id: behavior
+    attributes:
+      label: The issue occurs when
+      options:
+        - Importing a single book
+        - Importing all books
+        - In both cases
+      default: 1
+    validations:
+      required: true
+  - type: dropdown
+    id: how-many-books
+    attributes:
+      label: How many books do you have in your Apple Books library?
+      description: An approximate number is fine. May help identify potential performance issues.
+      options:
+        - "20 or less"
+        - "21 - 50"
+        - "51 - 100"
+        - "100+"
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/blob/master/.github/CODE_OF_CONDUCT.md) (make sure to open it in a new tab, if necessary).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

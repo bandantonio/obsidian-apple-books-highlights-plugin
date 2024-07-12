@@ -1,0 +1,32 @@
+name: Feature Request
+description: If you want to suggest an idea or a feature
+title: "[Request]: <Summary of your request>"
+labels: [ "enhancement", "question" ]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to fill out this request! 🙏
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Feature Request Checklist
+      description: Please check the following items before submitting your request.
+      options:
+        - label: I have searched the [existing issues](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement%2Cquestion) to avoid duplicates
+          required: true
+  - type: textarea
+    id: feature
+    attributes:
+      label: What feature would you like to request?
+      description: Also include links to any relevant resources, examples, or similar implementations that you know or like.
+      placeholder: Please provide an explicit description of your request, and why you think it would be beneficial.
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/blob/master/.github/CODE_OF_CONDUCT.md) (make sure to open it in a new tab, if necessary).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
