@@ -8,8 +8,9 @@ Import all your Apple Books highlights to Obsidian.
 ![GitHub manifest version](https://img.shields.io/github/manifest-json/v/bandantonio/obsidian-apple-books-highlights-plugin?style=for-the-badge&logo=obsidian&color=%230082FC)
 ![GitHub Downloads](https://img.shields.io/github/downloads/bandantonio/obsidian-apple-books-highlights-plugin/total?style=for-the-badge&logo=github&color=%237C3AED)
 [![Coveralls](https://img.shields.io/coverallsCoverage/github/bandantonio/obsidian-apple-books-highlights-plugin?branch=master&style=for-the-badge&logo=coveralls&label=Test%20coverage&color=%233F5767)](https://coveralls.io/github/bandantonio/obsidian-apple-books-highlights-plugin?branch=master)
-[![Plugin's page on Obsidian forum](https://img.shields.io/badge/obsidian_forum-blue?style=for-the-badge&color=%237C3AED&logo=obsidian)](https://forum.obsidian.md/t/new-plugin-apple-books-import-highlights/76856/21)
 
+[![GitHub Discussions](https://img.shields.io/badge/github_discussions-blue?style=for-the-badge&color=%23373e47&logo=github)](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/discussions)
+[![Plugin's page on Obsidian forum](https://img.shields.io/badge/obsidian_forum-blue?style=for-the-badge&color=%237C3AED&logo=obsidian)](https://forum.obsidian.md/t/new-plugin-apple-books-import-highlights/76856/21)
 
 ## Overview
 
@@ -30,12 +31,22 @@ This plugin aims to be a **fast**, **customizable**, **reliable**, and **up-to-d
 
 ## How to install
 
+### Outside of Obsidian
+
+1. Click the [link](https://obsidian.md/plugins?id=apple-books-import-highlights) (the same link you see in the "About" section of this repository) that will redirect you to the plugin's page on the Obsidian site.
+1. Confirm the browser prompt to allow the website to open Obsidian.
+1. In the Obsidian app:
+	1. Click **Install** on the plugin's page.
+	1. Click **Enable** right after installation.
+
+### Inside Obsidian
+
 1. Open **Settings**.
-1. Select **Turn on community plugins**
-1. Select **Browse** to list all available community plugins.
+1. Click **Turn on community plugins**
+1. Click **Browse** to list all available community plugins.
 1. Search for **Apple Books - Import Highlights**.
-1. Select **Install**.
-1. Select **Enable** right after installation
+1. Click **Install**.
+1. Click **Enable** right after installation
 
 Check Obsidian Help for more information about [Community plugins](https://help.obsidian.md/Extending+Obsidian/Community+plugins)
 
@@ -44,7 +55,7 @@ Check Obsidian Help for more information about [Community plugins](https://help.
 - **Command palette**:
   - `Cmd+P > Apple Books - Import Highlights: Import all`
   - `Cmd+P > Apple Books - Import Highlights: From a specific book...`
-- **Ribbon**: Select the plugin icon in the Ribbon (left sidebar)
+- **Ribbon**: Click the plugin icon ![plugin-icon][icon-data-url] in the Ribbon (left sidebar)
 
 ## Customization
 
@@ -103,6 +114,9 @@ Mon, Mar 04 2024, 17:50:28 +02:00
 
 ### Templates
 
+> [!TIP]
+> If you created a template you love and want to share it with others, you're welcome to do it in the [corresponding topic](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/discussions/32). Your contribution will also help others to get inspired and create their own templates.
+
 #### Template with colored highlights
 
 ![template colors](template-colors.png)
@@ -143,6 +157,10 @@ Number of annotations:: {{annotations.length}}
 
 ## Contributing
 
-Your feedback and ideas are more than welcome and highly appreciated! Join the discussion in the [Obsidian Forum](https://forum.obsidian.md/t/new-plugin-apple-books-import-highlights/76856).
+Ready to contribute? Check the [Contributing guidelines](CONTRIBUTING.md) to get started.
 
-If you have any question, feedback, or issue, feel free to open an issue.
+Your feedback and ideas are more than welcome and highly appreciated! Join the discussion in:
+- [Obsidian Forum](https://forum.obsidian.md/t/new-plugin-apple-books-import-highlights/76856)
+- [GitHub Discussions](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/discussions)
+
+[icon-data-url]: data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5MTkxOTEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1ib29rLW9wZW4iPjxwYXRoIGQ9Ik0yIDNoNmE0IDQgMCAwIDEgNCA0djE0YTMgMyAwIDAgMC0zLTNIMnoiLz48cGF0aCBkPSJNMjIgM2gtNmE0IDQgMCAwIDAtNCA0djE0YTMgMyAwIDAgMSAzLTNoN3oiLz48L3N2Zz4=

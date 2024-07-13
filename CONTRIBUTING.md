@@ -2,13 +2,15 @@
 
 Thank you for investing your time in contributing to the project! I, as the code owner, really appreciates it! 🩷
 
-First, read the [Code of Conduct](./CODE_OF_CONDUCT.md) to keep our community approachable and respectable.
+First, read the [Code of Conduct](.github/CODE_OF_CONDUCT.md) to keep our community approachable and respectable.
 
 ## How Can I Contribute?
 
 ### 🐛 Reporting Bugs
 
 If you spot a problem with the plugin, [search if an issue already exists][issue-bug]. If a related issue doesn't exist, you can open a new issue using the corresponding bug report form. Please provide as much information as possible (including screenshots and error messages) about the issue and how to reproduce it.
+
+If you're not sure if it's a bug or not, you're welcome to start a [new discussion](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/discussions).
 
 ### 🛠️ Resolving Issues
 
@@ -17,6 +19,10 @@ Scan through the [existing issues][issue-bug] to find one that interests you. As
 ### 💡 Suggesting Enhancements
 
 If you have an idea to improve the plugin, [search if someone else has already suggested it][issue-enhancement]. If a related issue doesn't exist, you can open a new issue using the corresponding enhancement request form. Please provide as much detail as possible about your suggestion.
+
+If you have an idea of an enhancement that is not fully formed yet, you're welcome to start a [new discussion](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/discussions), so together with the community, we can help you shape it.
+
+our community can help you shape it.
 
 ### 📚 Updating Documentation
 
