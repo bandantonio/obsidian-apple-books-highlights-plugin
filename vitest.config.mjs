@@ -4,7 +4,7 @@ import { defineConfig, configDefaults } from 'vitest/config';
 export default defineConfig({
 	test: {
 		include: ['test/**/*.spec.ts'],
-		exclude: [...configDefaults.exclude, ".direnv/**/*"],
+		exclude: [...configDefaults.exclude, '.direnv/**/*', 'test/e2e/'],
 		coverage: {
 			enabled: true,
 			provider: 'istanbul',
@@ -15,8 +15,9 @@ export default defineConfig({
 				'esbuild.config.mjs',
 				'version-bump.mjs',
 				'test/mocks/**/*',
-				'src/db/**/*',
-			]
+				'test/e2e/',
+				'src/db/**/*'
+			],
 		},
 		alias: {
 			obsidian: path.resolve(__dirname, 'test/mocks/obsidian.ts')
