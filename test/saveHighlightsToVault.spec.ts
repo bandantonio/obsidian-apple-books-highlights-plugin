@@ -3,6 +3,7 @@ import SaveHighlights from '../src/methods/saveHighlightsToVault';
 import { AppleBooksHighlightsImportPluginSettings } from '../src/settings';
 import { aggregatedHighlights } from './mocks/aggregatedDetailsData';
 import { defaultTemplateMock } from './mocks/renderedTemplate';
+import { ICombinedBooksAndHighlights } from '../src/types'
 
 const mockVault = {
 	getAbstractFileByPath: vi.fn(),
@@ -43,7 +44,7 @@ describe('Save highlights to vault', () => {
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
 		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('ibooks-highlights');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedHighlights);
+		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('ibooks-highlights');
@@ -66,7 +67,7 @@ describe('Save highlights to vault', () => {
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, { ...settings, highlightsFolder: '' });
 		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedHighlights);
+		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('');
@@ -92,7 +93,7 @@ describe('Save highlights to vault', () => {
 			};
 		});
 
-		await saveHighlights.saveHighlightsToVault(aggregatedHighlights);
+		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyList).toHaveBeenCalledTimes(1);
 		expect(spyList).toReturnWith({

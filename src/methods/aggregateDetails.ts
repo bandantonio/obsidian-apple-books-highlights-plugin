@@ -1,6 +1,7 @@
 import { IBook, IBookAnnotation, ICombinedBooksAndHighlights } from '../types';
 import { getBooks } from './getBooks';
 import { getAnnotations } from './getAnnotations';
+import { preserveNewlineIndentation, removeTrailingSpaces } from 'src/utils'
 
 export const aggregateBookAndHighlightDetails = async (): Promise<ICombinedBooksAndHighlights[]> => {
 	const books = await getBooks();
@@ -30,7 +31,7 @@ export const aggregateBookAndHighlightDetails = async (): Promise<ICombinedBooks
 
 					return {
 						chapter: annotation.ZFUTUREPROOFING5,
-						contextualText: textForContext ? preserveNewlineIndentation(textForContext) : textForContext,
+						contextualText: textForContext ? removeTrailingSpaces(preserveNewlineIndentation(textForContext)) : textForContext,
 						highlight: preserveNewlineIndentation(annotation.ZANNOTATIONSELECTEDTEXT),
 						note: userNote ? preserveNewlineIndentation(userNote) : userNote,
 						highlightLocation: annotation.ZANNOTATIONLOCATION,
@@ -47,10 +48,3 @@ export const aggregateBookAndHighlightDetails = async (): Promise<ICombinedBooks
 
 	return resultingHighlights;
 };
-
-// Handler of double new line characters (\n\n) to preserve proper indentation in text blocks
-const preserveNewlineIndentation = (textBlock: string): string => {
-	const stringWithNewLines = /\n+\s*/g;
-
-	return stringWithNewLines.test(textBlock) ? textBlock.replace(stringWithNewLines, '\n') : textBlock;
-}

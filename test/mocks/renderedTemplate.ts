@@ -64,3 +64,21 @@ along with a new line to test the preservation of indentation
 - <small>📅 Highlight modified on:: 2024-03-11 03:04:53 PM -04:00</small>
 
 `;
+
+export const renderedCustomTemplateWrappedTextBlockMock = `Title:: 📕 Designing Data-Intensive Applications
+Author:: Kleppmann, Martin
+Link:: [Apple Books Link](ibooks://assetid/28AEDF62F12B289C88BD6659BD6E50CC)
+
+## Annotations
+
+Number of annotations:: 1
+
+----
+
+> [!QUOTE]
+>  Chapter 1 introduces the terminology and approach
+that we're going to use throughout this book. It examines what we actually mean by
+words like reliability, scalability, and maintainability, and how
+we can try to achieve these goals.
+
+`;
