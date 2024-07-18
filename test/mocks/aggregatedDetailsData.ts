@@ -23,7 +23,7 @@ export const annotationsToAggregate = [{
 	"ZANNOTATIONASSETID": "THBFYNJKTGFTTVCGSAE5",
 	"ZFUTUREPROOFING5": "Another aggregated Introduction",
 	"ZANNOTATIONREPRESENTATIVETEXT": "This is a contextual text for the aggregated highlight from the Apple iPhone User Guide\n\ncontaining a new line to test the preservation of indentation",
-	"ZANNOTATIONSELECTEDTEXT": "aggregated highlight from the Apple iPhone User Guide\n\ncontaining a new line to test the preservation of indentation",
+	"ZANNOTATIONSELECTEDTEXT": "aggregated highlight from the Apple iPhone User Guide\n\ncontaining a new line to test the preservation of indentation\n\nand another new line\n\nto check one more time",
 	"ZANNOTATIONLOCATION": "aggregated-highlight-link-from-the-apple-iphone-user-guide",
 	"ZANNOTATIONNOTE": "Test note for the aggregated highlight from the Apple iPhone User Guide\n\nalong with a new line to test the preservation of indentation",
 	"ZANNOTATIONCREATIONDATE": 731876693.002279,
@@ -52,7 +52,7 @@ export const aggregatedHighlights = [{
 	}, {
 		"chapter": "Another aggregated Introduction",
 		"contextualText": "This is a contextual text for the aggregated highlight from the Apple iPhone User Guide\ncontaining a new line to test the preservation of indentation",
-		"highlight": "aggregated highlight from the Apple iPhone User Guide\ncontaining a new line to test the preservation of indentation",
+		"highlight": "aggregated highlight from the Apple iPhone User Guide\ncontaining a new line to test the preservation of indentation\nand another new line\nto check one more time",
 		"note": "Test note for the aggregated highlight from the Apple iPhone User Guide\nalong with a new line to test the preservation of indentation",
 		"highlightLocation": "aggregated-highlight-link-from-the-apple-iphone-user-guide",
 		"highlightStyle": 3,
