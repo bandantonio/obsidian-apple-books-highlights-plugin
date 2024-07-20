@@ -1,8 +1,17 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import SaveHighlights from '../src/methods/saveHighlightsToVault';
 import { AppleBooksHighlightsImportPluginSettings } from '../src/settings';
+import { rawCustomTemplateMock, rawCustomTemplateMockWithWrappedTextBlockContainingNewlines } from './mocks/rawTemplates';
 import { aggregatedHighlights } from './mocks/aggregatedDetailsData';
-import { defaultTemplateMock } from './mocks/renderedTemplate';
+import {
+	defaultTemplateMock,
+	renderedCustomTemplateMock,
+	renderedCustomTemplateMockWithWrappedTextBlockContainingNewlines,
+} from './mocks/renderedTemplate';
+import { ICombinedBooksAndHighlights } from '../src/types'
 
 const mockVault = {
 	getAbstractFileByPath: vi.fn(),
@@ -38,12 +47,16 @@ afterEach(() => {
 const settings = new AppleBooksHighlightsImportPluginSettings();
 
 describe('Save highlights to vault', () => {
-	test('Should save highlights to vault', async () => {
+	dayjs.extend(utc);
+	dayjs.extend(timezone);
+	const tzSpy = vi.spyOn(dayjs.tz, 'guess');
+
+	test('Should save highlights to vault using the default template', async () => {
 		// eslint-disable-next-line
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
 		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('ibooks-highlights');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedHighlights);
+		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('ibooks-highlights');
@@ -61,12 +74,63 @@ describe('Save highlights to vault', () => {
 		);
 	});
 
-	test('Should skip saving highlights to vault highlights are not found', async () => {
+	test('Should save highlights to vault using the custom colored template', async () => {
+		tzSpy.mockImplementation(() => 'America/New_York');
+
+		settings.template = rawCustomTemplateMock;
+
+		// eslint-disable-next-line
+		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
+		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('ibooks-highlights');
+
+		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
+
+		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
+		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('ibooks-highlights');
+
+		expect(mockVault.delete).toHaveBeenCalledTimes(1);
+		expect(mockVault.delete).toHaveBeenCalledWith('ibooks-highlights', true);
+
+		expect(mockVault.createFolder).toHaveBeenCalledTimes(1);
+		expect(mockVault.createFolder).toHaveBeenCalledWith('ibooks-highlights');
+
+		expect(mockVault.create).toHaveBeenCalledTimes(1);
+		expect(mockVault.create).toHaveBeenCalledWith(
+			`ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md`,
+			renderedCustomTemplateMock
+		);
+	});
+
+	test('Should save highlights to vault using the custom template with wrapped text block', async () => {
+		settings.template = rawCustomTemplateMockWithWrappedTextBlockContainingNewlines;
+		// eslint-disable-next-line
+		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
+		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('ibooks-highlights');
+
+		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
+
+		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
+		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('ibooks-highlights');
+
+		expect(mockVault.delete).toHaveBeenCalledTimes(1);
+		expect(mockVault.delete).toHaveBeenCalledWith('ibooks-highlights', true);
+
+		expect(mockVault.createFolder).toHaveBeenCalledTimes(1);
+		expect(mockVault.createFolder).toHaveBeenCalledWith('ibooks-highlights');
+
+		expect(mockVault.create).toHaveBeenCalledTimes(1);
+		expect(mockVault.create).toHaveBeenCalledWith(
+			`ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md`,
+			renderedCustomTemplateMockWithWrappedTextBlockContainingNewlines
+		);
+	});
+
+	test('Should skip saving highlights to vault if highlights are not found', async () => {
 		// eslint-disable-next-line
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, { ...settings, highlightsFolder: '' });
 		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedHighlights);
+		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('');
@@ -92,7 +156,7 @@ describe('Save highlights to vault', () => {
 			};
 		});
 
-		await saveHighlights.saveHighlightsToVault(aggregatedHighlights);
+		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyList).toHaveBeenCalledTimes(1);
 		expect(spyList).toReturnWith({

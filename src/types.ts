@@ -26,6 +26,9 @@ export interface IHighlight {
     highlight: string;
     highlightLocation: string;
     note: string;
+    highlightStyle: IBookAnnotation['ZANNOTATIONSTYLE'],
+    highlightCreationDate: number;
+    highlightModificationDate: number;
 }
 export interface ICombinedBooksAndHighlights {
     bookTitle: string;

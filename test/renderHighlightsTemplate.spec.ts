@@ -5,9 +5,10 @@ import Handlebars from 'handlebars';
 import { describe, expect, test, vi } from 'vitest';
 import { renderHighlightsTemplate } from '../src/methods/renderHighlightsTemplate';
 import { aggregatedHighlights } from './mocks/aggregatedDetailsData';
-import { rawCustomTemplateMock } from './mocks/rawTemplates';
-import { defaultTemplateMock, renderedCustomTemplateMock } from './mocks/renderedTemplate';
+import { rawCustomTemplateMock, rawCustomTemplateMockWithWrappedTextBlockContainingNewlines } from './mocks/rawTemplates';
+import { defaultTemplateMock, renderedCustomTemplateMock, renderedCustomTemplateMockWithWrappedTextBlockContainingNewlines } from './mocks/renderedTemplate';
 import defaultTemplate from '../src/template';
+import { ICombinedBooksAndHighlights } from 'src/types';
 
 describe('renderHighlightsTemplate', () => {
 	const helpers = Handlebars.helpers;
@@ -18,7 +19,7 @@ describe('renderHighlightsTemplate', () => {
 
 	describe('Template rendering', () => {
 		test('Should render a default template with the provided data', async () => {
-			const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlights[0], defaultTemplate);
+			const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlights[0] as ICombinedBooksAndHighlights, defaultTemplate);
 
 			expect(renderedTemplate).toEqual(defaultTemplateMock);
 		});
@@ -26,9 +27,15 @@ describe('renderHighlightsTemplate', () => {
 		test('Should render a custom template with the provided data', async () => {
 			tzSpy.mockImplementation(() => 'America/New_York');
 
-			const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlights[0], rawCustomTemplateMock);
+			const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlights[0] as ICombinedBooksAndHighlights, rawCustomTemplateMock);
 
 			expect(renderedTemplate).toEqual(renderedCustomTemplateMock);
+		});
+
+		test('Should render a custom template with the provided data and preserve newlines in wrapped text blocks', async () => {
+			const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlights[0] as ICombinedBooksAndHighlights, rawCustomTemplateMockWithWrappedTextBlockContainingNewlines);
+
+			expect(renderedTemplate).toEqual(renderedCustomTemplateMockWithWrappedTextBlockContainingNewlines);
 		});
 	});
 
