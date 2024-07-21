@@ -23,6 +23,15 @@ This plugin aims to be a **fast**, **customizable**, **reliable**, and **up-to-d
 - 📚 **Dataview-ready**: The default template creates highlights in a format that is compatible with [Dataview](https://blacksmithgu.github.io/obsidian-dataview/), so you can use your highlights in Dataview queries to unleash possible use cases even further (for example, to create a list of books you've read).
 - 🔄 **Up-to-date**: The plugin is updated regularly to support the latest versions of Obsidian, and Apple Books, as well as react to the users' feedback.
 
+## What users say
+
+- 💬 *Nice work. This is really quick*. - **cmyplay**
+- 💬 *I just wanted to say that I love your plugin. It’s exactly what I need with no frills*. - **civilserf**
+- 💬 *I am very grateful for the plugin you developed, which has made organizing my reading notes much more convenient*. - **JeffreyGH10**
+- 💬 *Love this! great work!* - **dschense**
+- 💬 *Thanks for sharing this nice plugin*. - **modatwork**
+- 💬 *Your plugin is super fast and useful!* - **weslau**
+
 ## Try it out
 
 [![Plugin's page on Obsidian forum](https://img.shields.io/badge/install_plugin-blue?style=for-the-badge&color=%237C3AED&logo=obsidian)](https://obsidian.md/plugins?id=apple-books-import-highlights)
