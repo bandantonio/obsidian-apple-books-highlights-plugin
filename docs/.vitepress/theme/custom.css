@@ -1,0 +1,22 @@
+:root {
+	--vp-c-brand-1: #1cb941;
+	--vp-c-brand-1-bg: #1cb941;
+	--vp-button-brand-bg: #1cb941;
+	--vp-c-brand-2: #747bff;
+	--vp-home-hero-name-color: transparent;
+	--vp-home-hero-name-background: -webkit-linear-gradient(
+	  120deg,
+	  var(--vp-c-brand-1),
+	  var(--vp-c-brand-2)
+	);
+}
+
+
+.vp-doc strong {
+	color: var(--vp-c-brand-2);
+}
+
+img[alt="plugin-icon"] {
+	height: 20px;
+	display: inline-block;
+}
