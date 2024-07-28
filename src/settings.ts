@@ -1,11 +1,13 @@
 import { App, Notice, PluginSettingTab, Setting } from 'obsidian';
 import IBookHighlightsPlugin from '../main';
 import defaultTemplate from './template';
+import { IHighlightsSortingCriterion, IBookHighlightsPluginSettings } from './types';
 
-export class AppleBooksHighlightsImportPluginSettings {
+export class AppleBooksHighlightsImportPluginSettings implements IBookHighlightsPluginSettings {
 	highlightsFolder = 'ibooks-highlights';
 	backup = false;
 	importOnStart = false;
+	highlightsSortingCriterion = IHighlightsSortingCriterion.CreationDateOldToNew;
 	template = defaultTemplate;
 }
 
@@ -65,6 +67,31 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
                         await this.plugin.saveSettings();
                     });
             });
+
+		new Setting(containerEl)
+			.setName('Highlights sorting criterion')
+			.setDesc('Sort highlights by a specific criterion. Default: By creation date (from oldest to newest)')
+			.setClass('ibooks-highlights-sorting')
+			.addDropdown((dropdown) => {
+				const options = {
+					[IHighlightsSortingCriterion.CreationDateOldToNew]: 'By creation date (from oldest to newest)',
+					[IHighlightsSortingCriterion.CreationDateNewToOld]: 'By creation date (from newest to oldest)',
+					[IHighlightsSortingCriterion.LastModifiedDateOldToNew]: 'By modification date (from oldest to newest)',
+					[IHighlightsSortingCriterion.LastModifiedDateNewToOld]: 'By modification date (from newest to oldest)',
+					[IHighlightsSortingCriterion.Book]: 'By location in a book'
+				};
+
+				dropdown
+					.addOptions(options)
+					.setValue(this.plugin.settings.highlightsSortingCriterion)
+					.onChange(async (value: IHighlightsSortingCriterion) => {
+						console.log('value', value);
+
+						this.plugin.settings.highlightsSortingCriterion = value;
+						await this.plugin.saveSettings();
+					}
+				);
+			});
 
         new Setting(containerEl)
             .setName('Template')
