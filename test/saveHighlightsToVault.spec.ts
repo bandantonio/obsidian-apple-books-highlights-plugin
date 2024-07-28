@@ -5,10 +5,10 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import SaveHighlights from '../src/methods/saveHighlightsToVault';
 import { AppleBooksHighlightsImportPluginSettings } from '../src/settings';
 import { rawCustomTemplateMock, rawCustomTemplateMockWithWrappedTextBlockContainingNewlines } from './mocks/rawTemplates';
-import { aggregatedHighlights } from './mocks/aggregatedDetailsData';
+import { aggregatedUnsortedHighlights } from './mocks/aggregatedDetailsData';
 import {
-	defaultTemplateMock,
-	renderedCustomTemplateMock,
+	defaultTemplateMockWithAnnotationsSortedByDefault,
+	renderedCustomTemplateMockWithDefaultSorting,
 	renderedCustomTemplateMockWithWrappedTextBlockContainingNewlines,
 } from './mocks/renderedTemplate';
 import { ICombinedBooksAndHighlights } from '../src/types'
@@ -56,7 +56,7 @@ describe('Save highlights to vault', () => {
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
 		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('ibooks-highlights');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
+		await saveHighlights.saveHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('ibooks-highlights');
@@ -70,7 +70,7 @@ describe('Save highlights to vault', () => {
 		expect(mockVault.create).toHaveBeenCalledTimes(1);
 		expect(mockVault.create).toHaveBeenCalledWith(
 			`ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md`,
-			defaultTemplateMock
+			defaultTemplateMockWithAnnotationsSortedByDefault
 		);
 	});
 
@@ -83,7 +83,7 @@ describe('Save highlights to vault', () => {
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
 		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('ibooks-highlights');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
+		await saveHighlights.saveHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('ibooks-highlights');
@@ -97,7 +97,7 @@ describe('Save highlights to vault', () => {
 		expect(mockVault.create).toHaveBeenCalledTimes(1);
 		expect(mockVault.create).toHaveBeenCalledWith(
 			`ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md`,
-			renderedCustomTemplateMock
+			renderedCustomTemplateMockWithDefaultSorting
 		);
 	});
 
@@ -107,7 +107,7 @@ describe('Save highlights to vault', () => {
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
 		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('ibooks-highlights');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
+		await saveHighlights.saveHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('ibooks-highlights');
@@ -130,7 +130,7 @@ describe('Save highlights to vault', () => {
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, { ...settings, highlightsFolder: '' });
 		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
+		await saveHighlights.saveHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
 		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('');
@@ -156,7 +156,7 @@ describe('Save highlights to vault', () => {
 			};
 		});
 
-		await saveHighlights.saveHighlightsToVault(aggregatedHighlights as ICombinedBooksAndHighlights[]);
+		await saveHighlights.saveHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyList).toHaveBeenCalledTimes(1);
 		expect(spyList).toReturnWith({

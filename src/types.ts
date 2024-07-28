@@ -1,3 +1,5 @@
+import { Template } from 'handlebars';
+
 export interface IBook {
     ZASSETID: string;
     ZTITLE: string;
@@ -39,4 +41,20 @@ export interface ICombinedBooksAndHighlights {
     bookLastOpenedDate: number;
     bookCoverUrl: string;
     annotations: IHighlight[];
+}
+
+export enum IHighlightsSortingCriterion {
+	CreationDateOldToNew = 'creationDateOldToNew',
+	CreationDateNewToOld = 'creationDateNewToOld',
+	LastModifiedDateOldToNew = 'lastModifiedDateOldToNew',
+	LastModifiedDateNewToOld = 'lastModifiedDateNewToOld',
+	Book = 'book'
+}
+
+export interface IBookHighlightsPluginSettings {
+	highlightsFolder: string;
+	backup: boolean;
+	importOnStart: boolean;
+	highlightsSortingCriterion: IHighlightsSortingCriterion;
+	template: Template;
 }

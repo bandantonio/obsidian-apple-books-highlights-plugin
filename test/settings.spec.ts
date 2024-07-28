@@ -16,6 +16,10 @@ describe('Plugin default settings', () => {
 		expect(settings.backup).toBeFalsy();
 	});
 
+	test("Highlights sorting criterion", () => {
+		expect(settings.highlightsSortingCriterion).toEqual('creationDateOldToNew');
+	});
+
 	test('Template', () => {
 		expect(settings.template).toEqual(defaultTemplate);
 	});

@@ -4,9 +4,9 @@ import timezone from 'dayjs/plugin/timezone';
 import Handlebars from 'handlebars';
 import { describe, expect, test, vi } from 'vitest';
 import { renderHighlightsTemplate } from '../src/methods/renderHighlightsTemplate';
-import { aggregatedHighlights } from './mocks/aggregatedDetailsData';
+import { aggregatedHighlightsWithDefaultSorting } from './mocks/aggregatedDetailsData';
 import { rawCustomTemplateMock, rawCustomTemplateMockWithWrappedTextBlockContainingNewlines } from './mocks/rawTemplates';
-import { defaultTemplateMock, renderedCustomTemplateMock, renderedCustomTemplateMockWithWrappedTextBlockContainingNewlines } from './mocks/renderedTemplate';
+import { defaultTemplateMockWithAnnotationsSortedByDefault, renderedCustomTemplateMockWithDefaultSorting, renderedCustomTemplateMockWithWrappedTextBlockContainingNewlines } from './mocks/renderedTemplate';
 import defaultTemplate from '../src/template';
 import { ICombinedBooksAndHighlights } from 'src/types';
 
@@ -19,21 +19,21 @@ describe('renderHighlightsTemplate', () => {
 
 	describe('Template rendering', () => {
 		test('Should render a default template with the provided data', async () => {
-			const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlights[0] as ICombinedBooksAndHighlights, defaultTemplate);
+			const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlightsWithDefaultSorting[0] as ICombinedBooksAndHighlights, defaultTemplate);
 
-			expect(renderedTemplate).toEqual(defaultTemplateMock);
+			expect(renderedTemplate).toEqual(defaultTemplateMockWithAnnotationsSortedByDefault);
 		});
 
 		test('Should render a custom template with the provided data', async () => {
 			tzSpy.mockImplementation(() => 'America/New_York');
 
-			const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlights[0] as ICombinedBooksAndHighlights, rawCustomTemplateMock);
+			const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlightsWithDefaultSorting[0] as ICombinedBooksAndHighlights, rawCustomTemplateMock);
 
-			expect(renderedTemplate).toEqual(renderedCustomTemplateMock);
+			expect(renderedTemplate).toEqual(renderedCustomTemplateMockWithDefaultSorting);
 		});
 
 		test('Should render a custom template with the provided data and preserve newlines in wrapped text blocks', async () => {
-			const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlights[0] as ICombinedBooksAndHighlights, rawCustomTemplateMockWithWrappedTextBlockContainingNewlines);
+			const renderedTemplate = await renderHighlightsTemplate(aggregatedHighlightsWithDefaultSorting[0] as ICombinedBooksAndHighlights, rawCustomTemplateMockWithWrappedTextBlockContainingNewlines);
 
 			expect(renderedTemplate).toEqual(renderedCustomTemplateMockWithWrappedTextBlockContainingNewlines);
 		});

@@ -3,6 +3,7 @@ import path from 'path';
 import { ICombinedBooksAndHighlights } from '../types';
 import { AppleBooksHighlightsImportPluginSettings } from '../settings';
 import { renderHighlightsTemplate } from './renderHighlightsTemplate';
+import { sortHighlights } from 'src/methods/sortHighlights';
 
 export default class SaveHighlights {
 	private app: App;
@@ -43,9 +44,13 @@ export default class SaveHighlights {
 
 		await this.vault.createFolder(this.settings.highlightsFolder);
 
-		highlights.forEach(async (highlight: ICombinedBooksAndHighlights) => {
-			const renderedTemplate = await renderHighlightsTemplate(highlight, this.settings.template);
-			const filePath = path.join(this.settings.highlightsFolder, `${highlight.bookTitle}.md`);
+		highlights.forEach(async (combinedHighlight: ICombinedBooksAndHighlights) => {
+			// Order highlights according to the value in settings
+			const sortedHighlights = sortHighlights(combinedHighlight, this.settings.highlightsSortingCriterion);
+
+			// Save highlights to vault
+			const renderedTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.template);
+			const filePath = path.join(this.settings.highlightsFolder, `${combinedHighlight.bookTitle}.md`);
 
 			await this.vault.create(
 				filePath,
