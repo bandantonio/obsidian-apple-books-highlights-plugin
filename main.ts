@@ -1,5 +1,5 @@
 import { Notice, Plugin } from 'obsidian';
-import { IBookHighlightsPluginSearchModal } from './src/search';
+import { IBookHighlightsPluginSearchModal, OverwriteBookModal } from './src/search';
 import { aggregateBookAndHighlightDetails } from './src/methods/aggregateDetails';
 import SaveHighlights from './src/methods/saveHighlightsToVault';
 import { AppleBooksHighlightsImportPluginSettings, IBookHighlightsSettingTab } from './src/settings';
@@ -17,12 +17,18 @@ export default class IBookHighlightsPlugin extends Plugin {
 		}
 
 		this.addRibbonIcon('book-open', this.manifest.name, async () => {
-			await this.aggregateAndSaveHighlights().then(() => {
-				new Notice('Apple Books highlights imported successfully');
-			}).catch((error) => {
-				new Notice(`[${this.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
+			try {
+				this.settings.backup
+				? await this.aggregateAndSaveHighlights().then(() => {
+					new Notice('Apple Books highlights imported successfully');
+					}).catch((error) => {
+						new Notice(`[${this.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
+						console.error(`[${this.manifest.name}]: ${error}`);
+					})
+				: new OverwriteBookModal(this.app, this).open();
+			} catch (error) {
 				console.error(`[${this.manifest.name}]: ${error}`);
-			});
+			}
 		});
 
 		this.addSettingTab(new IBookHighlightsSettingTab(this.app, this));
@@ -32,7 +38,9 @@ export default class IBookHighlightsPlugin extends Plugin {
 			name: 'Import all',
 			callback: async () => {
 				try {
-					await this.aggregateAndSaveHighlights();
+					this.settings.backup
+					? await this.aggregateAndSaveHighlights()
+					: new OverwriteBookModal(this.app, this).open();
 				} catch (error) {
 					new Notice(`[${this.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
 					console.error(`[${this.manifest.name}]: ${error}`);
@@ -74,6 +82,6 @@ export default class IBookHighlightsPlugin extends Plugin {
 			throw ('No highlights found. Make sure you made some highlights in your Apple Books.');
 		}
 
-		await this.saveHighlights.saveHighlightsToVault(highlights);
+		await this.saveHighlights.saveAllBooksHighlightsToVault(highlights);
 	}
 }

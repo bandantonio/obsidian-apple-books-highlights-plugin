@@ -1,9 +1,10 @@
-import { App, Vault } from 'obsidian';
+import { App, TFile, Vault } from 'obsidian';
 import path from 'path';
 import { ICombinedBooksAndHighlights } from '../types';
 import { AppleBooksHighlightsImportPluginSettings } from '../settings';
 import { renderHighlightsTemplate } from './renderHighlightsTemplate';
 import { sortHighlights } from 'src/methods/sortHighlights';
+import BackupHighlights from 'src/utils/backupHighlights';
 
 export default class SaveHighlights {
 	private app: App;
@@ -16,35 +17,26 @@ export default class SaveHighlights {
 		this.settings = settings;
 	}
 
-	async saveHighlightsToVault(highlights: ICombinedBooksAndHighlights[]): Promise<void> {
-		const highlightsFolderPath = this.vault.getAbstractFileByPath(
+	async saveAllBooksHighlightsToVault(highlights: ICombinedBooksAndHighlights[]): Promise<void> {
+		const highlightsFolderPath = this.vault.getFolderByPath(
 			this.settings.highlightsFolder
 		);
 
 		const isBackupEnabled = this.settings.backup;
 
-		// // Backup highlights folder if backup is enabled
 		if (highlightsFolderPath) {
 			if (isBackupEnabled) {
-				const highlightsFilesToBackup = (await this.vault.adapter.list(highlightsFolderPath.path)).files;
-
-				const highlightsBackupFolder = `${this.settings.highlightsFolder}-bk-${Date.now()}`;
-
-				await this.vault.createFolder(highlightsBackupFolder);
-
-				highlightsFilesToBackup.forEach(async (file: string) => {
-					const fileName = path.basename(file);
-
-					await this.vault.adapter.copy(file, path.join(highlightsBackupFolder, fileName))
-				});
+				const backupMethods = new BackupHighlights(this.vault, this.settings);
+				await backupMethods.backupAllHighlights();
+			} else {
+				await this.vault.delete(highlightsFolderPath, true);
+				await this.vault.createFolder(this.settings.highlightsFolder);
 			}
-
-			await this.vault.delete(highlightsFolderPath, true);
+		} else {
+			await this.vault.createFolder(this.settings.highlightsFolder);
 		}
 
-		await this.vault.createFolder(this.settings.highlightsFolder);
-
-		highlights.forEach(async (combinedHighlight: ICombinedBooksAndHighlights) => {
+		for (const combinedHighlight of highlights) {
 			// Order highlights according to the value in settings
 			const sortedHighlights = sortHighlights(combinedHighlight, this.settings.highlightsSortingCriterion);
 
@@ -52,10 +44,55 @@ export default class SaveHighlights {
 			const renderedTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.template);
 			const filePath = path.join(this.settings.highlightsFolder, `${combinedHighlight.bookTitle}.md`);
 
-			await this.vault.create(
-				filePath,
-				renderedTemplate
-			);
-		});
+			await this.createNewBookFile(filePath, renderedTemplate);
+		}
+	}
+
+	async saveSingleBookHighlightsToVault(highlights: ICombinedBooksAndHighlights[], shouldCreateFile: boolean): Promise<void> {
+		const highlightsFolderPath = this.vault.getFolderByPath(
+			this.settings.highlightsFolder
+		);
+
+		if (!highlightsFolderPath) {
+			await this.vault.createFolder(this.settings.highlightsFolder);
+		}
+
+		for (const combinedHighlight of highlights) {
+			// Order highlights according to the value in settings
+			const sortedHighlights = sortHighlights(combinedHighlight, this.settings.highlightsSortingCriterion);
+
+			// Save highlights to vault
+			const renderedTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.template);
+			const filePath = path.join(this.settings.highlightsFolder, `${combinedHighlight.bookTitle}.md`);
+
+			if (shouldCreateFile) {
+				await this.createNewBookFile(filePath, renderedTemplate);
+			} else {
+				const isBackupEnabled = this.settings.backup;
+				const backupMethods = new BackupHighlights(this.vault, this.settings);
+
+				const vaultFile = this.vault.getFileByPath(filePath) as TFile;
+
+				if (isBackupEnabled) {
+					backupMethods.backupSingleBookHighlights(combinedHighlight.bookTitle);
+				}
+
+				await this.modifyExistingBookFile(vaultFile, renderedTemplate);
+			}
+		}
+	}
+
+	async modifyExistingBookFile(file: TFile, data: string): Promise<void> {
+		await this.vault.modify(
+			file,
+			data
+		);
+	}
+
+	async createNewBookFile(filePath: string, data: string): Promise<void> {
+		await this.vault.create(
+			filePath,
+			data
+		);
 	}
 }

@@ -56,7 +56,13 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Backup highlights')
-            .setDesc('Backup highlights folder before import. Backup folder template: <highlights-folder>-bk-<timestamp> (For example, ibooks-highlights-bk-1704060001)')
+            .setDesc(createFragment(el => {
+                el.appendText('Backup highlights before import.')
+                el.createEl('br')
+                el.appendText('- Folder template: <highlights-folder>-bk-<timestamp> (For example, ibooks-highlights-bk-1704060001).')
+                el.createEl('br')
+                el.appendText('- File template: <highlights-file>-bk-<timestamp> (For example, Building a Second Brain-bk-1704060001).')
+            }))
             .addToggle((toggle) => {
                 toggle.setValue(this.plugin.settings.backup)
                     .onChange(async (value) => {
