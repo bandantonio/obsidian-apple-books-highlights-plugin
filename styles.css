@@ -7,3 +7,12 @@
 .ibooks-highlights-folder > .setting-item-control.setting-error > input {
 	border-color: #b00;
 }
+
+.modal-rewrite-book-title {
+    text-align: center;
+    color: var(--interactive-accent);
+}
+
+.modal-rewrite-all-books {
+    color: var(--interactive-accent);
+}

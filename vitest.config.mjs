@@ -9,12 +9,12 @@ export default defineConfig({
 			enabled: true,
 			provider: 'istanbul',
 			reporter: ['lcov'],
+			include: [
+				'main.ts',
+				'src/**/*.ts'
+			],
 			exclude: [
-				'src/template.ts',
-				'drizzle.config.ts',
-				'esbuild.config.mjs',
-				'version-bump.mjs',
-				'test/mocks/**/*',
+				'src/search.ts',
 				'src/db/**/*',
 			]
 		},

@@ -4,6 +4,7 @@ import timezone from 'dayjs/plugin/timezone';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import SaveHighlights from '../src/methods/saveHighlightsToVault';
 import { AppleBooksHighlightsImportPluginSettings } from '../src/settings';
+import defaultTemplate from '../src/template';
 import { rawCustomTemplateMock, rawCustomTemplateMockWithWrappedTextBlockContainingNewlines } from './mocks/rawTemplates';
 import { aggregatedUnsortedHighlights } from './mocks/aggregatedDetailsData';
 import {
@@ -14,13 +15,17 @@ import {
 import { ICombinedBooksAndHighlights } from '../src/types'
 
 const mockVault = {
-	getAbstractFileByPath: vi.fn(),
+	getFileByPath: vi.fn(),
+	getFolderByPath: vi.fn(),
 	// eslint-disable-next-line
 	createFolder: vi.fn().mockImplementation(async (folderName: string) => {
 		return;
 	}),
 	// eslint-disable-next-line
 	create: vi.fn().mockImplementation(async (filePath: string, data: string) => {
+		return;
+	}),
+	modify: vi.fn().mockImplementation(async (file: any, data: string) => {
 		return;
 	}),
 	// eslint-disable-next-line
@@ -38,6 +43,7 @@ const mockVault = {
 
 beforeEach(() => {
 	Date.now = vi.fn().mockImplementation(() => 1704060001);
+	settings.template = defaultTemplate;
 });
 
 afterEach(() => {
@@ -46,7 +52,7 @@ afterEach(() => {
 
 const settings = new AppleBooksHighlightsImportPluginSettings();
 
-describe('Save highlights to vault', () => {
+describe('Save all highlights to vault', () => {
 	dayjs.extend(utc);
 	dayjs.extend(timezone);
 	const tzSpy = vi.spyOn(dayjs.tz, 'guess');
@@ -54,12 +60,12 @@ describe('Save highlights to vault', () => {
 	test('Should save highlights to vault using the default template', async () => {
 		// eslint-disable-next-line
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
-		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('ibooks-highlights');
+		const spyGetFolderByPath = vi.spyOn(mockVault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
+		await saveHighlights.saveAllBooksHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
-		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
-		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('ibooks-highlights');
+		expect(spyGetFolderByPath).toHaveBeenCalledTimes(1);
+		expect(spyGetFolderByPath).toHaveBeenCalledWith('ibooks-highlights');
 
 		expect(mockVault.delete).toHaveBeenCalledTimes(1);
 		expect(mockVault.delete).toHaveBeenCalledWith('ibooks-highlights', true);
@@ -81,12 +87,12 @@ describe('Save highlights to vault', () => {
 
 		// eslint-disable-next-line
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
-		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('ibooks-highlights');
+		const spyGetFolderByPath = vi.spyOn(mockVault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
+		await saveHighlights.saveAllBooksHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
-		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
-		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('ibooks-highlights');
+		expect(spyGetFolderByPath).toHaveBeenCalledTimes(1);
+		expect(spyGetFolderByPath).toHaveBeenCalledWith('ibooks-highlights');
 
 		expect(mockVault.delete).toHaveBeenCalledTimes(1);
 		expect(mockVault.delete).toHaveBeenCalledWith('ibooks-highlights', true);
@@ -105,12 +111,12 @@ describe('Save highlights to vault', () => {
 		settings.template = rawCustomTemplateMockWithWrappedTextBlockContainingNewlines;
 		// eslint-disable-next-line
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
-		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('ibooks-highlights');
+		const spyGetFolderByPath = vi.spyOn(mockVault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
+		await saveHighlights.saveAllBooksHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
-		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
-		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('ibooks-highlights');
+		expect(spyGetFolderByPath).toHaveBeenCalledTimes(1);
+		expect(spyGetFolderByPath).toHaveBeenCalledWith('ibooks-highlights');
 
 		expect(mockVault.delete).toHaveBeenCalledTimes(1);
 		expect(mockVault.delete).toHaveBeenCalledWith('ibooks-highlights', true);
@@ -128,12 +134,12 @@ describe('Save highlights to vault', () => {
 	test('Should skip saving highlights to vault if highlights are not found', async () => {
 		// eslint-disable-next-line
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, { ...settings, highlightsFolder: '' });
-		const spyGetAbstractFileByPath = vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('');
+		const spyGetFolderByPath = vi.spyOn(mockVault, 'getFolderByPath').mockReturnValue('');
 
-		await saveHighlights.saveHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
+		await saveHighlights.saveAllBooksHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
-		expect(spyGetAbstractFileByPath).toHaveBeenCalledTimes(1);
-		expect(spyGetAbstractFileByPath).toHaveBeenCalledWith('');
+		expect(spyGetFolderByPath).toHaveBeenCalledTimes(1);
+		expect(spyGetFolderByPath).toHaveBeenCalledWith('');
 
 		expect(mockVault.delete).toHaveBeenCalledTimes(0);
 
@@ -145,7 +151,7 @@ describe('Save highlights to vault', () => {
 		// eslint-disable-next-line
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, { ...settings, backup: true });
 
-		vi.spyOn(mockVault, 'getAbstractFileByPath').mockReturnValue('ibooks-highlights');
+		vi.spyOn(mockVault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
 		// eslint-disable-next-line
 		const spyList = vi.spyOn(mockVault.adapter, 'list').mockImplementation(async (folderPath: string) => {
 			return {
@@ -156,7 +162,7 @@ describe('Save highlights to vault', () => {
 			};
 		});
 
-		await saveHighlights.saveHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
+		await saveHighlights.saveAllBooksHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
 		expect(spyList).toHaveBeenCalledTimes(1);
 		expect(spyList).toReturnWith({
@@ -172,5 +178,77 @@ describe('Save highlights to vault', () => {
 
 		expect(mockVault.adapter.copy).toHaveBeenNthCalledWith(1, 'ibooks-highlights/Hello-world.md', 'ibooks-highlights-bk-1704060001/Hello-world.md');
 		expect(mockVault.adapter.copy).toHaveBeenNthCalledWith(2, 'ibooks-highlights/Goodbye-world.md', 'ibooks-highlights-bk-1704060001/Goodbye-world.md');
+	});
+});
+
+describe('Save single book highlights to vault', () => {
+	test('Should save a single book when the book doesn\'t exist and backups are turned off', async () => {
+		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
+
+		await saveHighlights.saveSingleBookHighlightsToVault((aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]), true);
+
+		expect(mockVault.createFolder).toHaveBeenCalledTimes(1);
+		expect(mockVault.createFolder).toHaveBeenCalledWith('ibooks-highlights');
+
+		expect(mockVault.create).toHaveBeenCalledTimes(1);
+		expect(mockVault.create).toHaveBeenCalledWith(
+			`ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md`,
+			defaultTemplateMockWithAnnotationsSortedByDefault
+		);
+	});
+
+	test('Should save a single book when the book doesn\'t exist and backups are turned on', async () => {
+		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, { ...settings, backup: true });
+
+		await saveHighlights.saveSingleBookHighlightsToVault((aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]), true);
+
+		expect(mockVault.createFolder).toHaveBeenCalledTimes(1);
+		expect(mockVault.createFolder).toHaveBeenCalledWith('ibooks-highlights');
+
+		expect(mockVault.create).toHaveBeenCalledTimes(1);
+		expect(mockVault.create).toHaveBeenCalledWith(
+			`ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md`,
+			defaultTemplateMockWithAnnotationsSortedByDefault
+		);
+
+		expect(mockVault.adapter.copy).toHaveBeenCalledTimes(0);
+		expect(mockVault.delete).toHaveBeenCalledTimes(0);
+	});
+
+	test('Should modify a single book when it already exists in vault and backups are turned off', async () => {
+		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
+		vi.spyOn(mockVault, 'getFileByPath').mockReturnValue({
+			path: 'ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md'
+		});
+
+		vi.spyOn(saveHighlights, 'modifyExistingBookFile');
+
+		await saveHighlights.saveSingleBookHighlightsToVault((aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]), false);
+
+		expect(saveHighlights.modifyExistingBookFile).toHaveBeenCalledTimes(1);
+		expect(saveHighlights.modifyExistingBookFile).toHaveBeenCalledWith({
+			path: 'ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md'
+		},
+			defaultTemplateMockWithAnnotationsSortedByDefault
+		);
+	});
+
+	test('Should modify a single book when it already exists in vault and backups are turned on', async () => {
+		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, { ...settings, backup: true });
+		vi.spyOn(mockVault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
+		vi.spyOn(mockVault, 'getFileByPath').mockReturnValue({
+			path: 'ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md'
+		});
+
+		await saveHighlights.saveSingleBookHighlightsToVault((aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]), false);
+
+		expect(mockVault.getFileByPath).toHaveBeenCalledTimes(2);
+		expect(mockVault.getFileByPath).toHaveBeenCalledWith('ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md');
+
+		expect(mockVault.adapter.copy).toHaveBeenCalledTimes(1);
+		expect(mockVault.adapter.copy).toHaveBeenCalledWith(
+			'ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md',
+			'ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title-bk-1704060001.md'
+		);
 	});
 });

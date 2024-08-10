@@ -12,9 +12,6 @@ For example, below are some valid folder names:
 - `imported_notes/apple_books/highlights`
 - `3 - Resources/My Books/Apple Books/Unprocessed`
 
-If the highlight folder is not empty and the [Backup highlights](#backup-highlights) setting is enabled, the plugin will save the existing highlights to a backup folder before importing new highlights. If the setting is disabled, the plugin will overwrite the contents of the highlight folder.
-
-
 ## Import highlights on start
 
 - Default value: Turned off
@@ -24,13 +21,61 @@ Import all highlights from all your books when Obsidian starts. Respects the [Ba
 ## Backup highlights
 
 - Default value: Turned off
-- Backup folder template: `<highlights-folder>-bk-<timestamp>`. For example, `ibooks-highlights-bk-1704060001`.
+- Backup template:
+	- for the highlight folder: `<highlights-folder>-bk-<timestamp>`. For example, `ibooks-highlights-bk-1704060001`.
+	- for a specific book: `<highlights-file>-bk-<timestamp>`. For example, `Building a Second Brain-bk-1704060001`.
 
-Backup highlights folder before import. The backup folder name is pre-configured based on the template above and cannot be changed. The backup is created inside the [highlight folder](#highlight-folder).
+Backup highlights before import.
+- When importing all highlights, the [highlight folder](#highlight-folder) contents (see the note below) will be backed up.
+- When importing highlights from a specific book, the specific highlights file will be backed up, if it exists.
 
-> [!WARNING]
-> If the setting is disabled, the plugin will overwrite the contents of the [highlight folder](#highlight-folder) on import.
-> This behavior will be improved based on the feedback received: [Issue #34](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/issues/34#issuecomment-2231429171)
+The backup name is pre-configured based on the template above and cannot be changed.
+
+::: details Examples
+
+**Import all highlights**
+
+Initial state
+```plaintext
+.
+└── ibooks-highlights
+    ├── Atomic Habits - Tiny Changes, Remarkable Results
+    └── Building a Second Brain
+```
+After import
+```plaintext
+.
+├── ibooks-highlights
+│   └── <newly imported highlights>
+└── ibooks-highlights-bk-1723233525489
+    ├── Atomic Habits - Tiny Changes, Remarkable Results
+    └── Building a Second Brain
+```
+**Import highlights from a specific book**
+
+Initial state
+```plaintext
+.
+└── ibooks-highlights
+    ├── Atomic Habits - Tiny Changes, Remarkable Results
+    └── Building a Second Brain
+```
+After import
+```plaintext
+.
+└── ibooks-highlights
+    ├── Atomic Habits - Tiny Changes, Remarkable Results
+	├── Atomic Habits - Tiny Changes, Remarkable Results-bk-1723234215251
+    └── Building a Second Brain
+```
+
+:::
+
+> [!NOTE]
+> The plugin will back up only the files that are direct children of the [highlight folder](#highlight-folder). If you (for some reason) have a nested folder structure inside the [highlight folder](#highlight-folder), these folders will not be backed up and will be overwritten on import.
+
+> [!TIP]
+> To prevent accidental data loss when the setting is turned off, the plugin will display a confirmation dialog before overwriting the existing highlights.
 
 ## Highlights sorting criterion
 
