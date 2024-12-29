@@ -32,4 +32,21 @@ export const calculateAppleDate = (date: number) => {
 
 		return formattedDate;
 	});
+
+	// Assumption: contextualText always contains highlight.
+	// If that assumption is broken, return `null`
+	Handlebars.registerHelper('contextBefore', (highlight: string, contextualText: string) => {
+		const start = contextualText.indexOf(highlight);
+		if (start < 0) {
+			return null;
+		}
+		return contextualText.slice(0, start);
+	});
+	Handlebars.registerHelper('contextAfter', (highlight: string, contextualText: string) => {
+		const start = contextualText.indexOf(highlight);
+		if (start < 0) {
+			return null;
+		}
+		return contextualText.slice(start + highlight.length);
+	});
 })();

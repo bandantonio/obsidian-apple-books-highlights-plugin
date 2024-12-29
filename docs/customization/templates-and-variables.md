@@ -117,5 +117,26 @@ The plugin uses the `dateFormat` helper that takes a unix timestamp and the [dat
 Mon, Mar 04 2024, 17:50:28 +02:00
 ```
 
+## Contextual text
+
+There are two helpers to extract the contextual text before and after the highlighted portion: `contextBefore` and `contextAfter`.
+
+For example:
+
+```hbs
+🎯 Highlight:: {{contextBefore highlight contextualText}}<mark>{{highlight}}</mark>{{contextAfter highlight contextualText}}
+```
+
+Renders:
+
+````markdown
+```
+🎯 Highlight:: Something before <mark>the thing I highlighted</mark>, and then
+something after
+```
+````
+
+Both of these helpers assume that `contextualText` contains `highlight`. This should be true when used directly with the `contextualText`/`highlight` template variables above, though nothing prevents using these helpers with other variables, where that assumption might not hold.
+
 <!-- End of custom container to prevent Handlebars variables to be treated as Vue interpolations -->
 </span>
