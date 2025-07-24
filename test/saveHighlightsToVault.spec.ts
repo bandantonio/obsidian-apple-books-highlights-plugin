@@ -17,6 +17,7 @@ import { ICombinedBooksAndHighlights } from '../src/types'
 const mockVault = {
 	getFileByPath: vi.fn(),
 	getFolderByPath: vi.fn(),
+	getAbstractFileByPath: vi.fn(),
 	// eslint-disable-next-line
 	createFolder: vi.fn().mockImplementation(async (folderName: string) => {
 		return;
@@ -61,6 +62,7 @@ describe('Save all highlights to vault', () => {
 		// eslint-disable-next-line
 		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
 		const spyGetFolderByPath = vi.spyOn(mockVault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
+		vi.spyOn(mockVault, 'getAbstractFileByPath').mockImplementation(() => undefined);
 
 		await saveHighlights.saveAllBooksHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
@@ -76,6 +78,23 @@ describe('Save all highlights to vault', () => {
 		expect(mockVault.create).toHaveBeenCalledTimes(1);
 		expect(mockVault.create).toHaveBeenCalledWith(
 			`ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md`,
+			defaultTemplateMockWithAnnotationsSortedByDefault
+		);
+	});
+
+	test('Should rename file if it already exists', async () => {
+		const saveHighlights = new SaveHighlights({ vault: mockVault } as any, settings);
+		vi.spyOn(mockVault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
+		let callCount = 0;
+		vi.spyOn(mockVault, 'getAbstractFileByPath').mockImplementation(() => {
+			callCount++;
+			return callCount === 1 ? {} : undefined;
+		});
+
+		await saveHighlights.saveAllBooksHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
+
+		expect(mockVault.create).toHaveBeenCalledWith(
+			`ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title (1).md`,
 			defaultTemplateMockWithAnnotationsSortedByDefault
 		);
 	});
