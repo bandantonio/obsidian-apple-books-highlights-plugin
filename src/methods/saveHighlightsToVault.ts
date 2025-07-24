@@ -90,9 +90,23 @@ export default class SaveHighlights {
 	}
 
 	async createNewBookFile(filePath: string, data: string): Promise<void> {
-		await this.vault.create(
-			filePath,
-			data
-		);
+		let finalPath = filePath;
+		let counter = 1;
+		let hasWarned = false;
+
+		while (this.vault.getAbstractFileByPath(finalPath)) {
+			if (!hasWarned) {
+				console.warn(`File "${filePath}" already exists. Renaming to avoid overwrite.`);
+				hasWarned = true;
+			}
+			// Extract file extension (e.g., ".md") if present
+			const ext = filePath.includes('.') ? '.' + filePath.split('.').pop() : '';
+			// Remove the extension from the original file path to get the base name
+			const baseName = filePath.replace(new RegExp(`${ext}$`), '');
+			// Generate a new file name with a counter suffix, e.g., "Notes (1).md"
+			finalPath = `${baseName} (${counter})${ext}`;
+			counter++;
+		}
+		await this.vault.create(finalPath, data);
 	}
 }
