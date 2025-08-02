@@ -5,7 +5,8 @@
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
-		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production && npm run copy-assets",
+		"copy-assets": "cp manifest.json dist/manifest.json && cp styles.css dist/styles.css",
 		"lint": "eslint . --ext .ts",
 		"version": "node version-bump.mjs",
 		"test": "vitest",

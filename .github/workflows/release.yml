@@ -77,7 +77,4 @@ jobs:
         with:
           body: 'This release was generated automatically. Full details will be available soon'
           draft: true
-          files: |
-            main.js
-            manifest.json
-            styles.css
+          files: './dist/*'
