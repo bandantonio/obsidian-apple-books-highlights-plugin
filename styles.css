@@ -1,7 +1,11 @@
-.ibooks-highlights-template > .setting-item-control > textarea {
+.ibooks-highlights-template > .setting-item-control > textarea,
+.ibooks-highlights-file-naming-template > .setting-item-control > textarea {
     width: 100%;
-    height: 350px;
     overflow: auto;
+}
+
+.ibooks-highlights-template > .setting-item-control > textarea {
+    height: 350px;
 }
 
 .ibooks-highlights-folder > .setting-item-control.setting-error > input {

@@ -18,4 +18,13 @@ Number of annotations:: {{annotations.length}}
 {{/each}}
 `;
 
+export const allowedFilenameTemplateVariables = [
+  // The first variable is the default one
+  'bookTitle',
+  'bookId',
+  'bookAuthor',
+  'bookGenre',
+  'bookLanguage',
+];
+
 export default defaultTemplate;

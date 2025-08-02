@@ -23,4 +23,8 @@ describe('Plugin default settings', () => {
 	test('Template', () => {
 		expect(settings.template).toEqual(defaultTemplate);
 	});
+
+	test('Filename template', () => {
+		expect(settings.filenameTemplate).toEqual('{{{bookTitle}}}');
+	});
 })

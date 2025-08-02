@@ -40,9 +40,12 @@ export default class SaveHighlights {
 			// Order highlights according to the value in settings
 			const sortedHighlights = sortHighlights(combinedHighlight, this.settings.highlightsSortingCriterion);
 
-			// Save highlights to vault
+			// Render template for highlights and filename based on settings
 			const renderedTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.template);
-			const filePath = path.join(this.settings.highlightsFolder, `${combinedHighlight.bookTitle}.md`);
+			const renderedFilenameTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.filenameTemplate);
+			
+			// Save highlights to vault
+			const filePath = path.join(this.settings.highlightsFolder, `${renderedFilenameTemplate}.md`);
 
 			await this.createNewBookFile(filePath, renderedTemplate);
 		}
@@ -61,9 +64,12 @@ export default class SaveHighlights {
 			// Order highlights according to the value in settings
 			const sortedHighlights = sortHighlights(combinedHighlight, this.settings.highlightsSortingCriterion);
 
-			// Save highlights to vault
+			// Render template for highlights and filename based on settings
 			const renderedTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.template);
-			const filePath = path.join(this.settings.highlightsFolder, `${combinedHighlight.bookTitle}.md`);
+			const renderedFilenameTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.filenameTemplate);
+			
+			// Save highlights to vault
+			const filePath = path.join(this.settings.highlightsFolder, `${renderedFilenameTemplate}.md`);
 
 			if (shouldCreateFile) {
 				await this.createNewBookFile(filePath, renderedTemplate);

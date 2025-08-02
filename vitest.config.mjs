@@ -16,6 +16,7 @@ export default defineConfig({
 			exclude: [
 				'src/search.ts',
 				'src/db/**/*',
+				'src/settings.ts',
 			]
 		},
 		alias: {
