@@ -81,5 +81,33 @@ describe('renderHighlightsTemplate', () => {
 				expect(helpers.dateFormat(731876693.002279, 'dddd, MMMM D, YYYY [at] hh:mm A')).toEqual('Tuesday, March 12, 2024 at 06:04 AM');
 			});
 		});
+
+		describe('contextBefore & contextAfter', () => {
+			test('Should be registered', () => {
+				expect(helpers.contextBefore).toBeDefined();
+				expect(helpers.contextAfter).toBeDefined();
+			});
+
+			test('Should find the text before and after when it exists', () => {
+				const highlight = 'the thing I highlighted';
+				const contextualText = 'Something before the thing I highlighted, and something after.';
+				expect(helpers.contextBefore(highlight, contextualText)).toEqual('Something before ');
+				expect(helpers.contextAfter(highlight, contextualText)).toEqual(', and something after.');
+			});
+
+			test('Should return empty string when the contextualText and highlight are equal', () => {
+				const highlight = 'The thing I higlighted is the entire sentence.';
+				const contextualText = 'The thing I higlighted is the entire sentence.';
+				expect(helpers.contextBefore(highlight, contextualText)).toEqual('');
+				expect(helpers.contextAfter(highlight, contextualText)).toEqual('');
+			});
+
+			test('Should return null when the contextualText does not contain highlight', () => {
+				const highlight = 'does not occur';
+				const contextualText = 'The quick brown fox jumps over the lazy dog.';
+				expect(helpers.contextBefore(highlight, contextualText)).toBeNull();
+				expect(helpers.contextAfter(highlight, contextualText)).toBeNull();
+			});
+		});
 	});
 });
