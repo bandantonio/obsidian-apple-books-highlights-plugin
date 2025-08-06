@@ -1,6 +1,6 @@
 import { App, Notice, PluginSettingTab, Setting } from 'obsidian';
 import IBookHighlightsPlugin from '../main';
-import defaultTemplate from './template';
+import defaultTemplate, { allowedFilenameTemplateVariables } from './template';
 import { IHighlightsSortingCriterion, IBookHighlightsPluginSettings } from './types';
 
 export class AppleBooksHighlightsImportPluginSettings implements IBookHighlightsPluginSettings {
@@ -9,6 +9,7 @@ export class AppleBooksHighlightsImportPluginSettings implements IBookHighlights
 	importOnStart = false;
 	highlightsSortingCriterion = IHighlightsSortingCriterion.CreationDateOldToNew;
 	template = defaultTemplate;
+    filenameTemplate = `{{{${allowedFilenameTemplateVariables[0]}}}}`;
 }
 
 export class IBookHighlightsSettingTab extends PluginSettingTab {
@@ -91,8 +92,6 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
 					.addOptions(options)
 					.setValue(this.plugin.settings.highlightsSortingCriterion)
 					.onChange(async (value: IHighlightsSortingCriterion) => {
-						console.log('value', value);
-
 						this.plugin.settings.highlightsSortingCriterion = value;
 						await this.plugin.saveSettings();
 					}
@@ -115,6 +114,35 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
                 return text;
             });
 
+        const filenameTemplate = new Setting(containerEl)
+            .setName('Template for naming highlight files')
+            .setDesc(createFragment(el => {
+                el.appendText(`Template to generate the name of highlight files.`)
+                el.createEl('br')
+                el.appendText(`The following template variables are available:`)
+                const ul = el.createEl('ul');
+                allowedFilenameTemplateVariables.forEach((variable: string) => {
+                    ul.createEl('li', { text: `{{{${variable}}}}` })
+                });
+                el.createEl('br')
+                // The first variable is the default one
+                el.appendText(`Default: {{{${allowedFilenameTemplateVariables[0]}}}}`)
+            }))
+            .setClass('ibooks-highlights-file-naming-template')
+            
+        filenameTemplate.addTextArea((text) => {
+            text
+                .setPlaceholder('Naming template for highlight files')
+                .setValue(this.plugin.settings.filenameTemplate)
+                .onChange(async (value) => {                
+                    const valueToSet = (value === '') ? '{{{bookTitle}}}' : value;
+                    
+                    this.plugin.settings.filenameTemplate = valueToSet;
+                    await this.plugin.saveSettings();
+                });
+                return text;
+            });
+            
         new Setting(containerEl)
             .setName('Reset template')
             .setDesc('Reset template to default')

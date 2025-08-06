@@ -204,6 +204,18 @@ Let's consider an example book with the following highlights (callouts to the le
 
 Check the [Templates and variables](/customization/templates-and-variables) page for more information.
 
+## Template for naming highlight files
+
+<!-- Custom container to prevent Handlebars variables to be treated as Vue interpolations -->
+<span v-pre>
+
+- Default value: `{{{bookTitle}}}`
+
+<!-- End of custom container to prevent Handlebars variables to be treated as Vue interpolations -->
+</span>
+
+Template to generate the name of highlight files. Check the [Template variables for filenames](/customization/templates-and-variables#template-variables-for-filenames) section for more information.
+
 ## Reset template
 
 - Reset template to default

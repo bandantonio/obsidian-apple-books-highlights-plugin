@@ -100,6 +100,18 @@ Number of annotations:: {{annotations.length}}
 >
 > If you want escaped output, use double curly braces: `{{variable}}`.
 
+### Template variables for filenames
+
+The plugin uses a subset of the [template variables](#template-variables) to generate the name of highlight files.
+The following variables are available:
+
+- `{{{bookTitle}}}` (Default value)
+- `{{bookId}}`
+- `{{{bookAuthor}}}`
+- `{{{bookGenre}}}`
+- `{{bookLanguage}}`
+
+
 ## Date formatting
 
 The plugin uses the `dateFormat` helper that takes a unix timestamp and the [datajs-compatible string of tokens](https://day.js.org/docs/en/display/format#list-of-all-available-formats) to format dates in the template. For example:

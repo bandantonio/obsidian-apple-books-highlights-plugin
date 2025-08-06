@@ -83,3 +83,53 @@ describe('renderHighlightsTemplate', () => {
 		});
 	});
 });
+
+describe('renderFilenameTemplate', () => {
+	test('Should render book title as a default filename for highlights', async () => {
+		const renderedNamingTemplate = await renderHighlightsTemplate(
+			aggregatedHighlightsWithDefaultSorting[0] as ICombinedBooksAndHighlights,
+			`{{{bookTitle}}}`
+		);
+		expect(renderedNamingTemplate).toEqual('Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title');
+	});
+	
+	test('Should render all the available variables as a filename for highlights', async () => {
+		const renderedNamingTemplate = await renderHighlightsTemplate(
+			aggregatedHighlightsWithDefaultSorting[0] as ICombinedBooksAndHighlights,
+			`{{{bookTitle}}} - {{{bookId}}} - {{{bookAuthor}}} - {{{bookGenre}}} - {{{bookLanguage}}}`
+		);
+		expect(renderedNamingTemplate).toEqual('Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title - THBFYNJKTGFTTVCGSAE5 - Apple Inc. - Technology - EN');
+	});
+
+	test('Should render book title and author as a filename for highlights', async () => {
+		const renderedNamingTemplate = await renderHighlightsTemplate(
+			aggregatedHighlightsWithDefaultSorting[0] as ICombinedBooksAndHighlights,
+			`{{{bookTitle}}} by {{{bookAuthor}}}`
+		);
+		expect(renderedNamingTemplate).toEqual('Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title by Apple Inc.');
+	});
+
+	test('Should render book title and author with emojis as a filename for highlights', async () => {
+		const renderedNamingTemplate = await renderHighlightsTemplate(
+			aggregatedHighlightsWithDefaultSorting[0] as ICombinedBooksAndHighlights,
+			`📕 {{{bookTitle}}} by 👤 {{{bookAuthor}}}`
+		);
+		expect(renderedNamingTemplate).toEqual('📕 Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title by 👤 Apple Inc.');
+	});
+	
+	test('Should skip rendering of non-existing variables in filename template', async () => {
+		const renderedNamingTemplate = await renderHighlightsTemplate(
+			aggregatedHighlightsWithDefaultSorting[0] as ICombinedBooksAndHighlights,
+			`{{{bookAuthor}}} - {{{nonExistingVariable}}}`
+		);
+		expect(renderedNamingTemplate).toEqual('Apple Inc. - ');
+	});
+	
+	test(`Should render plain variable if it wasn't wrapped in curly braces`, async () => {
+		const renderedNamingTemplate = await renderHighlightsTemplate(
+			aggregatedHighlightsWithDefaultSorting[0] as ICombinedBooksAndHighlights,
+			`{{bookAuthor}} - bookTitle`
+		);
+		expect(renderedNamingTemplate).toEqual('Apple Inc. - bookTitle');
+	})
+});
