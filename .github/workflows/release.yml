@@ -72,9 +72,15 @@ jobs:
         run: npm run build
 
       - name: 📦 Create release
-        uses: softprops/action-gh-release@v1
         if: steps.build_plugin.outcome == 'success' && contains(github.ref, 'refs/tags/')
-        with:
-          body: 'This release was generated automatically. Full details will be available soon'
-          draft: true
-          files: './dist/*'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          gh release create "$TAG_NAME" \
+            --verify-tag \
+            --draft \
+            --title "$TAG_NAME" \
+            --generate-notes \
+            --notes-file .github/release_notes_template.md \
+            ./dist/*
