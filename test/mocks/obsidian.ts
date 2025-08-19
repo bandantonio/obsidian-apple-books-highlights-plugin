@@ -1,5 +1,6 @@
-export function setIcon(parent: HTMLElement, iconId: string, size?: number): void { }
+// biome-ignore lint/suspicious/noEmptyBlockStatements: Intentionally empty
+export function setIcon(): void {}
 
-export class App { }
-export class PluginSettingTab { }
-export class Setting { }
+export class App {}
+export class PluginSettingTab {}
+export class Setting {}

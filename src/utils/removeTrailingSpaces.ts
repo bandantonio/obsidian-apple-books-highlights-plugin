@@ -3,4 +3,4 @@ export const removeTrailingSpaces = (textBlock: string): string => {
   const endLineSpaces = /\s+$/;
 
   return endLineSpaces.test(textBlock) ? textBlock.replace(endLineSpaces, '') : textBlock;
-}
+};
