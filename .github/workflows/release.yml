@@ -31,7 +31,7 @@ jobs:
 
       - name: ✅ Run code style linter
         id: linter
-        run: npm run lint
+        run: npm run lint:ci
 
   run-tests:
     name: 🧪 Tests

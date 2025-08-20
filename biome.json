@@ -1,0 +1,178 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "files": {
+    "ignoreUnknown": true,
+    "includes": ["biome.json", "**/*.{ts,mjs}", "!**/*.config.{ts,mjs}"]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "warn",
+        "noExcessiveLinesPerFunction": "warn",
+        "noForEach": "warn",
+        "noImportantStyles": "warn",
+        "noUselessStringConcat": "warn",
+        "useWhile": "warn"
+      },
+      "correctness": {
+        "noGlobalDirnameFilename": "warn",
+        "noPrivateImports": "warn",
+        "noUndeclaredDependencies": "error"
+      },
+      "nursery": {
+        "noFloatingPromises": "warn",
+        "noMisusedPromises": "error",
+        "noShadow": "warn",
+        "noUselessUndefined": "warn",
+        "useConsistentTypeDefinitions": "warn",
+        "useExhaustiveSwitchCases": "error",
+        "useSortedClasses": "info"
+      },
+      "performance": {
+        "noAccumulatingSpread": "warn",
+        "noAwaitInLoops": "warn",
+        "useTopLevelRegex": "warn"
+      },
+      "recommended": true,
+      "style": {
+        "noCommonJs": "warn",
+        "noDefaultExport": "info",
+        "noMagicNumbers": "error",
+        "noNestedTernary": "error",
+        "noNonNullAssertion": "warn",
+        "noUnusedTemplateLiteral": "warn",
+        "noUselessElse": "warn",
+        "noYodaExpression": "error",
+        "useAtIndex": "warn",
+        "useBlockStatements": "error",
+        "useCollapsedElseIf": "warn",
+        "useCollapsedIf": "warn",
+        "useConsistentObjectDefinitions": "warn",
+        "useDefaultParameterLast": "warn",
+        "useDefaultSwitchClause": "warn",
+        "useFilenamingConvention": {
+          "level": "warn",
+          "options": {
+            "filenameCases": ["camelCase", "snake_case"],
+            "requireAscii": true,
+            "strictCase": true
+          }
+        },
+        "useForOf": "warn",
+        "useNamingConvention": {
+          "level": "warn",
+          "options": {
+            "conventions": [
+              {
+                "formats": ["CONSTANT_CASE", "camelCase"],
+                "selector": {
+                  "kind": "const",
+                  "scope": "any"
+                }
+              },
+              {
+                "match": "I[A-Z][a-zA-Z]*",
+                "selector": {
+                  "kind": "interface",
+                  "scope": "any"
+                }
+              },
+              {
+                "formats": ["CONSTANT_CASE", "camelCase"],
+                "selector": {
+                  "kind": "typeProperty",
+                  "scope": "any"
+                }
+              },
+              {
+                "formats": ["CONSTANT_CASE", "camelCase"],
+                "selector": {
+                  "kind": "objectLiteralProperty",
+                  "scope": "any"
+                }
+              }
+            ],
+            "requireAscii": false,
+            "strictCase": false
+          }
+        },
+        "useShorthandAssign": "warn",
+        "useSingleVarDeclarator": "error",
+        "useTemplate": "error",
+        "useThrowNewError": "warn",
+        "useThrowOnlyError": "warn",
+        "useTrimStartEnd": "warn"
+      },
+      "suspicious": {
+        "noAlert": "error",
+        "noBitwiseOperators": "warn",
+        "noConsole": {
+          "level": "warn",
+          "options": {
+            "allow": ["info", "error", "warn"]
+          }
+        },
+        "noConstantBinaryExpressions": "warn",
+        "noDoubleEquals": "warn",
+        "noDuplicateTestHooks": "error",
+        "noEmptyBlockStatements": "error",
+        "noExportsInTest": "error",
+        "noFocusedTests": "error",
+        "noIrregularWhitespace": "warn",
+        "noMisplacedAssertion": "error",
+        "noSkippedTests": "warn",
+        "noTsIgnore": "error",
+        "noUnassignedVariables": "error",
+        "noUselessEscapeInString": "warn",
+        "noVar": "error",
+        "useAwait": "error",
+        "useErrorMessage": "error",
+        "useGuardForIn": "warn",
+        "useStaticResponseMethods": "warn",
+        "useStrictMode": "warn"
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "expand": "auto",
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 140
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "json": {
+    "parser": {
+      "allowTrailingCommas": true
+    }
+  },
+  "assist": {
+    "actions": {
+      "recommended": true,
+      "source": {
+        "organizeImports": "on",
+        "useSortedAttributes": "on",
+        "useSortedKeys": "off",
+        "useSortedProperties": "on"
+      }
+    },
+    "enabled": true
+  },
+  "css": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "vcs": {
+    "clientKind": "git",
+    "defaultBranch": "main",
+    "enabled": true,
+    "useIgnoreFile": true
+  }
+}
