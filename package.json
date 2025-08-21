@@ -39,28 +39,28 @@
 		"url": "git+https://github.com/bandantonio/obsidian-apple-books-highlights-plugin.git"
 	},
 	"engines": {
-		"node": ">=20.8.0",
-		"npm": ">=10.0.0"
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.2.0",
-		"@types/better-sqlite3": "^7.6.10",
-    "@types/node": "^18.4.1",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^24.3.0",
 		"@vitest/coverage-istanbul": "^1.5.1",
-		"better-sqlite3": "^9.5.0",
+    "better-sqlite3": "^12.2.0",
 		"builtin-modules": "3.3.0",
-		"drizzle-kit": "^0.20.17",
-		"drizzle-orm": "^0.30.9",
+    "drizzle-kit": "^0.31.4",
+    "drizzle-orm": "^0.44.4",
     "esbuild": "0.17.3",
-		"husky": "^9.0.11",
+    "husky": "^9.1.7",
 		"obsidian": "latest",
-		"tslib": "2.4.0",
-		"typescript": "4.7.4",
-		"vitepress": "^1.3.1",
+    "tslib": "2.8.1",
+    "typescript": "5.9.2",
+    "vitepress": "^1.6.4",
 		"vitest": "^1.5.1"
 	},
 	"dependencies": {
-		"dayjs": "^1.11.10",
+    "dayjs": "^1.11.13",
 		"handlebars": "^4.7.8"
 	}
 }
