@@ -64,6 +64,33 @@ export const annotationsToAggregate = [
   },
 ];
 
+export const annotationsToAggregateWithMissingUserNote = [
+  {
+    ZANNOTATIONASSETID: 'THBFYNJKTGFTTVCGSAE5',
+    ZFUTUREPROOFING5: 'Aggregated Introduction 4',
+    ZANNOTATIONREPRESENTATIVETEXT: 'This is a contextual text for the fourth aggregated highlight from the Apple iPhone User Guide',
+    ZANNOTATIONSELECTEDTEXT: 'fourth aggregated highlight from the Apple iPhone User Guide',
+    ZANNOTATIONLOCATION: 'epubcfi(/6/36[ch4]!/10/2/4,/1:0,/:96)',
+    ZANNOTATIONNOTE: null,
+    ZANNOTATIONCREATIONDATE: 743629949.224146,
+    ZANNOTATIONMODIFICATIONDATE: 743629949.224197,
+    ZANNOTATIONSTYLE: 3,
+    ZANNOTATIONDELETED: 0,
+  },
+  {
+    ZANNOTATIONASSETID: 'THBFYNJKTGFTTVCGSAE5',
+    ZFUTUREPROOFING5: 'Aggregated Introduction 3',
+    ZANNOTATIONREPRESENTATIVETEXT: 'This is a contextual text for the third aggregated highlight from the Apple iPhone User Guide',
+    ZANNOTATIONSELECTEDTEXT: 'third aggregated highlight from the Apple iPhone User Guide',
+    ZANNOTATIONLOCATION: 'epubcfi(/6/24[ch3]!/4/2/10,/1:19,/3:113)',
+    ZANNOTATIONNOTE: 'Test note for the third aggregated highlight from the Apple iPhone User Guide',
+    ZANNOTATIONCREATIONDATE: 743629925.898202,
+    ZANNOTATIONMODIFICATIONDATE: 743640744.124985,
+    ZANNOTATIONSTYLE: 3,
+    ZANNOTATIONDELETED: 0,
+  },
+];
+
 export const annotationThree = {
   chapter: 'Aggregated Introduction 3',
   contextualText: 'This is a contextual text for the third aggregated highlight from the Apple iPhone User Guide',

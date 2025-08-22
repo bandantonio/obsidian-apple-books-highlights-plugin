@@ -1,22 +1,14 @@
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
 import path from 'path';
 import { afterEach, describe, expect, test } from 'vitest';
 import { TEST_DATABASE_PATH } from '../drizzle.config';
 import { BOOKS_LIBRARY_NAME, HIGHLIGHTS_LIBRARY_NAME } from '../src/db/constants';
 import { annotationsRequest, dbRequest } from '../src/db/index';
 import { annotations, bookLibrary } from '../src/db/schemas';
-import { seedDatabase } from '../src/db/seed';
+import { removeSeededData, seedDatabase } from '../src/db/seed';
 import { defaultAnnotations, defaultBooks } from '../src/db/seedData';
 
-afterEach(async () => {
-  const dbPath = path.join(process.cwd(), TEST_DATABASE_PATH);
-
-  const sqlite = new Database(dbPath);
-  const db = drizzle(sqlite);
-
-  await db.delete(bookLibrary);
-  await db.delete(annotations);
+afterEach(() => {
+  removeSeededData();
 });
 
 describe('Empty database', () => {

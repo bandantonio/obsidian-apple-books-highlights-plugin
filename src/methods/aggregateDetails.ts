@@ -32,7 +32,7 @@ export const aggregateBookAndHighlightDetails = async (): Promise<ICombinedBooks
 
           return {
             chapter: annotation.ZFUTUREPROOFING5,
-            contextualText: textForContext ? removeTrailingSpaces(preserveNewlineIndentation(textForContext)) : textForContext,
+            contextualText: removeTrailingSpaces(preserveNewlineIndentation(textForContext)),
             highlight: preserveNewlineIndentation(annotation.ZANNOTATIONSELECTEDTEXT),
             note: userNote ? preserveNewlineIndentation(userNote) : userNote,
             highlightLocation: annotation.ZANNOTATIONLOCATION,

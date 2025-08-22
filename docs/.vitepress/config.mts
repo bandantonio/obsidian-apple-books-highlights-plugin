@@ -6,6 +6,7 @@ export default defineConfig({
 	title: "Apple Books\nImport Highlights",
 	description: "Import your Apple Books highlights and notes to Obsidian",
 	base: '/obsidian-apple-books-highlights-plugin/',
+  lastUpdated: true,
 	themeConfig: {
 		// https://vitepress.dev/reference/default-theme-config
 		logo: '/logo.svg',

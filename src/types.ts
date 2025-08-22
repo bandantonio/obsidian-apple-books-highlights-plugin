@@ -16,7 +16,7 @@ export interface IBookAnnotation {
   ZANNOTATIONREPRESENTATIVETEXT: string;
   ZANNOTATIONSELECTEDTEXT: string;
   ZANNOTATIONLOCATION: string;
-  ZANNOTATIONNOTE: string;
+  ZANNOTATIONNOTE: string | null;
   ZANNOTATIONCREATIONDATE: number;
   ZANNOTATIONMODIFICATIONDATE: number;
   ZANNOTATIONSTYLE: 0 | 1 | 2 | 3 | 4 | 5;
@@ -27,7 +27,7 @@ export interface IHighlight {
   contextualText: string;
   highlight: string;
   highlightLocation: string;
-  note: string;
+  note: string | null;
   highlightStyle: IBookAnnotation['ZANNOTATIONSTYLE'];
   highlightCreationDate: number;
   highlightModificationDate: number;
