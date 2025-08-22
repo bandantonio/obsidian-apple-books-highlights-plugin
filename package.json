@@ -46,7 +46,7 @@
 		"@biomejs/biome": "2.2.0",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^24.3.0",
-		"@vitest/coverage-istanbul": "^1.5.1",
+    "@vitest/coverage-v8": "^3.2.4",
     "better-sqlite3": "^12.2.0",
 		"builtin-modules": "3.3.0",
     "drizzle-kit": "^0.31.4",
@@ -57,7 +57,7 @@
     "tslib": "2.8.1",
     "typescript": "5.9.2",
     "vitepress": "^1.6.4",
-		"vitest": "^1.5.1"
+    "vitest": "^3.2.4"
 	},
 	"dependencies": {
     "dayjs": "^1.11.13",

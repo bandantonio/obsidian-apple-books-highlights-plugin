@@ -1,9 +1,9 @@
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
-import type { IBook, IBookAnnotation } from '../types';
+import { TEST_DATABASE_PATH } from '../../drizzle.config';
 import { type annotations, bookLibrary } from './schemas';
 
-const sqlite = new Database('./test/mocks/testDatabase.sqlite');
+const sqlite = new Database(TEST_DATABASE_PATH);
 const db = drizzle(sqlite);
 
 export const seedDatabase = async (table: typeof bookLibrary | typeof annotations, seed: any[]) => {
@@ -20,4 +20,16 @@ export const seedDatabase = async (table: typeof bookLibrary | typeof annotation
   }
 
   console.info(`Seeding ${tableName} successful`);
+};
+
+export const removeSeededData = () => {
+  console.info('Removing seeded data from database...');
+
+  // try {
+  //   await db.delete(bookLibrary);
+  //   await db.delete(annotations);
+  // } catch (error) {
+  //   console.error(error);
+  //   process.exit(1);
+  // }
 };
