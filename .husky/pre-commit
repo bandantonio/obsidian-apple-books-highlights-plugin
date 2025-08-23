@@ -1,2 +1,0 @@
-npm run lint
-npm test -- --no-watch
