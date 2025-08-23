@@ -16,11 +16,12 @@
 		"coverage": "vitest run --coverage",
 		"db:generate": "drizzle-kit generate:sqlite",
 		"db:migrate": "npx tsx src/db/migrate.ts",
-		"db:seed": "npx tsx src/db/seed.ts",
-		"prepare": "husky",
+    "db:seed": "npx tsx src/db/seed.ts",
 		"docs:dev": "vitepress dev docs --port 3000",
 		"docs:build": "vitepress build docs",
-		"docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "setup:git-hooks": "git config core.hooksPath .git-hooks",
+    "postinstall": "npm run setup:git-hooks"
 	},
 	"keywords": [
 		"obsidian",
@@ -53,7 +54,6 @@
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.4",
     "esbuild": "0.25.9",
-    "husky": "^9.1.7",
 		"obsidian": "latest",
     "tslib": "2.8.1",
     "typescript": "5.9.2",
