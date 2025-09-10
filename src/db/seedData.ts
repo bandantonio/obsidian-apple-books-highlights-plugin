@@ -6,6 +6,7 @@ export const defaultBooks = [
     ZGENRE: 'Technology',
     ZLANGUAGE: 'EN',
     ZLASTOPENDATE: 726602576.413094,
+    ZDATEFINISHED: 726602576.413094,
     ZCOVERURL: '',
   },
   {
@@ -15,6 +16,7 @@ export const defaultBooks = [
     ZGENRE: 'Technology',
     ZLANGUAGE: 'EN',
     ZLASTOPENDATE: 726602576.413094,
+    ZDATEFINISHED: 726602576.413094,
     ZCOVERURL: '',
   },
   {
@@ -24,6 +26,7 @@ export const defaultBooks = [
     ZGENRE: 'Technology',
     ZLANGUAGE: 'EN',
     ZLASTOPENDATE: 726602576.413094,
+    ZDATEFINISHED: 726602576.413094,
     ZCOVERURL: '',
   },
   {
@@ -33,6 +36,7 @@ export const defaultBooks = [
     ZGENRE: 'Technology',
     ZLANGUAGE: 'EN',
     ZLASTOPENDATE: 726602576.413094,
+    ZDATEFINISHED: 726602576.413094,
     ZCOVERURL: '',
   },
 ];

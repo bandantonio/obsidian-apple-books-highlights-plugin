@@ -25,6 +25,7 @@ export const aggregateBookAndHighlightDetails = async (): Promise<ICombinedBooks
         bookGenre: book.ZGENRE,
         bookLanguage: book.ZLANGUAGE,
         bookLastOpenedDate: book.ZLASTOPENDATE,
+        bookFinishedDate: book.ZDATEFINISHED,
         bookCoverUrl: book.ZCOVERURL,
         annotations: bookRelatedAnnotations.map((annotation) => {
           const textForContext = annotation.ZANNOTATIONREPRESENTATIVETEXT;

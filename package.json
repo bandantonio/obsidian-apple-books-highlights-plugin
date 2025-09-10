@@ -14,7 +14,7 @@
 		"version": "node version-bump.mjs",
 		"test": "vitest",
 		"coverage": "vitest run --coverage",
-		"db:generate": "drizzle-kit generate:sqlite",
+    "db:generate": "drizzle-kit generate",
 		"db:migrate": "npx tsx src/db/migrate.ts",
     "db:seed": "npx tsx src/db/seed.ts",
 		"docs:dev": "vitepress dev docs --port 3000",

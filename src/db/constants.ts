@@ -20,6 +20,7 @@ export const BOOKS_LIBRARY_COLUMNS = [
   'ZGENRE',
   'ZLANGUAGE',
   'ZLASTOPENDATE',
+  'ZDATEFINISHED',
   'ZCOVERURL',
 ];
 // biome-ignore format: columns are easier to read and modify in this format

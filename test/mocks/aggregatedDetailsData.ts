@@ -6,6 +6,7 @@ export const booksToAggregate = [
     ZGENRE: 'Technology',
     ZLANGUAGE: 'EN',
     ZLASTOPENDATE: 743629954.550869,
+    ZDATEFINISHED: 743629954.550869,
     ZCOVERURL: '',
   },
 ];
@@ -145,6 +146,7 @@ export const aggregatedUnsortedHighlights = [
     bookGenre: 'Technology',
     bookLanguage: 'EN',
     bookLastOpenedDate: 743629954.550869,
+    bookFinishedDate: 743629954.550869,
     bookCoverUrl: '',
     annotations: [annotationThree, annotationOne, annotationFour, annotationTwo],
   },
@@ -158,6 +160,7 @@ export const aggregatedHighlightsWithDefaultSorting = [
     bookGenre: 'Technology',
     bookLanguage: 'EN',
     bookLastOpenedDate: 743629954.550869,
+    bookFinishedDate: 743629954.550869,
     bookCoverUrl: '',
     annotations: [annotationThree, annotationTwo, annotationFour, annotationOne],
   },

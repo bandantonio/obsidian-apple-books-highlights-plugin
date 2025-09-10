@@ -37,6 +37,7 @@ Author:: {{{bookAuthor}}}
 Genre:: {{#if bookGenre}}{{{bookGenre}}}{{else}}N/A{{/if}}
 Language:: {{#if bookLanguage}}{{bookLanguage}}{{else}}N/A{{/if}}
 Last Read:: {{dateFormat bookLastOpenedDate "YYYY-MM-DD hh:mm:ss A Z"}}
+finishedDate:: {{#if bookFinishedDate}}{{dateFormat bookFinishedDate "YYYY-MM-DDTHH:mm:ss"}}{{else}}Still Reading{{/if}}
 Link:: [Apple Books Link](ibooks://assetid/{{bookId}})
 
 {{#if bookCoverUrl}}![Book Cover]({{{bookCoverUrl}}}){{/if}}
@@ -76,6 +77,7 @@ Number of annotations:: {{annotations.length}}
 - `{{{bookGenre}}}` - The genre of the book.
 - `{{bookLanguage}}` - The language of the book.
 - `{{bookLastOpenedDate}}` - The date when you last opened the book. See the [Date formatting](#date-formatting) section for more information.
+- `{{bookFinishedDate}}` - The date when you finished reading the book. See the [Date formatting](#date-formatting) section for more information.
 - `{{bookCoverUrl}}` - The URL of the book cover.
 - `{{annotations}}` - An array of all the annotations in the book. You can use `{{annotations.length}}` to get the total number of annotations you made in the book. Each annotation has the following properties:
   - `{{{chapter}}}` - The chapter of the highlight in the book. It may not be available for all highlights due to the initial formatting of the book.
