@@ -19,6 +19,7 @@ describe('Plugin documentation', () => {
     expect(docsTemplateVariablesPage).toContain('{{{bookGenre}}}');
     expect(docsTemplateVariablesPage).toContain('{{bookLanguage}}');
     expect(docsTemplateVariablesPage).toContain('{{bookLastOpenedDate}}');
+    expect(docsTemplateVariablesPage).toContain('{{bookFinishedDate}}');
     expect(docsTemplateVariablesPage).toContain('{{bookCoverUrl}}');
     expect(docsTemplateVariablesPage).toContain('{{annotations}}');
     expect(docsTemplateVariablesPage).toContain('{{annotations.length}}');

@@ -1,7 +1,7 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
-  "id": "9ab8f1f7-710a-4b2c-9ba7-b286cb403847",
+  "id": "c46be62f-b995-49c5-a12e-cd1d6f8b4113",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "ZAEANNOTATION": {
@@ -33,6 +33,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "ZANNOTATIONLOCATION": {
+          "name": "ZANNOTATIONLOCATION",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "ZANNOTATIONNOTE": {
@@ -74,7 +81,8 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     },
     "ZBKLIBRARYASSET": {
       "name": "ZBKLIBRARYASSET",
@@ -121,6 +129,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "ZDATEFINISHED": {
+          "name": "ZDATEFINISHED",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "ZCOVERURL": {
           "name": "ZCOVERURL",
           "type": "text",
@@ -132,13 +147,18 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     }
   },
+  "views": {},
   "enums": {},
   "_meta": {
     "schemas": {},
     "tables": {},
     "columns": {}
+  },
+  "internal": {
+    "indexes": {}
   }
 }

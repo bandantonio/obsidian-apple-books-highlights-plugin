@@ -67,7 +67,16 @@ describe('Plugin constants', () => {
   });
 
   test('Check database columns', () => {
-    expect(BOOKS_LIBRARY_COLUMNS).toEqual(['ZASSETID', 'ZTITLE', 'ZAUTHOR', 'ZGENRE', 'ZLANGUAGE', 'ZLASTOPENDATE', 'ZCOVERURL']);
+    expect(BOOKS_LIBRARY_COLUMNS).toEqual([
+      'ZASSETID',
+      'ZTITLE',
+      'ZAUTHOR',
+      'ZGENRE',
+      'ZLANGUAGE',
+      'ZLASTOPENDATE',
+      'ZDATEFINISHED',
+      'ZCOVERURL',
+    ]);
 
     expect(HIGHLIGHTS_LIBRARY_COLUMNS).toEqual([
       'ZANNOTATIONASSETID',

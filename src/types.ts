@@ -7,6 +7,7 @@ export interface IBook {
   ZGENRE: string;
   ZLANGUAGE: string;
   ZLASTOPENDATE: number;
+  ZDATEFINISHED: number | null;
   ZCOVERURL: string;
 }
 
@@ -39,6 +40,7 @@ export interface ICombinedBooksAndHighlights {
   bookGenre: string;
   bookLanguage: string;
   bookLastOpenedDate: number;
+  bookFinishedDate: number | null;
   bookCoverUrl: string;
   annotations: IHighlight[];
 }

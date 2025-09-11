@@ -9,6 +9,7 @@ export const bookLibrary = sqliteTable(BOOKS_LIBRARY_NAME, {
   ZGENRE: text('ZGENRE'),
   ZLANGUAGE: text('ZLANGUAGE'),
   ZLASTOPENDATE: integer('ZLASTOPENDATE'),
+  ZDATEFINISHED: integer('ZDATEFINISHED'),
   ZCOVERURL: text('ZCOVERURL'),
 });
 
