@@ -1,27 +1,27 @@
 {
 	"name": "obsidian-apple-books-highlights-plugin",
-	"version": "1.7.0",
+	"version": "1.7.1",
 	"description": "Import highlights and notes from your Apple Books to Obsidian",
 	"main": "main.js",
 	"scripts": {
-    "dev": "node esbuild.config.mjs",
+		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production && npm run copy-assets",
 		"copy-assets": "cp manifest.json dist/manifest.json && cp styles.css dist/styles.css",
-    "lint": "biome check --diagnostic-level=warn --max-diagnostics=none",
-    "lint:ci": "biome ci --diagnostic-level=error",
-    "lint:fix": "biome check --write --no-errors-on-unmatched",
-    "lint:verbose": "biome check --verbose --max-diagnostics=none",
-		"version": "node version-bump.mjs",
+		"lint": "biome check --diagnostic-level=warn --max-diagnostics=none",
+		"lint:ci": "biome ci --diagnostic-level=error",
+		"lint:fix": "biome check --write --no-errors-on-unmatched",
+		"lint:verbose": "biome check --verbose --max-diagnostics=none",
+    "version": "node version-bump.mjs",
 		"test": "vitest",
 		"coverage": "vitest run --coverage",
-    "db:generate": "drizzle-kit generate",
+		"db:generate": "drizzle-kit generate",
 		"db:migrate": "npx tsx src/db/migrate.ts",
-    "db:seed": "npx tsx src/db/seed.ts",
+		"db:seed": "npx tsx src/db/seed.ts",
 		"docs:dev": "vitepress dev docs --port 3000",
 		"docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
-    "setup:git-hooks": "git config core.hooksPath .git-hooks",
-    "postinstall": "npm run setup:git-hooks"
+		"docs:preview": "vitepress preview docs",
+		"setup:git-hooks": "git config core.hooksPath .git-hooks",
+		"postinstall": "npm run setup:git-hooks"
 	},
 	"keywords": [
 		"obsidian",
@@ -41,27 +41,27 @@
 		"url": "git+https://github.com/bandantonio/obsidian-apple-books-highlights-plugin.git"
 	},
 	"engines": {
-    "node": ">=24.0.0",
-    "npm": ">=11.0.0"
+		"node": ">=24.0.0",
+		"npm": ">=11.0.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.2.0",
-    "@types/better-sqlite3": "^7.6.13",
-    "@types/node": "^24.3.0",
-    "@vitest/coverage-v8": "^3.2.4",
-    "better-sqlite3": "^12.2.0",
+		"@types/better-sqlite3": "^7.6.13",
+		"@types/node": "^24.3.0",
+		"@vitest/coverage-v8": "^3.2.4",
+		"better-sqlite3": "^12.2.0",
 		"builtin-modules": "3.3.0",
-    "drizzle-kit": "^0.31.4",
-    "drizzle-orm": "^0.44.4",
-    "esbuild": "0.25.9",
+		"drizzle-kit": "^0.31.4",
+		"drizzle-orm": "^0.44.4",
+		"esbuild": "0.25.9",
 		"obsidian": "latest",
-    "tslib": "2.8.1",
-    "typescript": "5.9.2",
-    "vitepress": "^1.6.4",
-    "vitest": "^3.2.4"
+		"tslib": "2.8.1",
+		"typescript": "5.9.2",
+		"vitepress": "^1.6.4",
+		"vitest": "^3.2.4"
 	},
 	"dependencies": {
-    "dayjs": "^1.11.13",
+		"dayjs": "^1.11.13",
 		"handlebars": "^4.7.8"
 	}
 }

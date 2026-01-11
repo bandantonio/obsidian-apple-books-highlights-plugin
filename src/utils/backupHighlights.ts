@@ -1,4 +1,4 @@
-import type { TFile, Vault } from 'obsidian';
+import type { Vault } from 'obsidian';
 import path from 'path';
 import type { AppleBooksHighlightsImportPluginSettings } from '../settings';
 
@@ -40,11 +40,16 @@ export default class BackupHighlights {
     }
   }
 
-  async backupSingleBookHighlights(bookTitle: string): Promise<void> {
-    const bookFilePathToBackup = path.join(this.settings.highlightsFolder, `${bookTitle}.md`);
-    const vaultFile = this.vault.getFileByPath(bookFilePathToBackup) as TFile;
+  async backupSingleBookHighlights(filename: string): Promise<void> {
+    const bookFilePathToBackup = path.join(this.settings.highlightsFolder, `${filename}.md`);
+    const vaultFile = this.vault.getFileByPath(bookFilePathToBackup);
 
-    const backupBookTitle = `${bookTitle}-bk-${Date.now()}.md`;
+    // File may not exist in case when the user changed the filename template between imports of the same book
+    if (!vaultFile) {
+      return;
+    }
+
+    const backupBookTitle = `${filename}-bk-${Date.now()}.md`;
 
     await this.vault.adapter.copy(vaultFile.path, path.join(this.settings.highlightsFolder, backupBookTitle));
   }

@@ -1,5 +1,3 @@
-import type { Template } from 'handlebars';
-
 export interface IBook {
   ZASSETID: string;
   ZTITLE: string;
@@ -58,5 +56,6 @@ export interface IBookHighlightsPluginSettings {
   backup: boolean;
   importOnStart: boolean;
   highlightsSortingCriterion: IHighlightsSortingCriterion;
-  template: Template;
+  template: string;
+  filenameTemplate: string;
 }

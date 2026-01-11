@@ -76,7 +76,7 @@ export default class SaveHighlights {
         const vaultFile = this.vault.getFileByPath(filePath) as TFile;
 
         if (isBackupEnabled) {
-          backupMethods.backupSingleBookHighlights(combinedHighlight.bookTitle);
+          backupMethods.backupSingleBookHighlights(renderedFilenameTemplate);
         }
 
         await this.modifyExistingBookFile(vaultFile, renderedTemplate);
