@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { AppleBooksHighlightsImportPluginSettings } from '../src/settings';
+import type { ICombinedBooksAndHighlights } from '../src/types';
 import { checkBookExistence } from '../src/utils/checkBookExistence';
+import { aggregatedUnsortedHighlights } from './mocks/aggregatedDetailsData';
 
 describe('checkBookExistence', () => {
   const mockVault = {
@@ -13,20 +15,22 @@ describe('checkBookExistence', () => {
     vi.resetAllMocks();
   });
 
-  test('Should return false if the book file does not exist', () => {
-    const bookTitle = 'Hello World';
+  test('Should return false if the book file does not exist', async () => {
+    const item = aggregatedUnsortedHighlights[0] as ICombinedBooksAndHighlights;
+
     mockVault.getFileByPath.mockReturnValue(null);
 
-    const checkResult = checkBookExistence(bookTitle, mockVault as any, settings);
+    const checkResult = await checkBookExistence(item, mockVault as any, settings);
 
     expect(checkResult).toBe(false);
   });
 
-  test('Should return true if the book file exists', () => {
-    const bookTitle = 'Hello World';
-    mockVault.getFileByPath.mockReturnValue({ path: `${settings.highlightsFolder}/${bookTitle}.md` });
+  test('Should return true if the book file exists', async () => {
+    const item = aggregatedUnsortedHighlights[0] as ICombinedBooksAndHighlights;
 
-    const checkResult = checkBookExistence(bookTitle, mockVault as any, settings);
+    mockVault.getFileByPath.mockReturnValue({ path: `${settings.highlightsFolder}/Hello World.md` });
+
+    const checkResult = await checkBookExistence(item, mockVault as any, settings);
 
     expect(checkResult).toBe(true);
   });

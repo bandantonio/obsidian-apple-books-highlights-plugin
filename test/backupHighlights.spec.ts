@@ -76,15 +76,25 @@ describe('Backup all highlights', () => {
 
 describe('Backup single book highlights', () => {
   test('Should backup a single book highlights', async () => {
-    const bookTitle = 'Hello-world';
-    const vaultFile = { path: `${settings.highlightsFolder}/${bookTitle}.md` };
+    const filename = 'Hello-world';
+    const vaultFile = { path: `${settings.highlightsFolder}/${filename}.md` };
     mockVault.getFileByPath = vi.fn().mockReturnValue(vaultFile);
 
-    const backupBookTitle = `${bookTitle}-bk-1704060001.md`;
+    const backupBookTitle = `${filename}-bk-1704060001.md`;
 
     const backupHighlights = new BackupHighlights(mockVault as any, settings);
-    await backupHighlights.backupSingleBookHighlights(bookTitle);
+    await backupHighlights.backupSingleBookHighlights(filename);
 
     expect(mockVault.adapter.copy).toHaveBeenCalledWith(vaultFile.path, `${settings.highlightsFolder}/${backupBookTitle}`);
+  });
+
+  test('Should skip backup if the book file does not exist (when file template was changed between imports of the same book)', async () => {
+    const filename = 'Hello-world';
+    mockVault.getFileByPath = vi.fn().mockReturnValue(null);
+
+    const backupHighlights = new BackupHighlights(mockVault as any, settings);
+    await backupHighlights.backupSingleBookHighlights(filename);
+
+    expect(mockVault.adapter.copy).not.toHaveBeenCalled();
   });
 });

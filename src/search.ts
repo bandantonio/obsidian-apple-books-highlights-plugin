@@ -36,7 +36,7 @@ export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSugge
   }
 
   async onChooseSuggestion(item: ICombinedBooksAndHighlights) {
-    const doesBookFileExist = checkBookExistence(item.bookTitle, this.app.vault, this.plugin.settings);
+    const doesBookFileExist = await checkBookExistence(item, this.app.vault, this.plugin.settings);
 
     const isBackupEnabled = this.plugin.settings.backup;
 
