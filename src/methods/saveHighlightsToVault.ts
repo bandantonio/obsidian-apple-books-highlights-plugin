@@ -1,20 +1,23 @@
 import type { App, TFile, Vault } from 'obsidian';
 import path from 'path';
+import { DataService } from '../services/dataService';
+import { HighlightProcessingService } from '../services/highlightProcessingService';
 import type { AppleBooksHighlightsImportPluginSettings } from '../settings';
 import type { ICombinedBooksAndHighlights } from '../types';
 import BackupHighlights from '../utils/backupHighlights';
 import { renderHighlightsTemplate } from './renderHighlightsTemplate';
-import { sortHighlights } from './sortHighlights';
 
 export default class SaveHighlights {
   private app: App;
   private vault: Vault;
   private settings: AppleBooksHighlightsImportPluginSettings;
+  private highlightProcessingService: HighlightProcessingService;
 
   constructor(app: App, settings: AppleBooksHighlightsImportPluginSettings) {
     this.app = app;
     this.vault = this.app.vault;
     this.settings = settings;
+    this.highlightProcessingService = new HighlightProcessingService(new DataService());
   }
 
   async saveAllBooksHighlightsToVault(highlights: ICombinedBooksAndHighlights[]): Promise<void> {
@@ -36,7 +39,7 @@ export default class SaveHighlights {
 
     for (const combinedHighlight of highlights) {
       // Order highlights according to the value in settings
-      const sortedHighlights = sortHighlights(combinedHighlight, this.settings.highlightsSortingCriterion);
+      const sortedHighlights = this.highlightProcessingService.sortHighlights(combinedHighlight, this.settings.highlightsSortingCriterion);
 
       // Render template for highlights and filename based on settings
       const renderedTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.template);
@@ -58,7 +61,7 @@ export default class SaveHighlights {
 
     for (const combinedHighlight of highlights) {
       // Order highlights according to the value in settings
-      const sortedHighlights = sortHighlights(combinedHighlight, this.settings.highlightsSortingCriterion);
+      const sortedHighlights = this.highlightProcessingService.sortHighlights(combinedHighlight, this.settings.highlightsSortingCriterion);
 
       // Render template for highlights and filename based on settings
       const renderedTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.template);

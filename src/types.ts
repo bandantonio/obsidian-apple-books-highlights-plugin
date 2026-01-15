@@ -3,6 +3,13 @@ export interface IDataService {
   getAnnotations(): Promise<IBookAnnotation[]>;
 }
 
+export interface IHighlightProcessingService {
+  aggregateHighlights(): Promise<ICombinedBooksAndHighlights[]>;
+  sortHighlights(highlights: ICombinedBooksAndHighlights, criterion: IHighlightsSortingCriterion): ICombinedBooksAndHighlights;
+  // renderHighlightsTemplate(): Promise<string>;
+  // renderFilenameTemplate(): Promise<string>;
+}
+
 export interface IBook {
   ZASSETID: string;
   ZTITLE: string;
