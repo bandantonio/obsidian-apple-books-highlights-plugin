@@ -1,11 +1,9 @@
-import type { IBook, IBookAnnotation, ICombinedBooksAndHighlights } from '../types';
+import type { IBook, IBookAnnotation, ICombinedBooksAndHighlights, IDataService } from '../types';
 import { preserveNewlineIndentation, removeTrailingSpaces } from '../utils';
-import { getAnnotations } from './getAnnotations';
-import { getBooks } from './getBooks';
 
-export const aggregateBookAndHighlightDetails = async (): Promise<ICombinedBooksAndHighlights[]> => {
-  const books = await getBooks();
-  const annotations = await getAnnotations();
+export const aggregateBookAndHighlightDetails = async (dataService: IDataService): Promise<ICombinedBooksAndHighlights[]> => {
+  const books = await dataService.getBooks();
+  const annotations = await dataService.getAnnotations();
 
   const resultingHighlights: ICombinedBooksAndHighlights[] = books.reduce((highlights: ICombinedBooksAndHighlights[], book: IBook) => {
     const bookRelatedAnnotations: IBookAnnotation[] = annotations.filter(

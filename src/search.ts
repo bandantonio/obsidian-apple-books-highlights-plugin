@@ -1,6 +1,7 @@
 import { type App, Modal, Notice, Setting, SuggestModal } from 'obsidian';
 import type IBookHighlightsPlugin from '../main';
 import { aggregateBookAndHighlightDetails } from './methods/aggregateDetails';
+import { DataService } from './services/dataService';
 import type { ICombinedBooksAndHighlights } from './types';
 import { checkBookExistence } from './utils/checkBookExistence';
 
@@ -14,8 +15,10 @@ abstract class IBookHighlightsPluginSuggestModal extends SuggestModal<ICombinedB
 
 export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSuggestModal {
   async getSuggestions(query: string): Promise<ICombinedBooksAndHighlights[]> {
+    const dataService = new DataService();
+
     try {
-      const allBooks = await aggregateBookAndHighlightDetails();
+      const allBooks = await aggregateBookAndHighlightDetails(dataService);
 
       return allBooks.filter((book) => {
         const titleMatch = book.bookTitle.toLowerCase().includes(query.toLowerCase());

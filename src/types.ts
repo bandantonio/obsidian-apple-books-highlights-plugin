@@ -1,3 +1,8 @@
+export interface IDataService {
+  getBooks(): Promise<IBook[]>;
+  getAnnotations(): Promise<IBookAnnotation[]>;
+}
+
 export interface IBook {
   ZASSETID: string;
   ZTITLE: string;

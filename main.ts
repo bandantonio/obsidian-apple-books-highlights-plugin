@@ -2,14 +2,17 @@ import { Notice, Plugin } from 'obsidian';
 import { aggregateBookAndHighlightDetails } from './src/methods/aggregateDetails';
 import SaveHighlights from './src/methods/saveHighlightsToVault';
 import { IBookHighlightsPluginSearchModal, OverwriteBookModal } from './src/search';
+import { DataService } from './src/services/dataService';
 import { AppleBooksHighlightsImportPluginSettings, IBookHighlightsSettingTab } from './src/settings';
 
 export default class IBookHighlightsPlugin extends Plugin {
   settings: AppleBooksHighlightsImportPluginSettings;
+  dataService: DataService;
   saveHighlights: SaveHighlights;
 
   async onload() {
     const settings = await this.loadSettings();
+    this.dataService = new DataService();
     this.saveHighlights = new SaveHighlights(this.app, settings);
 
     if (settings.importOnStart) {
@@ -76,7 +79,7 @@ export default class IBookHighlightsPlugin extends Plugin {
   }
 
   async aggregateAndSaveHighlights(): Promise<void> {
-    const highlights = await aggregateBookAndHighlightDetails();
+    const highlights = await aggregateBookAndHighlightDetails(this.dataService);
 
     if (highlights.length === 0) {
       throw 'No highlights found. Make sure you made some highlights in your Apple Books.';

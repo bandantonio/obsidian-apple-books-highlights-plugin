@@ -1,6 +1,7 @@
 import { describe, expect, test, vi } from 'vitest';
 import * as db from '../src/db';
 import { aggregateBookAndHighlightDetails } from '../src/methods/aggregateDetails';
+import { DataService } from '../src/services/dataService';
 import type { IBook, IBookAnnotation } from '../src/types';
 import {
   aggregatedUnsortedHighlights,
@@ -14,7 +15,8 @@ describe('aggregateBookAndHighlightDetails', () => {
     vi.spyOn(db, 'dbRequest').mockResolvedValue(booksToAggregate as IBook[]);
     vi.spyOn(db, 'annotationsRequest').mockResolvedValue(annotationsToAggregate as IBookAnnotation[]);
 
-    const books = await aggregateBookAndHighlightDetails();
+    const dataService = new DataService();
+    const books = await aggregateBookAndHighlightDetails(dataService);
 
     expect(books).toEqual(aggregatedUnsortedHighlights);
   });
@@ -23,7 +25,8 @@ describe('aggregateBookAndHighlightDetails', () => {
     vi.spyOn(db, 'dbRequest').mockResolvedValue(booksToAggregate as IBook[]);
     vi.spyOn(db, 'annotationsRequest').mockResolvedValue(annotationsToAggregateWithMissingUserNote as IBookAnnotation[]);
 
-    const books = await aggregateBookAndHighlightDetails();
+    const dataService = new DataService();
+    const books = await aggregateBookAndHighlightDetails(dataService);
 
     expect(books[0].annotations[0].chapter).toBe('Aggregated Introduction 4');
     expect(books[0].annotations[0].note).toBeNull();
@@ -35,7 +38,8 @@ describe('aggregateBookAndHighlightDetails', () => {
     vi.spyOn(db, 'dbRequest').mockResolvedValue(booksToAggregate as IBook[]);
     vi.spyOn(db, 'annotationsRequest').mockResolvedValue([]);
 
-    const books = await aggregateBookAndHighlightDetails();
+    const dataService = new DataService();
+    const books = await aggregateBookAndHighlightDetails(dataService);
 
     expect(books).toEqual([]);
   });
