@@ -6,8 +6,10 @@ export interface IDataService {
 export interface IHighlightProcessingService {
   aggregateHighlights(): Promise<ICombinedBooksAndHighlights[]>;
   sortHighlights(highlights: ICombinedBooksAndHighlights, criterion: IHighlightsSortingCriterion): ICombinedBooksAndHighlights;
-  // renderHighlightsTemplate(): Promise<string>;
-  // renderFilenameTemplate(): Promise<string>;
+}
+
+export interface IRenderService {
+  renderTemplate(highlight: ICombinedBooksAndHighlights, template: string): Promise<string>;
 }
 
 export interface IBook {

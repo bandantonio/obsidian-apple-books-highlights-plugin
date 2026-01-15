@@ -2,22 +2,24 @@ import type { App, TFile, Vault } from 'obsidian';
 import path from 'path';
 import { DataService } from '../services/dataService';
 import { HighlightProcessingService } from '../services/highlightProcessingService';
+import { RenderService } from '../services/renderService';
 import type { AppleBooksHighlightsImportPluginSettings } from '../settings';
 import type { ICombinedBooksAndHighlights } from '../types';
 import BackupHighlights from '../utils/backupHighlights';
-import { renderHighlightsTemplate } from './renderHighlightsTemplate';
 
 export default class SaveHighlights {
   private app: App;
   private vault: Vault;
   private settings: AppleBooksHighlightsImportPluginSettings;
   private highlightProcessingService: HighlightProcessingService;
+  private renderService: RenderService;
 
   constructor(app: App, settings: AppleBooksHighlightsImportPluginSettings) {
     this.app = app;
     this.vault = this.app.vault;
     this.settings = settings;
     this.highlightProcessingService = new HighlightProcessingService(new DataService());
+    this.renderService = new RenderService();
   }
 
   async saveAllBooksHighlightsToVault(highlights: ICombinedBooksAndHighlights[]): Promise<void> {
@@ -42,8 +44,8 @@ export default class SaveHighlights {
       const sortedHighlights = this.highlightProcessingService.sortHighlights(combinedHighlight, this.settings.highlightsSortingCriterion);
 
       // Render template for highlights and filename based on settings
-      const renderedTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.template);
-      const renderedFilenameTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.filenameTemplate);
+      const renderedTemplate = await this.renderService.renderTemplate(sortedHighlights, this.settings.template);
+      const renderedFilenameTemplate = await this.renderService.renderTemplate(sortedHighlights, this.settings.filenameTemplate);
 
       // Save highlights to vault
       const filePath = path.join(this.settings.highlightsFolder, `${renderedFilenameTemplate}.md`);
@@ -64,8 +66,8 @@ export default class SaveHighlights {
       const sortedHighlights = this.highlightProcessingService.sortHighlights(combinedHighlight, this.settings.highlightsSortingCriterion);
 
       // Render template for highlights and filename based on settings
-      const renderedTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.template);
-      const renderedFilenameTemplate = await renderHighlightsTemplate(sortedHighlights, this.settings.filenameTemplate);
+      const renderedTemplate = await this.renderService.renderTemplate(sortedHighlights, this.settings.template);
+      const renderedFilenameTemplate = await this.renderService.renderTemplate(sortedHighlights, this.settings.filenameTemplate);
 
       // Save highlights to vault
       const filePath = path.join(this.settings.highlightsFolder, `${renderedFilenameTemplate}.md`);

@@ -1,6 +1,6 @@
 import type { Vault } from 'obsidian';
 import path from 'path';
-import { renderHighlightsTemplate } from '../methods/renderHighlightsTemplate';
+import { RenderService } from '../services/renderService';
 import type { AppleBooksHighlightsImportPluginSettings } from '../settings';
 import type { ICombinedBooksAndHighlights } from '../types';
 
@@ -9,7 +9,8 @@ export const checkBookExistence = async (
   vault: Vault,
   settings: AppleBooksHighlightsImportPluginSettings,
 ): Promise<boolean> => {
-  const renderedFilename = await renderHighlightsTemplate(item, settings.filenameTemplate);
+  const renderService = new RenderService();
+  const renderedFilename = await renderService.renderTemplate(item, settings.filenameTemplate);
   const pathToBookFile = path.join(settings.highlightsFolder, `${renderedFilename}.md`);
   const doesBookFileExist = vault.getFileByPath(pathToBookFile);
 

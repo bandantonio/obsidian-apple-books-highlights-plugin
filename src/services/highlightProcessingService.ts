@@ -1,7 +1,6 @@
 import type { ICombinedBooksAndHighlights, IDataService, IHighlight, IHighlightProcessingService } from '../types';
 import { IHighlightsSortingCriterion } from '../types';
 import { preserveNewlineIndentation, removeTrailingSpaces } from '../utils';
-// import { renderHighlightsTemplate } from '../methods/renderHighlightsTemplate';
 
 export class HighlightProcessingService implements IHighlightProcessingService {
   private dataService: IDataService;
