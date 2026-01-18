@@ -1,3 +1,5 @@
+import type { TAbstractFile, TFile, TFolder } from 'obsidian';
+
 export interface IDataService {
   getBooks(): Promise<IBook[]>;
   getAnnotations(): Promise<IBookAnnotation[]>;
@@ -9,7 +11,18 @@ export interface IHighlightProcessingService {
 }
 
 export interface IRenderService {
-  renderTemplate(highlight: ICombinedBooksAndHighlights, template: string): Promise<string>;
+  renderTemplate(highlight: ICombinedBooksAndHighlights, template: string): string;
+}
+
+export interface IVaultService {
+  getHighlightsFolder(): TFolder | null;
+  checkFileExistence(filePath: string): TFile | null;
+  checkBookExistence(item: ICombinedBooksAndHighlights): boolean;
+  backupAllHighlights(highlightsFolderPath?: TFolder | null): Promise<void>;
+  backupSingleBookHighlights(filename: string): Promise<void>;
+  createNewBookFile(filePath: string, content: string): Promise<void>;
+  recreateHighlightsFolder(highlightsFolderPath?: TFolder | null): Promise<void>;
+  modifyExistingBookFile(file: TFile, content: string): Promise<void>;
 }
 
 export interface IBook {

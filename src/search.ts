@@ -1,9 +1,9 @@
 import { type App, Modal, Notice, Setting, SuggestModal } from 'obsidian';
 import type IBookHighlightsPlugin from '../main';
-import { aggregateBookAndHighlightDetails } from './methods/aggregateDetails';
 import { DataService } from './services/dataService';
+import { HighlightProcessingService } from './services/highlightProcessingService';
+import { VaultService } from './services/vaultService';
 import type { ICombinedBooksAndHighlights } from './types';
-import { checkBookExistence } from './utils/checkBookExistence';
 
 abstract class IBookHighlightsPluginSuggestModal extends SuggestModal<ICombinedBooksAndHighlights> {
   plugin: IBookHighlightsPlugin;
@@ -16,9 +16,10 @@ abstract class IBookHighlightsPluginSuggestModal extends SuggestModal<ICombinedB
 export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSuggestModal {
   async getSuggestions(query: string): Promise<ICombinedBooksAndHighlights[]> {
     const dataService = new DataService();
+    const highlightProcessingService = new HighlightProcessingService(dataService);
 
     try {
-      const allBooks = await aggregateBookAndHighlightDetails(dataService);
+      const allBooks = await highlightProcessingService.aggregateHighlights();
 
       return allBooks.filter((book) => {
         const titleMatch = book.bookTitle.toLowerCase().includes(query.toLowerCase());
@@ -39,7 +40,8 @@ export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSugge
   }
 
   async onChooseSuggestion(item: ICombinedBooksAndHighlights) {
-    const doesBookFileExist = await checkBookExistence(item, this.app.vault, this.plugin.settings);
+    const vaultService = new VaultService(this.app, this.plugin.settings);
+    const doesBookFileExist = vaultService.checkBookExistence(item);
 
     const isBackupEnabled = this.plugin.settings.backup;
 

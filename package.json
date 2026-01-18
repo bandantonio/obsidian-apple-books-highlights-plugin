@@ -9,7 +9,7 @@
 		"copy-assets": "cp manifest.json dist/manifest.json && cp styles.css dist/styles.css",
 		"lint": "biome check --diagnostic-level=warn --max-diagnostics=none",
 		"lint:ci": "biome ci --diagnostic-level=error",
-		"lint:fix": "biome check --write --no-errors-on-unmatched",
+    "lint:fix": "biome check --fix --no-errors-on-unmatched",
 		"lint:verbose": "biome check --verbose --max-diagnostics=none",
     "version": "node version-bump.mjs",
 		"test": "vitest",

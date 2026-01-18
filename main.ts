@@ -1,5 +1,5 @@
 import { Notice, Plugin } from 'obsidian';
-import SaveHighlights from './src/methods/saveHighlightsToVault';
+import SaveHighlights from './src/saveHighlightsToVault';
 import { IBookHighlightsPluginSearchModal, OverwriteBookModal } from './src/search';
 import { DataService } from './src/services/dataService';
 import { HighlightProcessingService } from './src/services/highlightProcessingService';
