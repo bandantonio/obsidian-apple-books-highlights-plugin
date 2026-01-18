@@ -2,17 +2,26 @@ import type { App, TFile, TFolder, Vault } from 'obsidian';
 import path from 'path';
 import { defaultPluginSettings } from '../settings';
 import type { IBookHighlightsPluginSettings, ICombinedBooksAndHighlights, IRenderService, IVaultService } from '../types';
+import type { DiagnosticsCollector } from '../utils/diagnostics';
+import { Timer } from '../utils/timing';
 
 export class VaultService implements IVaultService {
   private app: App;
   private vault: Vault;
   private settings: IBookHighlightsPluginSettings = defaultPluginSettings;
   private renderService: IRenderService;
+  private diagnosticsCollector?: DiagnosticsCollector;
 
-  constructor(app: App, settings: IBookHighlightsPluginSettings, renderService: IRenderService) {
+  constructor(
+    app: App,
+    settings: IBookHighlightsPluginSettings,
+    renderService: IRenderService,
+    diagnosticsCollector?: DiagnosticsCollector,
+  ) {
     this.app = app;
     this.settings = settings;
     this.renderService = renderService;
+    this.diagnosticsCollector = diagnosticsCollector;
     this.vault = this.app.vault;
   }
 
@@ -25,38 +34,55 @@ export class VaultService implements IVaultService {
   }
 
   checkBookExistence(item: ICombinedBooksAndHighlights): boolean {
+    const timer = new Timer('VaultService.checkBookExistence', this.diagnosticsCollector);
+    timer.start();
     const renderedFilename = this.renderService.renderTemplate(item, this.settings.filenameTemplate);
     const pathToBookFile = path.join(this.settings.highlightsFolder, `${renderedFilename}.md`);
     const doesBookFileExist = this.vault.getFileByPath(pathToBookFile);
-
+    timer.end();
     return Boolean(doesBookFileExist);
   }
 
   async createNewBookFile(filePath: string, content: string): Promise<void> {
+    const timer = new Timer('VaultService.createNewBookFile', this.diagnosticsCollector);
+    timer.start();
     await this.vault.create(filePath, content);
+    timer.end();
   }
 
   async modifyExistingBookFile(file: TFile, content: string): Promise<void> {
+    const timer = new Timer('VaultService.modifyExistingBookFile');
+    timer.start();
     await this.vault.modify(file, content);
+    timer.end();
   }
 
   async createHighlightsFolder() {
+    const timer = new Timer('VaultService.createHighlightsFolder', this.diagnosticsCollector);
+    timer.start();
     await this.vault.createFolder(this.settings.highlightsFolder);
+    timer.end();
   }
 
   async recreateHighlightsFolder(highlightsFolderPath?: TFolder | null) {
+    const timer = new Timer('VaultService.recreateHighlightsFolder', this.diagnosticsCollector);
+    timer.start();
     // This function is called on successful check of the folder existence,
     // so the folderPath will never be null (that's why there is non-null assertion operator at the end)
     const highlightsFolder = highlightsFolderPath ?? this.getHighlightsFolder();
 
     await this.vault.delete(highlightsFolder!, true);
     await this.vault.createFolder(this.settings.highlightsFolder);
+    timer.end();
   }
 
   async backupAllHighlights(highlightsFolderPath?: TFolder | null): Promise<void> {
+    const timer = new Timer('VaultService.backupAllHighlights', this.diagnosticsCollector);
+    timer.start();
     const highlightsFolder = highlightsFolderPath ?? this.getHighlightsFolder();
 
     if (!highlightsFolder) {
+      timer.end();
       return;
     }
 
@@ -82,19 +108,24 @@ export class VaultService implements IVaultService {
       await this.vault.delete(highlightsFolder, true);
       await this.vault.createFolder(this.settings.highlightsFolder);
     }
+    timer.end();
   }
 
   async backupSingleBookHighlights(filename: string): Promise<void> {
+    const timer = new Timer('VaultService.backupSingleBookHighlights', this.diagnosticsCollector);
+    timer.start();
     const bookFilePathToBackup = path.join(this.settings.highlightsFolder, `${filename}.md`);
     const vaultFile = this.vault.getFileByPath(bookFilePathToBackup);
 
     // File may not exist in case when the user changed the filename template between imports of the same book
     if (!vaultFile) {
+      timer.end();
       return;
     }
 
     const backupBookTitle = `${filename}-bk-${Date.now()}.md`;
 
     await this.vault.adapter.copy(vaultFile.path, path.join(this.settings.highlightsFolder, backupBookTitle));
+    timer.end();
   }
 }

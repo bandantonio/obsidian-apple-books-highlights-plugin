@@ -1,15 +1,21 @@
 import type { ICombinedBooksAndHighlights, IDataService, IHighlight, IHighlightProcessingService } from '../types';
 import { IHighlightsSortingCriterion } from '../types';
 import { preserveNewlineIndentation, removeTrailingSpaces } from '../utils';
+import type { DiagnosticsCollector } from '../utils/diagnostics';
+import { Timer } from '../utils/timing';
 
 export class HighlightProcessingService implements IHighlightProcessingService {
   private dataService: IDataService;
+  private diagnosticsCollector?: DiagnosticsCollector;
 
-  constructor(dataService: IDataService) {
+  constructor(dataService: IDataService, diagnosticsCollector?: DiagnosticsCollector) {
     this.dataService = dataService;
+    this.diagnosticsCollector = diagnosticsCollector;
   }
 
   async aggregateHighlights(): Promise<ICombinedBooksAndHighlights[]> {
+    const timer = new Timer('HighlightProcessingService.aggregateHighlights', this.diagnosticsCollector);
+    timer.start();
     try {
       const books = await this.dataService.getBooks();
       const annotations = await this.dataService.getAnnotations();
@@ -52,8 +58,10 @@ export class HighlightProcessingService implements IHighlightProcessingService {
 
         return highlights;
       }, []);
+      timer.end();
       return resultingHighlights;
     } catch (error) {
+      timer.end();
       throw new Error(`Error aggregating highlights: ${(error as Error).message}`);
     }
   }
@@ -62,6 +70,8 @@ export class HighlightProcessingService implements IHighlightProcessingService {
     combinedHighlight: ICombinedBooksAndHighlights,
     highlightsSortingCriterion: IHighlightsSortingCriterion,
   ): ICombinedBooksAndHighlights {
+    const timer = new Timer('HighlightProcessingService.sortHighlights', this.diagnosticsCollector);
+    timer.start();
     let sortedHighlights: IHighlight[] = [];
 
     switch (highlightsSortingCriterion) {
@@ -87,6 +97,7 @@ export class HighlightProcessingService implements IHighlightProcessingService {
         break;
     }
 
+    timer.end();
     return {
       ...combinedHighlight,
       annotations: sortedHighlights,

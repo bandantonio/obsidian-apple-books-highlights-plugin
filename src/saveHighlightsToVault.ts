@@ -5,6 +5,8 @@ import { HighlightProcessingService } from './services/highlightProcessingServic
 import { VaultService } from './services/vaultService';
 import { defaultPluginSettings } from './settings';
 import type { IBookHighlightsPluginSettings, ICombinedBooksAndHighlights, IRenderService } from './types';
+import type { DiagnosticsCollector } from './utils/diagnostics';
+import { Timer } from './utils/timing';
 
 export default class SaveHighlights {
   private app: App;
@@ -12,16 +14,26 @@ export default class SaveHighlights {
   private highlightProcessingService: HighlightProcessingService;
   private renderService: IRenderService;
   private vaultService: VaultService;
+  private diagnosticsCollector?: DiagnosticsCollector;
 
-  constructor(app: App, settings: IBookHighlightsPluginSettings, renderService: IRenderService) {
+  constructor(
+    app: App,
+    settings: IBookHighlightsPluginSettings,
+    renderService: IRenderService,
+    diagnosticsCollector?: DiagnosticsCollector,
+  ) {
     this.app = app;
     this.settings = settings;
-    this.highlightProcessingService = new HighlightProcessingService(new DataService());
+    this.diagnosticsCollector = diagnosticsCollector;
+    this.highlightProcessingService = new HighlightProcessingService(new DataService(this.diagnosticsCollector), this.diagnosticsCollector);
     this.renderService = renderService;
-    this.vaultService = new VaultService(this.app, this.settings, this.renderService);
+    this.vaultService = new VaultService(this.app, this.settings, this.renderService, this.diagnosticsCollector);
   }
 
   async saveAllBooksHighlightsToVault(highlights: ICombinedBooksAndHighlights[]): Promise<void> {
+    const cycleTimer = new Timer('Full Save Cycle (saveAllBooksHighlightsToVault)', this.diagnosticsCollector);
+    cycleTimer.start();
+
     const highlightsFolder = this.vaultService.getHighlightsFolder();
     const doesHighlightsFolderExist = Boolean(highlightsFolder);
 
@@ -50,9 +62,19 @@ export default class SaveHighlights {
 
       await this.vaultService.createNewBookFile(filePath, renderedTemplate);
     }
+
+    cycleTimer.end();
+
+    // Write diagnostics to file if collector is available
+    if (this.diagnosticsCollector) {
+      await this.diagnosticsCollector.writeDiagnosticsToFile();
+    }
   }
 
   async saveSingleBookHighlightsToVault(highlights: ICombinedBooksAndHighlights[], shouldCreateFile: boolean): Promise<void> {
+    const cycleTimer = new Timer('Full Save Cycle (saveSingleBookHighlightsToVault)', this.diagnosticsCollector);
+    cycleTimer.start();
+
     const highlightsFolder = this.vaultService.getHighlightsFolder();
     const doesHighlightsFolderExist = Boolean(highlightsFolder);
 
@@ -83,6 +105,13 @@ export default class SaveHighlights {
 
         await this.vaultService.modifyExistingBookFile(vaultFile, renderedTemplate);
       }
+    }
+
+    cycleTimer.end();
+
+    // Write diagnostics to file if collector is available
+    if (this.diagnosticsCollector) {
+      await this.diagnosticsCollector.writeDiagnosticsToFile();
     }
   }
 }

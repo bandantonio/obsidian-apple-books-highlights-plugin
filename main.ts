@@ -7,7 +7,8 @@ import { RenderService } from './src/services/renderService';
 import { VaultService } from './src/services/vaultService';
 import { defaultPluginSettings, IBookHighlightsSettingTab } from './src/settings';
 import type { IBookHighlightsPluginSettings } from './src/types';
-
+import { DiagnosticsCollector } from './src/utils/diagnostics';
+import { Timer } from './src/utils/timing';
 export default class IBookHighlightsPlugin extends Plugin {
   settings: IBookHighlightsPluginSettings;
   dataService: DataService;
@@ -15,14 +16,16 @@ export default class IBookHighlightsPlugin extends Plugin {
   renderService: RenderService;
   saveHighlights: SaveHighlights;
   vaultService: VaultService;
+  diagnosticsCollector: DiagnosticsCollector;
 
   async onload() {
     const settings = await this.loadSettings();
-    this.dataService = new DataService();
-    this.highlightProcessingService = new HighlightProcessingService(this.dataService);
-    this.renderService = new RenderService();
-    this.vaultService = new VaultService(this.app, this.settings, this.renderService);
-    this.saveHighlights = new SaveHighlights(this.app, this.settings, this.renderService);
+    this.diagnosticsCollector = new DiagnosticsCollector(this.app, this.settings);
+    this.dataService = new DataService(this.diagnosticsCollector);
+    this.highlightProcessingService = new HighlightProcessingService(this.dataService, this.diagnosticsCollector);
+    this.renderService = new RenderService(this.diagnosticsCollector);
+    this.vaultService = new VaultService(this.app, this.settings, this.renderService, this.diagnosticsCollector);
+    this.saveHighlights = new SaveHighlights(this.app, this.settings, this.renderService, this.diagnosticsCollector);
 
     if (settings.importOnStart) {
       await this.aggregateAndSaveHighlights();
@@ -88,12 +91,24 @@ export default class IBookHighlightsPlugin extends Plugin {
   }
 
   async aggregateAndSaveHighlights(): Promise<void> {
+    // Reset diagnostics collector for each import run
+    this.diagnosticsCollector.reset();
+
+    const timer = new Timer('Full Import Cycle (aggregateAndSaveHighlights)', this.diagnosticsCollector);
+    timer.start();
+
     const highlights = await this.highlightProcessingService.aggregateHighlights();
 
     if (highlights.length === 0) {
       throw 'No highlights found. Make sure you made some highlights in your Apple Books.';
     }
 
+    // Set counts for diagnostics
+    const totalHighlights = highlights.reduce((sum, book) => sum + book.annotations.length, 0);
+    this.diagnosticsCollector.setCounts(highlights.length, totalHighlights);
+
     await this.saveHighlights.saveAllBooksHighlightsToVault(highlights);
+
+    timer.end();
   }
 }

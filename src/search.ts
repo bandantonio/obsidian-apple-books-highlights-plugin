@@ -18,7 +18,7 @@ abstract class IBookHighlightsPluginSuggestModal extends SuggestModal<ICombinedB
 
 export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSuggestModal {
   async getSuggestions(query: string): Promise<ICombinedBooksAndHighlights[]> {
-    const highlightProcessingService = new HighlightProcessingService(this.dataService);
+    const highlightProcessingService = new HighlightProcessingService(this.dataService, this.plugin.diagnosticsCollector);
 
     try {
       const allBooks = await highlightProcessingService.aggregateHighlights();
@@ -42,6 +42,9 @@ export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSugge
   }
 
   async onChooseSuggestion(item: ICombinedBooksAndHighlights) {
+    // Set counts for diagnostics (single book)
+    this.plugin.diagnosticsCollector.setCounts(1, item.annotations.length);
+
     const doesBookFileExist = this.vaultService.checkBookExistence(item);
 
     const isBackupEnabled = this.plugin.settings.backup;
