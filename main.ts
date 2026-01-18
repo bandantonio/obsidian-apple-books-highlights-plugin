@@ -3,19 +3,25 @@ import SaveHighlights from './src/saveHighlightsToVault';
 import { IBookHighlightsPluginSearchModal, OverwriteBookModal } from './src/search';
 import { DataService } from './src/services/dataService';
 import { HighlightProcessingService } from './src/services/highlightProcessingService';
+import { RenderService } from './src/services/renderService';
+import { VaultService } from './src/services/vaultService';
 import { AppleBooksHighlightsImportPluginSettings, IBookHighlightsSettingTab } from './src/settings';
 
 export default class IBookHighlightsPlugin extends Plugin {
   settings: AppleBooksHighlightsImportPluginSettings;
   dataService: DataService;
   highlightProcessingService: HighlightProcessingService;
+  renderService: RenderService;
   saveHighlights: SaveHighlights;
+  vaultService: VaultService;
 
   async onload() {
     const settings = await this.loadSettings();
     this.dataService = new DataService();
     this.highlightProcessingService = new HighlightProcessingService(this.dataService);
-    this.saveHighlights = new SaveHighlights(this.app, settings);
+    this.renderService = new RenderService();
+    this.vaultService = new VaultService(this.app, this.settings, this.renderService);
+    this.saveHighlights = new SaveHighlights(this.app, this.settings, this.renderService);
 
     if (settings.importOnStart) {
       await this.aggregateAndSaveHighlights();
@@ -58,7 +64,7 @@ export default class IBookHighlightsPlugin extends Plugin {
       name: 'From a specific book...',
       callback: () => {
         try {
-          new IBookHighlightsPluginSearchModal(this.app, this).open();
+          new IBookHighlightsPluginSearchModal(this.app, this, this.dataService, this.vaultService).open();
         } catch (error) {
           new Notice(`[${this.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
           console.error(`[${this.manifest.name}]: ${error}`);

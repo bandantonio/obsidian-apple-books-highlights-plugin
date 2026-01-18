@@ -2,24 +2,23 @@ import type { App, TFile } from 'obsidian';
 import path from 'path';
 import { DataService } from './services/dataService';
 import { HighlightProcessingService } from './services/highlightProcessingService';
-import { RenderService } from './services/renderService';
 import { VaultService } from './services/vaultService';
 import type { AppleBooksHighlightsImportPluginSettings } from './settings';
-import type { ICombinedBooksAndHighlights } from './types';
+import type { ICombinedBooksAndHighlights, IRenderService } from './types';
 
 export default class SaveHighlights {
   private app: App;
   private settings: AppleBooksHighlightsImportPluginSettings;
   private highlightProcessingService: HighlightProcessingService;
-  private renderService: RenderService;
+  private renderService: IRenderService;
   private vaultService: VaultService;
 
-  constructor(app: App, settings: AppleBooksHighlightsImportPluginSettings) {
+  constructor(app: App, settings: AppleBooksHighlightsImportPluginSettings, renderService: IRenderService) {
     this.app = app;
     this.settings = settings;
     this.highlightProcessingService = new HighlightProcessingService(new DataService());
-    this.renderService = new RenderService();
-    this.vaultService = new VaultService(this.app, this.settings);
+    this.renderService = renderService;
+    this.vaultService = new VaultService(this.app, this.settings, this.renderService);
   }
 
   async saveAllBooksHighlightsToVault(highlights: ICombinedBooksAndHighlights[]): Promise<void> {

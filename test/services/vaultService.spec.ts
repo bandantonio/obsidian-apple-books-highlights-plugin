@@ -1,9 +1,8 @@
 import path from 'path';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
-import { RenderService } from '../../src/services/renderService';
 import { VaultService } from '../../src/services/vaultService';
 import { AppleBooksHighlightsImportPluginSettings } from '../../src/settings';
-import type { ICombinedBooksAndHighlights } from '../../src/types';
+import type { ICombinedBooksAndHighlights, IRenderService } from '../../src/types';
 import { aggregatedUnsortedHighlights } from '../mocks/aggregatedDetailsData';
 import { defaultTemplateMockWithAnnotationsSortedByDefault } from '../mocks/renderedTemplate';
 
@@ -22,7 +21,20 @@ const mockApp: any = {
   },
 };
 
+const mockRenderService: IRenderService = {
+  renderTemplate: vi.fn().mockImplementation((_item: ICombinedBooksAndHighlights, _template: string) => {
+    return;
+  }),
+};
+
 describe('VaultService', () => {
+  let vaultService: VaultService;
+
+  beforeEach(() => {
+    const settings = new AppleBooksHighlightsImportPluginSettings();
+    vaultService = new VaultService(mockApp, settings, mockRenderService);
+  });
+
   afterEach(() => {
     vi.resetAllMocks();
   });
@@ -30,8 +42,9 @@ describe('VaultService', () => {
   describe('getHighlightsFolder', () => {
     test('Should return the highlights folder if it exists', () => {
       const settings = new AppleBooksHighlightsImportPluginSettings();
+
       mockApp.vault.getFolderByPath.mockReturnValue({ path: settings.highlightsFolder });
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       const result = vaultService.getHighlightsFolder();
 
@@ -42,7 +55,7 @@ describe('VaultService', () => {
     test('Should return null if the highlights folder does not exist', () => {
       const settings = new AppleBooksHighlightsImportPluginSettings();
       mockApp.vault.getFolderByPath.mockReturnValue(null);
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       const result = vaultService.getHighlightsFolder();
 
@@ -56,7 +69,7 @@ describe('VaultService', () => {
       const filePath = 'ibooks-highlights/Some-book.md';
       const settings = new AppleBooksHighlightsImportPluginSettings();
       mockApp.vault.getFileByPath.mockReturnValue({ path: filePath });
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       const result = vaultService.checkFileExistence(filePath);
 
@@ -68,7 +81,7 @@ describe('VaultService', () => {
       const filePath = 'ibooks-highlights/Non-existent-book.md';
       const settings = new AppleBooksHighlightsImportPluginSettings();
       mockApp.vault.getFileByPath.mockReturnValue(null);
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       const result = vaultService.checkFileExistence(filePath);
 
@@ -81,7 +94,7 @@ describe('VaultService', () => {
     test('Should return false if the book file does not exist', () => {
       const mockedHighlights = aggregatedUnsortedHighlights[0] as ICombinedBooksAndHighlights;
       const settings = new AppleBooksHighlightsImportPluginSettings();
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       mockApp.vault.getFileByPath.mockReturnValue(null);
 
@@ -93,9 +106,8 @@ describe('VaultService', () => {
     test('Should return true if the book file exists', () => {
       const mockedHighlights = aggregatedUnsortedHighlights[0] as ICombinedBooksAndHighlights;
       const settings = new AppleBooksHighlightsImportPluginSettings();
-      const vaultService = new VaultService(mockApp, settings);
-      const renderService = new RenderService();
-      const renderedFilename = renderService.renderTemplate(mockedHighlights, settings.filenameTemplate);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
+      const renderedFilename = mockRenderService.renderTemplate(mockedHighlights, settings.filenameTemplate);
 
       const pathToFile = path.join(settings.highlightsFolder, `${renderedFilename}.md`);
       mockApp.vault.getFileByPath.mockReturnValue({ path: pathToFile });
@@ -111,7 +123,7 @@ describe('VaultService', () => {
     test('Should create a new book file in the vault', async () => {
       const mockedHighlights = defaultTemplateMockWithAnnotationsSortedByDefault;
       const settings = new AppleBooksHighlightsImportPluginSettings();
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       const filePath =
         'ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title by Apple Inc..md';
@@ -128,7 +140,7 @@ describe('VaultService', () => {
     test('Should modify an existing book file in the vault', async () => {
       const mockedHighlights = defaultTemplateMockWithAnnotationsSortedByDefault;
       const settings = new AppleBooksHighlightsImportPluginSettings();
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       const filePath = {
         path: 'ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title by Apple Inc..md',
@@ -143,7 +155,7 @@ describe('VaultService', () => {
   describe('createHighlightsFolder', () => {
     test('Should create highlights folder in the vault', async () => {
       const settings = new AppleBooksHighlightsImportPluginSettings();
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       mockApp.vault.createFolder.mockResolvedValue({ path: settings.highlightsFolder });
       await vaultService.createHighlightsFolder();
@@ -157,7 +169,7 @@ describe('VaultService', () => {
   describe('recreateHighlightsFolder', () => {
     test('Should delete and recreate highlights folder in the vault', async () => {
       const settings = new AppleBooksHighlightsImportPluginSettings();
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       const folderPath = { path: settings.highlightsFolder } as any;
       mockApp.vault.getFolderByPath.mockReturnValue(folderPath);
@@ -182,7 +194,7 @@ describe('VaultService', () => {
 
     test('Should skip backup if the highlights folder does not exist', async () => {
       const settings = new AppleBooksHighlightsImportPluginSettings();
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       mockApp.vault.getFolderByPath.mockReturnValue(null);
 
@@ -194,7 +206,7 @@ describe('VaultService', () => {
 
     test('Should skip backup if the highlights folder is empty', async () => {
       const settings = new AppleBooksHighlightsImportPluginSettings();
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       mockApp.vault.getFolderByPath.mockReturnValue({ path: settings.highlightsFolder });
       mockApp.vault.adapter.list.mockResolvedValue({ files: [] });
@@ -208,7 +220,7 @@ describe('VaultService', () => {
 
     test('Should backup all the content of the highlights folder', async () => {
       const settings = new AppleBooksHighlightsImportPluginSettings();
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       const highlightsFolderPath = { path: settings.highlightsFolder };
       mockApp.vault.getFolderByPath.mockReturnValue(highlightsFolderPath);
@@ -239,7 +251,7 @@ describe('VaultService', () => {
 
     test('Should backup a single book highlights', async () => {
       const settings = new AppleBooksHighlightsImportPluginSettings();
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       const filename = 'Hello-world';
       const vaultFile = { path: `${settings.highlightsFolder}/${filename}.md` };
@@ -254,7 +266,7 @@ describe('VaultService', () => {
 
     test('Should skip backup if the book file does not exist (when file template was changed between imports of the same book)', async () => {
       const settings = new AppleBooksHighlightsImportPluginSettings();
-      const vaultService = new VaultService(mockApp, settings);
+      const vaultService = new VaultService(mockApp, settings, mockRenderService);
 
       const filename = 'Hello-world';
       mockApp.vault.getFileByPath.mockReturnValue(null);

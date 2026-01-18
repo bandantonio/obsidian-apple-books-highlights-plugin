@@ -3,6 +3,7 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import SaveHighlights from '../src/saveHighlightsToVault';
+import { RenderService } from '../src/services/renderService';
 import { VaultService } from '../src/services/vaultService';
 import { AppleBooksHighlightsImportPluginSettings } from '../src/settings';
 import type { ICombinedBooksAndHighlights } from '../src/types';
@@ -30,6 +31,8 @@ const mockApp: any = {
 };
 
 describe('saveHighlightsToVault', () => {
+  const mockRenderService = new RenderService();
+
   afterEach(() => {
     vi.resetAllMocks();
   });
@@ -38,7 +41,7 @@ describe('saveHighlightsToVault', () => {
     const settings = new AppleBooksHighlightsImportPluginSettings();
 
     test('Should save highlights to vault using the default template', async () => {
-      const saveHighlights = new SaveHighlights(mockApp, settings);
+      const saveHighlights = new SaveHighlights(mockApp, settings, mockRenderService);
 
       const spyGetFolderByPath = vi.spyOn(mockApp.vault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
 
@@ -61,7 +64,11 @@ describe('saveHighlightsToVault', () => {
     });
 
     test('Should save highlights to vault using the default template and custom file name', async () => {
-      const saveHighlights = new SaveHighlights(mockApp, { ...settings, filenameTemplate: '{{{bookTitle}}} by {{{bookAuthor}}}' });
+      const saveHighlights = new SaveHighlights(
+        mockApp,
+        { ...settings, filenameTemplate: '{{{bookTitle}}} by {{{bookAuthor}}}' },
+        mockRenderService,
+      );
 
       const spyGetFolderByPath = vi.spyOn(mockApp.vault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
 
@@ -98,7 +105,7 @@ describe('saveHighlightsToVault', () => {
       const tzSpy = vi.spyOn(dayjs.tz, 'guess');
       tzSpy.mockImplementation(() => 'America/New_York');
 
-      const saveHighlights = new SaveHighlights(mockApp, { ...settings, template: rawCustomTemplateMock });
+      const saveHighlights = new SaveHighlights(mockApp, { ...settings, template: rawCustomTemplateMock }, mockRenderService);
       const spyGetFolderByPath = vi.spyOn(mockApp.vault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
 
       await saveHighlights.saveAllBooksHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
@@ -123,11 +130,15 @@ describe('saveHighlightsToVault', () => {
       const tzSpy = vi.spyOn(dayjs.tz, 'guess');
       tzSpy.mockImplementation(() => 'America/New_York');
 
-      const saveHighlights = new SaveHighlights(mockApp, {
-        ...settings,
-        template: rawCustomTemplateMock,
-        filenameTemplate: '{{{bookTitle}}} by {{{bookAuthor}}}',
-      });
+      const saveHighlights = new SaveHighlights(
+        mockApp,
+        {
+          ...settings,
+          template: rawCustomTemplateMock,
+          filenameTemplate: '{{{bookTitle}}} by {{{bookAuthor}}}',
+        },
+        mockRenderService,
+      );
 
       await saveHighlights.saveAllBooksHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
 
@@ -139,10 +150,14 @@ describe('saveHighlightsToVault', () => {
     });
 
     test('Should save highlights to vault using the custom template with wrapped text block', async () => {
-      const saveHighlights = new SaveHighlights(mockApp, {
-        ...settings,
-        template: rawCustomTemplateMockWithWrappedTextBlockContainingNewlines,
-      });
+      const saveHighlights = new SaveHighlights(
+        mockApp,
+        {
+          ...settings,
+          template: rawCustomTemplateMockWithWrappedTextBlockContainingNewlines,
+        },
+        mockRenderService,
+      );
       const spyGetFolderByPath = vi.spyOn(mockApp.vault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
 
       await saveHighlights.saveAllBooksHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
@@ -164,7 +179,7 @@ describe('saveHighlightsToVault', () => {
     });
 
     test('Should skip saving highlights to vault if highlights are not found', async () => {
-      const saveHighlights = new SaveHighlights(mockApp, { ...settings, highlightsFolder: '' });
+      const saveHighlights = new SaveHighlights(mockApp, { ...settings, highlightsFolder: '' }, mockRenderService);
       const spyGetFolderByPath = vi.spyOn(mockApp.vault, 'getFolderByPath').mockReturnValue('');
 
       await saveHighlights.saveAllBooksHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[]);
@@ -179,7 +194,7 @@ describe('saveHighlightsToVault', () => {
     });
 
     test('Should backup highlights if backup option is enabled', async () => {
-      const saveHighlights = new SaveHighlights(mockApp, { ...settings, backup: true });
+      const saveHighlights = new SaveHighlights(mockApp, { ...settings, backup: true }, mockRenderService);
 
       vi.spyOn(mockApp.vault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
       const spyList = vi.spyOn(mockApp.vault.adapter, 'list').mockImplementation((_folderPath: string) => {
@@ -221,7 +236,7 @@ describe('saveHighlightsToVault', () => {
     const settings = new AppleBooksHighlightsImportPluginSettings();
 
     test("Should save a single book when the book doesn't exist and backups are turned off", async () => {
-      const saveHighlights = new SaveHighlights(mockApp, settings);
+      const saveHighlights = new SaveHighlights(mockApp, settings, mockRenderService);
 
       await saveHighlights.saveSingleBookHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[], true);
 
@@ -236,7 +251,7 @@ describe('saveHighlightsToVault', () => {
     });
 
     test("Should save a single book when the book doesn't exist and backups are turned on", async () => {
-      const saveHighlights = new SaveHighlights(mockApp, { ...settings, backup: true });
+      const saveHighlights = new SaveHighlights(mockApp, { ...settings, backup: true }, mockRenderService);
 
       await saveHighlights.saveSingleBookHighlightsToVault(aggregatedUnsortedHighlights as ICombinedBooksAndHighlights[], true);
 
@@ -254,7 +269,7 @@ describe('saveHighlightsToVault', () => {
     });
 
     test('Should modify a single book when it already exists in vault and backups are turned off', async () => {
-      const saveHighlights = new SaveHighlights(mockApp, settings);
+      const saveHighlights = new SaveHighlights(mockApp, settings, mockRenderService);
 
       vi.spyOn(mockApp.vault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
       vi.spyOn(mockApp.vault, 'getFileByPath').mockReturnValue({
@@ -275,7 +290,7 @@ describe('saveHighlightsToVault', () => {
     });
 
     test('Should modify a single book when it already exists in vault and backups are turned on', async () => {
-      const saveHighlights = new SaveHighlights(mockApp, { ...settings, backup: true });
+      const saveHighlights = new SaveHighlights(mockApp, { ...settings, backup: true }, mockRenderService);
       vi.spyOn(mockApp.vault, 'getFolderByPath').mockReturnValue('ibooks-highlights');
       vi.spyOn(mockApp.vault, 'getFileByPath').mockReturnValue({
         path: 'ibooks-highlights/Apple iPhone - User Guide - Instructions - with - restricted - symbols - in - title.md',

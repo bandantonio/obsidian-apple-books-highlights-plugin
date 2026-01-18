@@ -1,22 +1,24 @@
 import { type App, Modal, Notice, Setting, SuggestModal } from 'obsidian';
 import type IBookHighlightsPlugin from '../main';
-import { DataService } from './services/dataService';
 import { HighlightProcessingService } from './services/highlightProcessingService';
-import { VaultService } from './services/vaultService';
-import type { ICombinedBooksAndHighlights } from './types';
+import type { ICombinedBooksAndHighlights, IDataService, IVaultService } from './types';
 
 abstract class IBookHighlightsPluginSuggestModal extends SuggestModal<ICombinedBooksAndHighlights> {
   plugin: IBookHighlightsPlugin;
-  constructor(app: App, plugin: IBookHighlightsPlugin) {
+  dataService: IDataService;
+  vaultService: IVaultService;
+
+  constructor(app: App, plugin: IBookHighlightsPlugin, dataService: IDataService, vaultService: IVaultService) {
     super(app);
     this.plugin = plugin;
+    this.dataService = dataService;
+    this.vaultService = vaultService;
   }
 }
 
 export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSuggestModal {
   async getSuggestions(query: string): Promise<ICombinedBooksAndHighlights[]> {
-    const dataService = new DataService();
-    const highlightProcessingService = new HighlightProcessingService(dataService);
+    const highlightProcessingService = new HighlightProcessingService(this.dataService);
 
     try {
       const allBooks = await highlightProcessingService.aggregateHighlights();
@@ -40,8 +42,7 @@ export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSugge
   }
 
   async onChooseSuggestion(item: ICombinedBooksAndHighlights) {
-    const vaultService = new VaultService(this.app, this.plugin.settings);
-    const doesBookFileExist = vaultService.checkBookExistence(item);
+    const doesBookFileExist = this.vaultService.checkBookExistence(item);
 
     const isBackupEnabled = this.plugin.settings.backup;
 

@@ -1,18 +1,19 @@
 import type { App, TFile, TFolder, Vault } from 'obsidian';
 import path from 'path';
 import type { AppleBooksHighlightsImportPluginSettings } from '../settings';
-import type { ICombinedBooksAndHighlights, IVaultService } from '../types';
-import { RenderService } from './renderService';
+import type { ICombinedBooksAndHighlights, IRenderService, IVaultService } from '../types';
 
 export class VaultService implements IVaultService {
   private app: App;
   private vault: Vault;
   private settings: AppleBooksHighlightsImportPluginSettings;
+  private renderService: IRenderService;
 
-  constructor(app: App, settings: AppleBooksHighlightsImportPluginSettings) {
+  constructor(app: App, settings: AppleBooksHighlightsImportPluginSettings, renderService: IRenderService) {
     this.app = app;
-    this.vault = this.app.vault;
     this.settings = settings;
+    this.renderService = renderService;
+    this.vault = this.app.vault;
   }
 
   getHighlightsFolder(): TFolder | null {
@@ -24,8 +25,7 @@ export class VaultService implements IVaultService {
   }
 
   checkBookExistence(item: ICombinedBooksAndHighlights): boolean {
-    const renderService = new RenderService();
-    const renderedFilename = renderService.renderTemplate(item, this.settings.filenameTemplate);
+    const renderedFilename = this.renderService.renderTemplate(item, this.settings.filenameTemplate);
     const pathToBookFile = path.join(this.settings.highlightsFolder, `${renderedFilename}.md`);
     const doesBookFileExist = this.vault.getFileByPath(pathToBookFile);
 
