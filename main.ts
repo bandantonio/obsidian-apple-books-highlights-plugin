@@ -5,10 +5,11 @@ import { DataService } from './src/services/dataService';
 import { HighlightProcessingService } from './src/services/highlightProcessingService';
 import { RenderService } from './src/services/renderService';
 import { VaultService } from './src/services/vaultService';
-import { AppleBooksHighlightsImportPluginSettings, IBookHighlightsSettingTab } from './src/settings';
+import { defaultPluginSettings, IBookHighlightsSettingTab } from './src/settings';
+import type { IBookHighlightsPluginSettings } from './src/types';
 
 export default class IBookHighlightsPlugin extends Plugin {
-  settings: AppleBooksHighlightsImportPluginSettings;
+  settings: IBookHighlightsPluginSettings;
   dataService: DataService;
   highlightProcessingService: HighlightProcessingService;
   renderService: RenderService;
@@ -77,7 +78,7 @@ export default class IBookHighlightsPlugin extends Plugin {
   onunload() {}
 
   async loadSettings() {
-    this.settings = Object.assign(new AppleBooksHighlightsImportPluginSettings(), await this.loadData());
+    this.settings = { ...defaultPluginSettings, ...(await this.loadData()) };
 
     return this.settings;
   }

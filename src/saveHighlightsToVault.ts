@@ -3,17 +3,17 @@ import path from 'path';
 import { DataService } from './services/dataService';
 import { HighlightProcessingService } from './services/highlightProcessingService';
 import { VaultService } from './services/vaultService';
-import type { AppleBooksHighlightsImportPluginSettings } from './settings';
-import type { ICombinedBooksAndHighlights, IRenderService } from './types';
+import { defaultPluginSettings } from './settings';
+import type { IBookHighlightsPluginSettings, ICombinedBooksAndHighlights, IRenderService } from './types';
 
 export default class SaveHighlights {
   private app: App;
-  private settings: AppleBooksHighlightsImportPluginSettings;
+  private settings: IBookHighlightsPluginSettings = defaultPluginSettings;
   private highlightProcessingService: HighlightProcessingService;
   private renderService: IRenderService;
   private vaultService: VaultService;
 
-  constructor(app: App, settings: AppleBooksHighlightsImportPluginSettings, renderService: IRenderService) {
+  constructor(app: App, settings: IBookHighlightsPluginSettings, renderService: IRenderService) {
     this.app = app;
     this.settings = settings;
     this.highlightProcessingService = new HighlightProcessingService(new DataService());

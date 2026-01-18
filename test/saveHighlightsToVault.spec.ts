@@ -5,8 +5,8 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import SaveHighlights from '../src/saveHighlightsToVault';
 import { RenderService } from '../src/services/renderService';
 import { VaultService } from '../src/services/vaultService';
-import { AppleBooksHighlightsImportPluginSettings } from '../src/settings';
-import type { ICombinedBooksAndHighlights } from '../src/types';
+import { defaultPluginSettings } from '../src/settings';
+import type { IBookHighlightsPluginSettings, ICombinedBooksAndHighlights } from '../src/types';
 import { aggregatedUnsortedHighlights } from './mocks/aggregatedDetailsData';
 import { rawCustomTemplateMock, rawCustomTemplateMockWithWrappedTextBlockContainingNewlines } from './mocks/rawTemplates';
 import {
@@ -38,7 +38,7 @@ describe('saveHighlightsToVault', () => {
   });
 
   describe('Default template', () => {
-    const settings = new AppleBooksHighlightsImportPluginSettings();
+    const settings: IBookHighlightsPluginSettings = { ...defaultPluginSettings };
 
     test('Should save highlights to vault using the default template', async () => {
       const saveHighlights = new SaveHighlights(mockApp, settings, mockRenderService);
@@ -99,7 +99,7 @@ describe('saveHighlightsToVault', () => {
       dayjs.extend(timezone);
     });
 
-    const settings = new AppleBooksHighlightsImportPluginSettings();
+    const settings: IBookHighlightsPluginSettings = { ...defaultPluginSettings };
 
     test('Should save highlights to vault using the custom colored template', async () => {
       const tzSpy = vi.spyOn(dayjs.tz, 'guess');
@@ -233,7 +233,7 @@ describe('saveHighlightsToVault', () => {
       Date.now = vi.fn().mockImplementation(() => mockedTimestamp);
     });
 
-    const settings = new AppleBooksHighlightsImportPluginSettings();
+    const settings: IBookHighlightsPluginSettings = { ...defaultPluginSettings };
 
     test("Should save a single book when the book doesn't exist and backups are turned off", async () => {
       const saveHighlights = new SaveHighlights(mockApp, settings, mockRenderService);

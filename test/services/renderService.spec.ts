@@ -4,7 +4,7 @@ import utc from 'dayjs/plugin/utc';
 import Handlebars from 'handlebars';
 import { describe, expect, test, vi } from 'vitest';
 import { RenderService } from '../../src/services/renderService';
-import defaultTemplate from '../../src/template';
+import { defaultTemplate } from '../../src/settings';
 import type { ICombinedBooksAndHighlights } from '../../src/types';
 import { aggregatedHighlightsWithDefaultSorting } from '../mocks/aggregatedDetailsData';
 import { rawCustomTemplateMock, rawCustomTemplateMockWithWrappedTextBlockContainingNewlines } from '../mocks/rawTemplates';

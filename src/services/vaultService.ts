@@ -1,15 +1,15 @@
 import type { App, TFile, TFolder, Vault } from 'obsidian';
 import path from 'path';
-import type { AppleBooksHighlightsImportPluginSettings } from '../settings';
-import type { ICombinedBooksAndHighlights, IRenderService, IVaultService } from '../types';
+import { defaultPluginSettings } from '../settings';
+import type { IBookHighlightsPluginSettings, ICombinedBooksAndHighlights, IRenderService, IVaultService } from '../types';
 
 export class VaultService implements IVaultService {
   private app: App;
   private vault: Vault;
-  private settings: AppleBooksHighlightsImportPluginSettings;
+  private settings: IBookHighlightsPluginSettings = defaultPluginSettings;
   private renderService: IRenderService;
 
-  constructor(app: App, settings: AppleBooksHighlightsImportPluginSettings, renderService: IRenderService) {
+  constructor(app: App, settings: IBookHighlightsPluginSettings, renderService: IRenderService) {
     this.app = app;
     this.settings = settings;
     this.renderService = renderService;

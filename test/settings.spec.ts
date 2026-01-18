@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
-import { AppleBooksHighlightsImportPluginSettings } from '../src/settings';
-import defaultTemplate from '../src/template';
+import { defaultPluginSettings, defaultTemplate } from '../src/settings';
+import type { IBookHighlightsPluginSettings } from '../src/types';
 
-const settings = new AppleBooksHighlightsImportPluginSettings();
+const settings: IBookHighlightsPluginSettings = { ...defaultPluginSettings };
 
 describe('Plugin default settings', () => {
   test('Highlights folder', () => {

@@ -1,30 +1,72 @@
 import { type App, Notice, PluginSettingTab, Setting } from 'obsidian';
 import type IBookHighlightsPlugin from '../main';
-import defaultTemplate, { allowedFilenameTemplateVariables } from './template';
 import { type IBookHighlightsPluginSettings, IHighlightsSortingCriterion } from './types';
 
-export class AppleBooksHighlightsImportPluginSettings implements IBookHighlightsPluginSettings {
-  highlightsFolder = 'ibooks-highlights';
-  backup = false;
-  importOnStart = false;
-  highlightsSortingCriterion = IHighlightsSortingCriterion.CreationDateOldToNew;
-  template = defaultTemplate;
-  filenameTemplate = `{{{${allowedFilenameTemplateVariables[0]}}}}`;
-}
+export const defaultTemplate = `Title:: 📕 {{{bookTitle}}}
+Author:: {{{bookAuthor}}}
+Link:: [Apple Books Link](ibooks://assetid/{{bookId}})
+
+## Annotations
+
+Number of annotations:: {{annotations.length}}
+
+{{#each annotations}}
+----
+
+- 📖 Chapter:: {{#if chapter}}{{{chapter}}}{{else}}N/A{{/if}}
+- 🔖 Context:: {{#if contextualText}}{{{contextualText}}}{{else}}N/A{{/if}}
+- 🎯 Highlight:: {{{highlight}}}
+- 📝 Note:: {{#if note}}{{{note}}}{{else}}N/A{{/if}}
+- 📙 Highlight Link:: {{#if highlightLocation}}[Apple Books Highlight Link](ibooks://assetid/{{../bookId}}#{{highlightLocation}}){{else}}N/A{{/if}}
+
+{{/each}}
+`;
+
+export const allowedFilenameTemplateVariables = [
+  // The first variable is the default one
+  'bookTitle',
+  'bookId',
+  'bookAuthor',
+  'bookGenre',
+  'bookLanguage',
+];
+
+export const getDefaultFilenameTemplate = (): string => `{{{${allowedFilenameTemplateVariables[0]}}}}`;
+
+export const defaultPluginSettings: IBookHighlightsPluginSettings = {
+  highlightsFolder: 'ibooks-highlights',
+  backup: false,
+  importOnStart: false,
+  highlightsSortingCriterion: IHighlightsSortingCriterion.CreationDateOldToNew,
+  template: defaultTemplate,
+  filenameTemplate: getDefaultFilenameTemplate(),
+};
 
 export class IBookHighlightsSettingTab extends PluginSettingTab {
   plugin: IBookHighlightsPlugin;
+  settings: IBookHighlightsPluginSettings;
 
   constructor(app: App, plugin: IBookHighlightsPlugin) {
     super(app, plugin);
     this.plugin = plugin;
+    this.settings = plugin.settings;
   }
 
   display(): void {
     const { containerEl } = this;
-
     containerEl.empty();
 
+    this.addHighlightsFolderSetting(containerEl);
+    this.addImportOnStartSetting(containerEl);
+    this.addBackupSetting(containerEl);
+    this.addHighlightsSortingCriterionSetting(containerEl);
+    this.addTemplateSetting(containerEl);
+    this.addFilenameTemplateSetting(containerEl);
+    this.addResetTemplateSetting(containerEl);
+    this.addCredits(containerEl);
+  }
+
+  private addHighlightsFolderSetting(containerEl: HTMLElement): void {
     const folder = new Setting(containerEl)
       .setName('Highlights folder')
       .setDesc('A folder (within the root of your vault) where you want to save imported highlights')
@@ -46,7 +88,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         }),
     );
+  }
 
+  private addImportOnStartSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Import highlights on start')
       .setDesc('Import all highlights from all your books when Obsidian starts')
@@ -57,7 +101,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         });
       });
+  }
 
+  private addBackupSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Backup highlights')
       .setDesc(
@@ -79,7 +125,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         });
       });
+  }
 
+  private addHighlightsSortingCriterionSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Highlights sorting criterion')
       .setDesc('Sort highlights by a specific criterion. Default: By creation date (from oldest to newest)')
@@ -102,7 +150,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
             await this.plugin.saveSettings();
           });
       });
+  }
 
+  private addTemplateSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Template')
       .setDesc('Template for highlight files')
@@ -119,7 +169,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           });
         return text;
       });
+  }
 
+  private addFilenameTemplateSetting(containerEl: HTMLElement): void {
     const filenameTemplate = new Setting(containerEl)
       .setName('Template for naming highlight files')
       .setDesc(
@@ -153,7 +205,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
         });
       return text;
     });
+  }
 
+  private addResetTemplateSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Reset template')
       .setDesc('Reset template to default')
@@ -165,7 +219,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           this.display();
         });
       });
+  }
 
+  private addCredits(containerEl: HTMLElement): void {
     containerEl.createEl('hr');
     containerEl
       .createEl('small', {
