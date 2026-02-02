@@ -1,4 +1,35 @@
 export interface IBook {
+  id: string;
+  title: string;
+  author: string;
+  genre: string;
+  language: string;
+  lastOpenedDate: number;
+  finishedDate: number | null;
+  coverUrl: string;
+}
+
+export interface IAnnotationFromDb extends IAnnotation {
+  assetId: string;
+  ZANNOTATIONDELETED: number;
+}
+
+export interface IAnnotation {
+  chapter: string;
+  contextualText: string;
+  highlight: string;
+  highlightLocation: string;
+  note: string | null;
+  highlightCreationDate: number;
+  highlightModificationDate: number;
+  highlightStyle: number;
+}
+
+export interface IBookWithAnnotations extends IBook {
+  annotations: IAnnotation[];
+}
+
+export interface IBook{
   ZASSETID: string;
   ZTITLE: string;
   ZAUTHOR: string;
@@ -18,7 +49,7 @@ export interface IBookAnnotation {
   ZANNOTATIONNOTE: string | null;
   ZANNOTATIONCREATIONDATE: number;
   ZANNOTATIONMODIFICATIONDATE: number;
-  ZANNOTATIONSTYLE: 0 | 1 | 2 | 3 | 4 | 5;
+  ZANNOTATIONSTYLE: number;
 }
 
 export interface IHighlight {
