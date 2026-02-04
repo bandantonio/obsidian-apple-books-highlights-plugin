@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
-import type { IAnnotationFromDb, IBook } from '../../src/types';
+import type { IAnnotation, IBook } from '../../src/types';
 import { books, annotationsFromDb } from './dataFetch';
 
 export const testDbName = 'mockedDatabase.sqlite';
@@ -38,7 +38,7 @@ export const createTestDatabase = async () => {
   
   const insertBook = db.prepare(`
     INSERT INTO ZBKLIBRARYASSET (ZASSETID, ZTITLE, ZAUTHOR, ZGENRE, ZLANGUAGE, ZLASTOPENDATE, ZDATEFINISHED, ZCOVERURL, ZPURCHASEDATE)
-    VALUES (@id, @title, @author, @genre, @language, @lastOpenedDate, @finishedDate, @coverUrl, @ZPURCHASEDATE);
+    VALUES (@bookId, @bookTitle, @bookAuthor, @bookGenre, @bookLanguage, @bookLastOpenedDate, @bookFinishedDate, @bookCoverUrl, @ZPURCHASEDATE);
   `);
   
   const insertAnnotation = db.prepare(`
@@ -51,47 +51,55 @@ export const createTestDatabase = async () => {
   const insertBooksTransaction = db.transaction((booksData: IBook[]) => {
     
     for (const book of booksData) {
-      if (book.title !== 'Non-Purchased Book') {
+      const { bookId, bookTitle, bookAuthor, bookGenre, bookLanguage, bookLastOpenedDate, bookFinishedDate, bookCoverUrl } = book;
+      
+      if (bookTitle !== 'Non-Purchased Book') {
         insertBook.run({
-          id: book.id,
-          title: book.title,
-          author: book.author,
-          genre: book.genre,
-          language: book.language,
-          lastOpenedDate: book.lastOpenedDate,
-          finishedDate: book.finishedDate,
-          coverUrl: book.coverUrl,
-          ZPURCHASEDATE: book.lastOpenedDate,
+          bookId,
+          bookTitle,
+          bookAuthor,
+          bookGenre,
+          bookLanguage,
+          bookLastOpenedDate,
+          bookFinishedDate,
+          bookCoverUrl,
+          ZPURCHASEDATE: bookLastOpenedDate,
         });
       } else {
         insertBook.run({
-          id: book.id,
-          title: book.title,
-          author: book.author,
-          genre: book.genre,
-          language: book.language,
-          lastOpenedDate: book.lastOpenedDate,
-          finishedDate: book.finishedDate,
-          coverUrl: book.coverUrl,
+          bookId,
+          bookTitle,
+          bookAuthor,
+          bookGenre,
+          bookLanguage,
+          bookLastOpenedDate,
+          bookFinishedDate,
+          bookCoverUrl,
           ZPURCHASEDATE: null,
         });
       }
     }
   });
   
+  interface IAnnotationFromDb extends IAnnotation {
+    ZANNOTATIONDELETED: number;
+  };
+
   const insertAnnotationsTransaction = db.transaction((annotationsData: IAnnotationFromDb[]) => {
-    for (const ann of annotationsData) {
+    for (const annotation of annotationsData) {
+      const { assetId, chapter, contextualText, highlight, note, highlightLocation, highlightStyle, highlightCreationDate, highlightModificationDate, ZANNOTATIONDELETED } = annotation;
+      
       insertAnnotation.run({
-        assetId: ann.assetId,
-        chapter: ann.chapter,
-        contextualText: ann.contextualText,
-        highlight: ann.highlight,
-        highlightLocation: ann.highlightLocation,
-        note: ann.note,
-        highlightCreationDate: ann.highlightCreationDate,
-        highlightModificationDate: ann.highlightModificationDate,
-        highlightStyle: ann.highlightStyle,
-        ZANNOTATIONDELETED: ann.ZANNOTATIONDELETED
+        assetId,
+        chapter,
+        contextualText,
+        highlight,
+        highlightLocation,
+        note,
+        highlightCreationDate,
+        highlightModificationDate,
+        highlightStyle,
+        ZANNOTATIONDELETED
       });
     }
   });

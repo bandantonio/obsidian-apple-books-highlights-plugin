@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import os from 'os';
 import path from 'path';
-import type { IBook, IAnnotationFromDb } from '../types';
+import type { IBook, IAnnotation } from '../types';
 
 export const getBooks = async (booksDbPath?: string): Promise<IBook[]> => {
   const BOOKS_DB_PATH: string = path.join(
@@ -10,14 +10,14 @@ export const getBooks = async (booksDbPath?: string): Promise<IBook[]> => {
   );
   
   const dbQuery = `SELECT
-  ZASSETID as id,
-  ZTITLE as title,
-  ZAUTHOR as author,
-  ZGENRE as genre,
-  ZLANGUAGE as language,
-  ZLASTOPENDATE as lastOpenedDate,
-  ZDATEFINISHED as finishedDate,
-  ZCOVERURL as coverUrl
+  ZASSETID as bookId,
+  ZTITLE as bookTitle,
+  ZAUTHOR as bookAuthor,
+  ZGENRE as bookGenre,
+  ZLANGUAGE as bookLanguage,
+  ZLASTOPENDATE as bookLastOpenedDate,
+  ZDATEFINISHED as bookFinishedDate,
+  ZCOVERURL as bookCoverUrl
   FROM ZBKLIBRARYASSET
   WHERE ZPURCHASEDATE IS NOT NULL`;
   
@@ -28,7 +28,7 @@ export const getBooks = async (booksDbPath?: string): Promise<IBook[]> => {
   }
 };
 
-export const getAnnotations = async (annotationsDbPath?: string): Promise<IAnnotationFromDb[]> => {
+export const getAnnotations = async (annotationsDbPath?: string): Promise<IAnnotation[]> => {
   const HIGHLIGHTS_DB_PATH: string = path.join(
     os.homedir(),
     'Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite',
@@ -39,11 +39,11 @@ export const getAnnotations = async (annotationsDbPath?: string): Promise<IAnnot
   ZFUTUREPROOFING5 as chapter,
   ZANNOTATIONREPRESENTATIVETEXT as contextualText,
   ZANNOTATIONSELECTEDTEXT as highlight,
-  ZANNOTATIONLOCATION as highlightLocation,
   ZANNOTATIONNOTE as note,
+  ZANNOTATIONLOCATION as highlightLocation,
+  ZANNOTATIONSTYLE as highlightStyle,
   ZANNOTATIONCREATIONDATE as highlightCreationDate,
-  ZANNOTATIONMODIFICATIONDATE as highlightModificationDate,
-  ZANNOTATIONSTYLE as highlightStyle
+  ZANNOTATIONMODIFICATIONDATE as highlightModificationDate
   FROM ZAEANNOTATION
   WHERE ZANNOTATIONDELETED IS 0
   AND ZANNOTATIONSELECTEDTEXT IS NOT NULL`;
@@ -71,7 +71,7 @@ const dbRequest = async (dbPath: string, sqlQuery: string): Promise<IBook[]> => 
   }
 };
 
-export const annotationsRequest = async (dbPath: string, sqlQuery: string): Promise<IAnnotationFromDb[]> => {
+export const annotationsRequest = async (dbPath: string, sqlQuery: string): Promise<IAnnotation[]> => {
   const dbQueryResult = spawn('sqlite3', [dbPath, sqlQuery, '-json']);
   
   const chunks: string[] = [];
