@@ -1,10 +1,10 @@
-import type { IBook, IAnnotation, IBookWithAnnotations } from '../types';
+import type { IBook, IAnnotation, IBookWithAnnotations, IHighlightsSortingCriterion } from '../types';
 import { getBooks, getAnnotations } from './dataFetching';
 
-export const aggregateBooksWithAnnotations = async (): Promise<IBookWithAnnotations[]> => {
+export const aggregateBooksWithAnnotations = async (sortingCriterion: IHighlightsSortingCriterion): Promise<IBookWithAnnotations[]> => {
   const [books, annotations] = await Promise.all([
     getBooks(),
-    getAnnotations()
+    getAnnotations(sortingCriterion)
   ]);
   
   const annotationsMap = new Map<string, IAnnotation[]>();
@@ -33,8 +33,6 @@ export function enrichBooksWithAnnotations(books: IBook[], annotationsMap: Map<s
         bookFinishedDate,
         bookCoverUrl,
         annotations: bookRelatedAnnotations.map((annotation) => {
-          console.log('annot', annotation);
-          
           const { assetId, chapter, contextualText: rawContextualText, highlight: rawHighlight, note: rawNote, highlightLocation, highlightStyle, highlightCreationDate, highlightModificationDate } = annotation;
 
           return {
@@ -86,3 +84,21 @@ export const preserveNewlineIndentation = (textBlock: string): string => {
 
   return stringWithNewLines.test(textBlock) ? textBlock.replace(stringWithNewLines, '\n') : textBlock;
 };
+
+export const normalizeAnnotationLocation = (location: string): string => {
+  const normalizedLocation = location
+    .slice(8, -1)	              // Get rid of the epubcfi() wrapper
+    .replace(/\[.*?\]/g, '')    // Get rid of bracketed assertions
+    .replace(/\d+/g, (num) => num.padStart(4, '0'))   // Pad numbers to 4 digits for consistent comparison
+  
+  return normalizedLocation;
+};
+
+export const sortByLocation = (annotations: IAnnotation[]) => {
+  return annotations.sort((a, b) => {
+      const normalizedFirstLocation = normalizeAnnotationLocation(a.highlightLocation);
+      const normalizedSecondLocation = normalizeAnnotationLocation(b.highlightLocation);
+      
+      return normalizedFirstLocation.localeCompare(normalizedSecondLocation);
+    });
+}

@@ -1,14 +1,10 @@
 import Database from 'better-sqlite3';
 import fs from 'fs';
-import path from 'path';
 import type { IAnnotation, IBook } from '../../src/types';
 import { books, annotationsFromDb } from './dataFetch';
 
-export const testDbName = 'mockedDatabase.sqlite';
-const dbPath = path.join(__dirname, testDbName);
-
 export const createTestDatabase = async () => {
-  const db = new Database(dbPath);
+  const db = new Database(process.env.TEST_DB_PATH);
   
   db.exec(`CREATE TABLE IF NOT EXISTS ZBKLIBRARYASSET (
     ZASSETID TEXT,
@@ -120,5 +116,5 @@ export const destroyTestDatabaseTables = (db: any) => {
 }
 
 export const deleteTestDatabaseFile = () => {
-  fs.unlinkSync(dbPath);
+  fs.unlinkSync(process.env.TEST_DB_PATH!);
 };

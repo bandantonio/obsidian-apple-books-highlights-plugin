@@ -10,11 +10,13 @@ describe('annotationsProcessing', () => {
       const annotationsMap = new Map();
       mapAnnotationsToBooks(notDeletedAnnotations, annotationsMap);
 
-      expect(annotationsMap.size).toBe(3);
+      expect(annotationsMap.size).toBe(4);
       expect(annotationsMap.get('THBFYNJKTGFTTVCGSAE1')!.length).toBe(1);
       expect(annotationsMap.get('THBFYNJKTGFTTVCGSAE2')!.length).toBe(1);
       expect(annotationsMap.get('THBFYNJKTGFTTVCGSAE3')!.length).toBe(2);
+      expect(annotationsMap.get('THBFYNJKTGFTTVCGSAE6')!.length).toBe(4);
       expect(annotationsMap.get('THBFYNJKTGFTTVCGSAE3')![1].highlight).toBe('duplicated highlight from the Mac User Guide');
+      expect(annotationsMap.get('THBFYNJKTGFTTVCGSAE6')![2].highlight).toBe('Highlight that was created third and modified first');
     });
 
     test('Should correctly map annotations to their respective books if bookId already exists in the map', () => {
@@ -23,10 +25,11 @@ describe('annotationsProcessing', () => {
 
       mapAnnotationsToBooks(notDeletedAnnotations, annotationsMap);
 
-      expect(annotationsMap.size).toBe(3);
+      expect(annotationsMap.size).toBe(4);
       expect(annotationsMap.get('THBFYNJKTGFTTVCGSAE1')!.length).toBe(1);
       expect(annotationsMap.get('THBFYNJKTGFTTVCGSAE2')!.length).toBe(1);
       expect(annotationsMap.get('THBFYNJKTGFTTVCGSAE3')!.length).toBe(2);
+      expect(annotationsMap.get('THBFYNJKTGFTTVCGSAE6')!.length).toBe(4);
     });
   });
 

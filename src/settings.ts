@@ -3,11 +3,12 @@ import type IBookHighlightsPlugin from '../main';
 import defaultTemplate, { allowedFilenameTemplateVariables } from './template';
 import { type IBookHighlightsPluginSettings, IHighlightsSortingCriterion } from './types';
 
+
 export class AppleBooksHighlightsImportPluginSettings implements IBookHighlightsPluginSettings {
   highlightsFolder = 'ibooks-highlights';
   backup = false;
   importOnStart = false;
-  highlightsSortingCriterion = IHighlightsSortingCriterion.CreationDateOldToNew;
+  highlightsSortingCriterion: IHighlightsSortingCriterion = 'creationDateOldToNew';
   template = defaultTemplate;
   filenameTemplate = `{{{${allowedFilenameTemplateVariables[0]}}}}`;
 }
@@ -85,12 +86,12 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
       .setDesc('Sort highlights by a specific criterion. Default: By creation date (from oldest to newest)')
       .setClass('ibooks-highlights-sorting')
       .addDropdown((dropdown) => {
-        const options = {
-          [IHighlightsSortingCriterion.CreationDateOldToNew]: 'By creation date (from oldest to newest)',
-          [IHighlightsSortingCriterion.CreationDateNewToOld]: 'By creation date (from newest to oldest)',
-          [IHighlightsSortingCriterion.LastModifiedDateOldToNew]: 'By modification date (from oldest to newest)',
-          [IHighlightsSortingCriterion.LastModifiedDateNewToOld]: 'By modification date (from newest to oldest)',
-          [IHighlightsSortingCriterion.Book]: 'By location in a book',
+        const options: Record<IHighlightsSortingCriterion, string> = {
+          creationDateOldToNew: 'By creation date (from oldest to newest)',
+          creationDateNewToOld: 'By creation date (from newest to oldest)',
+          lastModifiedDateOldToNew: 'By modification date (from oldest to newest)',
+          lastModifiedDateNewToOld: 'By modification date (from newest to oldest)',
+          book: 'By location in a book',
         };
 
         dropdown

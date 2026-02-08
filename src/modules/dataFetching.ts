@@ -1,10 +1,11 @@
 import { spawn } from 'child_process';
 import os from 'os';
 import path from 'path';
-import type { IBook, IAnnotation } from '../types';
+import type { IBook, IAnnotation, IHighlightsSortingCriterion } from '../types';
+import { sortByLocation } from './annotationsProcessing';
 
-export const getBooks = async (booksDbPath?: string): Promise<IBook[]> => {
-  const BOOKS_DB_PATH: string = path.join(
+export const getBooks = async (): Promise<IBook[]> => {
+  const BOOKS_DB_PATH: string = process.env.BOOKS_DB_PATH || path.join(
     os.homedir(),
     'Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary/BKLibrary-1-091020131601.sqlite',
   );
@@ -22,19 +23,19 @@ export const getBooks = async (booksDbPath?: string): Promise<IBook[]> => {
   WHERE ZPURCHASEDATE IS NOT NULL`;
   
   try {
-    return await dbRequest(booksDbPath || BOOKS_DB_PATH, dbQuery);
+    return await dbRequest(BOOKS_DB_PATH, dbQuery);
   } catch (error) {
     throw new Error('No books found. Looks like your Apple Books library is empty.');
   }
 };
 
-export const getAnnotations = async (annotationsDbPath?: string): Promise<IAnnotation[]> => {
-  const HIGHLIGHTS_DB_PATH: string = path.join(
+export const getAnnotations = async (sortingCriterion: IHighlightsSortingCriterion): Promise<IAnnotation[]> => {
+  const HIGHLIGHTS_DB_PATH: string = process.env.ANNOTATIONS_DB_PATH || path.join(
     os.homedir(),
     'Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite',
   );
   
-  const annotationsQuery = `SELECT
+  const baseQuery = `SELECT
   ZANNOTATIONASSETID as assetId,
   ZFUTUREPROOFING5 as chapter,
   ZANNOTATIONREPRESENTATIVETEXT as contextualText,
@@ -47,15 +48,34 @@ export const getAnnotations = async (annotationsDbPath?: string): Promise<IAnnot
   FROM ZAEANNOTATION
   WHERE ZANNOTATIONDELETED IS 0
   AND ZANNOTATIONSELECTEDTEXT IS NOT NULL`;
+
+  const sortingOptionsMap: Record<IHighlightsSortingCriterion, string> = {
+    creationDateOldToNew: 'ORDER BY ZANNOTATIONCREATIONDATE',
+    creationDateNewToOld: 'ORDER BY ZANNOTATIONCREATIONDATE DESC',
+    lastModifiedDateOldToNew: 'ORDER BY ZANNOTATIONMODIFICATIONDATE',
+    lastModifiedDateNewToOld: 'ORDER BY ZANNOTATIONMODIFICATIONDATE DESC',
+    book: '',
+  };
+
+  const sortingQueryPart = sortingOptionsMap[sortingCriterion];
+  
+  const fullQuery = baseQuery + ' ' + sortingQueryPart;
   
   try {
-    return await annotationsRequest(annotationsDbPath || HIGHLIGHTS_DB_PATH, annotationsQuery);
+    if (sortingCriterion !== 'book') {
+      return await annotationsRequest(HIGHLIGHTS_DB_PATH, fullQuery);
+    } else {
+      const retrievedAnnotations = await annotationsRequest(HIGHLIGHTS_DB_PATH, fullQuery);
+      const sortedAnnotations = sortByLocation(retrievedAnnotations);
+      
+      return sortedAnnotations;
+    }
   } catch (error) {
     throw new Error('No highlights found. Make sure you made some highlights in your Apple Books.');
   }
 };
 
-const dbRequest = async (dbPath: string, sqlQuery: string): Promise<IBook[]> => {
+const dbRequest = async (dbPath: string, sqlQuery: string): Promise<IBook[]> => {  
   const dbQueryResult = spawn('sqlite3', [dbPath, sqlQuery, '-json']);
   
   const chunks: string[] = [];
