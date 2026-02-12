@@ -1,10 +1,13 @@
+import * as Handlebars from 'handlebars';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import Handlebars from 'handlebars';
 
-// TODO: Consider simplifying calculations inside the function and adding unit tests for it.
-// Remove ignore comment when done.
+
+export const compileTemplate = (template: string): Handlebars.TemplateDelegate => {
+  return Handlebars.compile(template);
+};
+
 export const calculateAppleDate = (date: number) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -12,6 +15,7 @@ export const calculateAppleDate = (date: number) => {
   const timeZone = dayjs.tz.guess();
 
   const APPLE_EPOCH_START = new Date('2001-01-01').getTime();
+  
   // biome-ignore lint/style/noMagicNumbers: Temporarily ignore hardcoded numbers until refactored.
   const dateInMilliseconds = date * 1000;
   const calculatedDate = dayjs(APPLE_EPOCH_START)
@@ -21,18 +25,16 @@ export const calculateAppleDate = (date: number) => {
   return calculatedDate;
 };
 
-(() => {
-  Handlebars.registerHelper('eq', function (a, b) {
-    if (a == b) {
-      return this;
-    }
-  });
+Handlebars.registerHelper('eq', function (a, b) {
+  if (a == b) {
+    return this;
+  }
+});
 
-  // TODO: Consider using out-of-the-box date validation via https://day.js.org/docs/en/parse/is-valid
-  Handlebars.registerHelper('dateFormat', (date, format) => {
-    const calculatedDate = calculateAppleDate(date);
-    const formattedDate = calculatedDate.format(format);
+// TODO: Consider using out-of-the-box date validation via https://day.js.org/docs/en/parse/is-valid
+Handlebars.registerHelper('dateFormat', (date, format) => {
+  const calculatedDate = calculateAppleDate(date);
+  const formattedDate = calculatedDate.format(format);
 
-    return formattedDate;
-  });
-})();
+  return formattedDate;
+});
