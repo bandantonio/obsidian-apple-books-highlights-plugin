@@ -1,17 +1,43 @@
 import { type App, Notice, PluginSettingTab, Setting } from 'obsidian';
 import type IBookHighlightsPlugin from '../main';
-import defaultTemplate, { allowedFilenameTemplateVariables } from './template';
 import { type IBookHighlightsPluginSettings, IHighlightsSortingCriterion } from './types';
 
+export const defaultTemplate = `Title:: 📕 {{{bookTitle}}}
+Author:: {{{bookAuthor}}}
+Link:: [Apple Books Link](ibooks://assetid/{{bookId}})
 
-export class AppleBooksHighlightsImportPluginSettings implements IBookHighlightsPluginSettings {
-  highlightsFolder = 'ibooks-highlights';
-  backup = false;
-  importOnStart = false;
-  highlightsSortingCriterion: IHighlightsSortingCriterion = 'creationDateOldToNew';
-  template = defaultTemplate;
-  filenameTemplate = `{{{${allowedFilenameTemplateVariables[0]}}}}`;
-}
+## Annotations
+
+Number of annotations:: {{annotations.length}}
+
+{{#each annotations}}
+----
+
+- 📖 Chapter:: {{#if chapter}}{{{chapter}}}{{else}}N/A{{/if}}
+- 🔖 Context:: {{#if contextualText}}{{{contextualText}}}{{else}}N/A{{/if}}
+- 🎯 Highlight:: {{{highlight}}}
+- 📝 Note:: {{#if note}}{{{note}}}{{else}}N/A{{/if}}
+- 📙 Highlight Link:: {{#if highlightLocation}}[Apple Books Highlight Link](ibooks://assetid/{{../bookId}}#{{highlightLocation}}){{else}}N/A{{/if}}
+
+{{/each}}
+`;
+
+const allowedFilenameTemplateVariables = [
+  'bookTitle',  // Dwfault
+  'bookId',
+  'bookAuthor',
+  'bookGenre',
+  'bookLanguage'
+];
+
+export const defaultPluginSettings: IBookHighlightsPluginSettings = {
+  highlightsFolder: 'ibooks-highlights',
+  backup: false,
+  importOnStart: false,
+  highlightsSortingCriterion: 'creationDateOldToNew',
+  template: defaultTemplate,
+  filenameTemplate: allowedFilenameTemplateVariables[0],
+};
 
 export class IBookHighlightsSettingTab extends PluginSettingTab {
   plugin: IBookHighlightsPlugin;
@@ -26,6 +52,17 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
 
     containerEl.empty();
 
+    this.addHighlightsFolderSetting(containerEl);
+    this.addImportOnStartSetting(containerEl);
+    this.addBackupSetting(containerEl);
+    this.addHighlightsSortingCriterionSetting(containerEl);
+    this.addTemplateSetting(containerEl);
+    this.addFilenameTemplateSetting(containerEl);
+    this.addResetTemplateSetting(containerEl);
+    this.addCredits(containerEl);    
+  }
+  
+  addHighlightsFolderSetting(containerEl: HTMLElement): void {
     const folder = new Setting(containerEl)
       .setName('Highlights folder')
       .setDesc('A folder (within the root of your vault) where you want to save imported highlights')
@@ -47,7 +84,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         }),
     );
-
+  }
+  
+  addImportOnStartSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Import highlights on start')
       .setDesc('Import all highlights from all your books when Obsidian starts')
@@ -58,7 +97,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         });
       });
-
+  }
+  
+  addBackupSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Backup highlights')
       .setDesc(
@@ -80,7 +121,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         });
       });
-
+  }
+  
+  addHighlightsSortingCriterionSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Highlights sorting criterion')
       .setDesc('Sort highlights by a specific criterion. Default: By creation date (from oldest to newest)')
@@ -103,7 +146,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
             await this.plugin.saveSettings();
           });
       });
-
+  }
+  
+  addTemplateSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Template')
       .setDesc('Template for highlight files')
@@ -120,7 +165,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           });
         return text;
       });
-
+  }
+  
+  addFilenameTemplateSetting(containerEl: HTMLElement): void {
     const filenameTemplate = new Setting(containerEl)
       .setName('Template for naming highlight files')
       .setDesc(
@@ -130,14 +177,14 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           el.appendText('The following template variables are available:');
 
           const ul = el.createEl('ul');
-          for (const variable of allowedFilenameTemplateVariables) {
+          for (const allowedVariable of allowedFilenameTemplateVariables) {
             ul.createEl('li', {
-              text: `{{{${variable}}}}`,
+              text: `{{{${allowedVariable}}}}`,
             });
           }
           el.createEl('br');
           // The first variable is the default one
-          el.appendText(`Default: {{{${allowedFilenameTemplateVariables[0]}}}}`);
+          el.appendText(`Default: {{{${defaultPluginSettings.filenameTemplate}}}}`);
         }),
       )
       .setClass('ibooks-highlights-file-naming-template');
@@ -147,14 +194,16 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
         .setPlaceholder('Naming template for highlight files')
         .setValue(this.plugin.settings.filenameTemplate)
         .onChange(async (value) => {
-          const valueToSet = value === '' ? '{{{bookTitle}}}' : value;
+          const valueToSet = value === '' ? `{{{${defaultPluginSettings.filenameTemplate}}}}` : value;
           this.plugin.settings.filenameTemplate = valueToSet;
 
           await this.plugin.saveSettings();
         });
       return text;
     });
-
+  }
+  
+  addResetTemplateSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Reset template')
       .setDesc('Reset template to default')
@@ -166,7 +215,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           this.display();
         });
       });
-
+  }
+  
+  addCredits(containerEl: HTMLElement): void {
     containerEl.createEl('hr');
     containerEl
       .createEl('small', {
