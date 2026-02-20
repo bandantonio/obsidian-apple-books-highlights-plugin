@@ -1,6 +1,6 @@
 import { type App, Notice, PluginSettingTab, Setting } from 'obsidian';
-import type IBookHighlightsPlugin from '../main';
-import { type IBookHighlightsPluginSettings, IHighlightsSortingCriterion } from './types';
+import type IBookHighlightsPlugin from '../../main';
+import { type IBookHighlightsPluginSettings, IHighlightsSortingCriterion } from '../types';
 
 export const defaultTemplate = `Title:: 📕 {{{bookTitle}}}
 Author:: {{{bookAuthor}}}

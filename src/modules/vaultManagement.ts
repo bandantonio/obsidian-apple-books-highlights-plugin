@@ -1,5 +1,6 @@
-import type { App, Vault } from 'obsidian';
-import type { IBookHighlightsPluginSettings } from '../types';
+import type { App, Vault, TFolder, TFile } from 'obsidian';
+import { compileTemplate } from './templateProcessing';
+import type { IBookHighlightsPluginSettings, IBookWithAnnotations } from '../types';
 import path from 'path';
 
 export class VaultManagement {
@@ -16,22 +17,56 @@ export class VaultManagement {
     return this.settings.highlightsFolder;
   }
   
-  doesHighlightsFolderExist(): boolean {
+  getHighlightsFolderPath(): TFolder | null {
     const folderPath = this.getHighlightsFolder();
-    const folder = this.vault.getFolderByPath(folderPath);
     
-    return Boolean(folder);
+    const checkPath = this.vault.getFolderByPath(folderPath);
+    return checkPath;
+  };
+  
+  getFilePath(filenameTemplate: string): TFile | null {
+    const filePath = path.join(this.getHighlightsFolder(), `${filenameTemplate}.md`);
+    
+    const result = this.vault.getFileByPath(filePath);
+    
+    return result;
   }
   
   async createHighlightsFolder(): Promise<void> {
-    const folderPath = this.getHighlightsFolder();
-    this.vault.createFolder(folderPath);
+    const highlightsFolderPath = this.getHighlightsFolderPath();
+    
+    if (!highlightsFolderPath) {
+      this.vault.createFolder(this.getHighlightsFolder());
+    }
   }
       
-  async createNewBookFile(filename: string, content: string): Promise<void> {
-    
+  async createBookFile(filename: string, content: string): Promise<void> {
     const filePath = path.join(this.getHighlightsFolder(), `${filename}.md`);
     
     await this.vault.create(filePath, content);
+  }
+  
+  async modifyBookFile(file: TFile, content: string): Promise<void> {
+    await this.vault.modify(file, content);
+  }
+  
+  async backupAllHighlights(): Promise<void> {
+    console.time('backing-up-existing-highlights');
+    const highlightsFolderPath = this.getHighlightsFolderPath();
+    
+    if (highlightsFolderPath) {
+      const files = (await this.vault.adapter.list(highlightsFolderPath.path)).files;
+      
+      if (files.length > 0) {
+        const highlightsBackupFolderName = `${this.getHighlightsFolder()}-bk-${Date.now()}`;
+        await this.vault.adapter.rename(highlightsFolderPath.path, highlightsBackupFolderName);
+      }
+    }
+    console.timeEnd('backing-up-existing-highlights');
+  }
+  
+  async backupBookFile(file: TFile): Promise<void> {
+    const backupFileName = `${file.basename}-bk-${Date.now()}.md`;
+    await this.vault.adapter.rename(file.path, path.join(this.getHighlightsFolder(), backupFileName));
   }
 }
