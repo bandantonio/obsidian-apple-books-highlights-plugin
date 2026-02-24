@@ -4,11 +4,22 @@ import path from 'path';
 import type { IBook, IAnnotation, IHighlightsSortingCriterion } from '../types';
 import { sortByLocation } from './annotationsProcessing';
 
-export const getBooks = async (): Promise<IBook[]> => {
-  const BOOKS_DB_PATH: string = process.env.BOOKS_DB_PATH || path.join(
+export const getBooksDbPath = (): string => {
+  return process.env.BOOKS_DB_PATH || path.join(
     os.homedir(),
     'Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary/BKLibrary-1-091020131601.sqlite',
   );
+};
+
+export const getAnnotationsDbPath = (): string => {
+  return process.env.ANNOTATIONS_DB_PATH || path.join(
+    os.homedir(),
+    'Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite',
+  );
+};
+
+export const getBooks = async (): Promise<IBook[]> => {
+  const BOOKS_DB_PATH = getBooksDbPath();
   
   const dbQuery = `SELECT
   ZASSETID as bookId,
@@ -30,10 +41,7 @@ export const getBooks = async (): Promise<IBook[]> => {
 };
 
 export const getAnnotations = async (sortingCriterion: IHighlightsSortingCriterion): Promise<IAnnotation[]> => {
-  const HIGHLIGHTS_DB_PATH: string = process.env.ANNOTATIONS_DB_PATH || path.join(
-    os.homedir(),
-    'Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite',
-  );
+  const HIGHLIGHTS_DB_PATH = getAnnotationsDbPath();
   
   const baseQuery = `SELECT
   ZANNOTATIONASSETID as assetId,
@@ -75,7 +83,7 @@ export const getAnnotations = async (sortingCriterion: IHighlightsSortingCriteri
   }
 };
 
-const dbRequest = async (dbPath: string, sqlQuery: string): Promise<IBook[]> => {  
+export const dbRequest = async (dbPath: string, sqlQuery: string): Promise<IBook[]> => {
   const dbQueryResult = spawn('sqlite3', [dbPath, sqlQuery, '-json']);
   
   const chunks: string[] = [];
@@ -106,3 +114,4 @@ export const annotationsRequest = async (dbPath: string, sqlQuery: string): Prom
     throw new Error('Failed to parse database result');
   }
 };
+
