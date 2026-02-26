@@ -205,7 +205,7 @@ export const annotationToSortThird = {
   contextualText: 'Highlight that was created third and modified first',
   highlight: 'Highlight that was created third and modified first',
   highlightLocation: 'epubcfi(/6/12[chapter1]!/4/2/22/1,:0,:125)',
-  note: 'Yet another modification note',
+  note: null,
   highlightCreationDate: 743629949.224146,
   highlightModificationDate: 743629949.224197,
   highlightStyle: 3,

@@ -13,7 +13,6 @@ export const importHighlights = async (vault: VaultManagement, settings: IBookHi
   }
   
   const aggregatedBooksAndAnnotations = await aggregateBooksWithAnnotations(settings.highlightsSortingCriterion);
-  console.log('highlights', aggregatedBooksAndAnnotations);
   
   console.time('template-rendering');
   const precompiledTemplate = compileTemplate(settings.template);

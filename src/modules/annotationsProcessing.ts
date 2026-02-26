@@ -40,7 +40,7 @@ export function enrichBooksWithAnnotations(books: IBook[], annotationsMap: Map<s
             chapter,
             contextualText: removeTrailingSpaces(preserveNewlineIndentation(rawContextualText)),
             highlight: preserveNewlineIndentation(rawHighlight),
-            note: rawNote ? preserveNewlineIndentation(rawNote) : rawNote,
+            note: rawNote ? preserveNewlineIndentation(rawNote) : null,
             highlightLocation,
             highlightStyle,
             highlightCreationDate,

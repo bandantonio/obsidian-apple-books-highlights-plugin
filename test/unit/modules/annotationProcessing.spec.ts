@@ -49,6 +49,20 @@ describe('annotationsProcessing', () => {
       expect(booksWithAnnotations.length).toBe(3);
       expect(booksWithAnnotations).toEqual(aggregatedBooksAndAnnotations);
     });
+    
+    test('Should pass null if annotation does not have a note', () => {
+      const annotationsMap = new Map(
+        [
+          ['THBFYNJKTGFTTVCGSAE6', [notDeletedAnnotations[4], notDeletedAnnotations[5], notDeletedAnnotations[6], notDeletedAnnotations[7]]]
+        ]
+      );
+      const booksWithAnnotations: IBookWithAnnotations[] = [];
+
+      enrichBooksWithAnnotations(purchasedBooks, annotationsMap, booksWithAnnotations);
+      expect(booksWithAnnotations.length).toBe(1);
+      expect(booksWithAnnotations[0].annotations.length).toBe(4);
+      expect(booksWithAnnotations[0].annotations[2].note).toBeNull();
+    });
   });
 
   describe('cleanUpTitle', () => {
