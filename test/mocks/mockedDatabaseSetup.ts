@@ -1,9 +1,19 @@
 import Database from 'better-sqlite3';
 import fs from 'fs';
+import path from 'path';
 import type { IAnnotation, IBook } from '../../src/types';
 import { books, annotationsFromDb } from './dataFetch';
 
-export const createTestDatabase = async () => {
+export const setPathsForTestEnvironment = () => {
+  const testDbPath = path.join(process.cwd(), 'test/mocks/mockedDatabase.sqlite');
+      
+  process.env = {
+    TEST_DB_PATH: testDbPath,
+    BOOKS_DB_PATH: testDbPath,
+    ANNOTATIONS_DB_PATH: testDbPath,
+  };
+};
+export const createTestDatabaseAndTables = () => {
   const db = new Database(process.env.TEST_DB_PATH);
   
   db.exec(`CREATE TABLE IF NOT EXISTS ZBKLIBRARYASSET (
@@ -32,6 +42,14 @@ export const createTestDatabase = async () => {
   );
 `);
   
+  return db;
+};
+
+interface IAnnotationFromDb extends IAnnotation {
+  ZANNOTATIONDELETED: number;
+}
+
+export const insertTestData = (db: any) => {
   const insertBook = db.prepare(`
     INSERT INTO ZBKLIBRARYASSET (ZASSETID, ZTITLE, ZAUTHOR, ZGENRE, ZLANGUAGE, ZLASTOPENDATE, ZDATEFINISHED, ZCOVERURL, ZPURCHASEDATE)
     VALUES (@bookId, @bookTitle, @bookAuthor, @bookGenre, @bookLanguage, @bookLastOpenedDate, @bookFinishedDate, @bookCoverUrl, @ZPURCHASEDATE);
@@ -45,7 +63,6 @@ export const createTestDatabase = async () => {
   `);
   
   const insertBooksTransaction = db.transaction((booksData: IBook[]) => {
-    
     for (const book of booksData) {
       const { bookId, bookTitle, bookAuthor, bookGenre, bookLanguage, bookLastOpenedDate, bookFinishedDate, bookCoverUrl } = book;
       
@@ -76,10 +93,6 @@ export const createTestDatabase = async () => {
       }
     }
   });
-  
-  interface IAnnotationFromDb extends IAnnotation {
-    ZANNOTATIONDELETED: number;
-  };
 
   const insertAnnotationsTransaction = db.transaction((annotationsData: IAnnotationFromDb[]) => {
     for (const annotation of annotationsData) {
@@ -102,17 +115,13 @@ export const createTestDatabase = async () => {
   
   insertBooksTransaction(books);
   insertAnnotationsTransaction(annotationsFromDb);
-  
-  return db;
-}
+};
 
 export const destroyTestDatabaseTables = (db: any) => {
   db.exec(`
     DROP TABLE ZBKLIBRARYASSET;
     DROP TABLE ZAEANNOTATION;
   `);
-  
-  db.close();
 }
 
 export const deleteTestDatabaseFile = () => {
