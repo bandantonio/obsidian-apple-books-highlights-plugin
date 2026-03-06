@@ -1,0 +1,90 @@
+[
+  {
+    "assetId": "THBFYNJKTGFTTVCGSAE6",
+    "chapter": "Chapter 1",
+    "contextualText": "Highlight that was created last and modified second",
+    "highlight": "Highlight that was created last and modified second",
+    "highlightLocation": "epubcfi(/6/12[chapter1]!/4/2/4,/1:0,/3:45)",
+    "note": "Some note",
+    "highlightCreationDate": 743629954.550827,
+    "highlightModificationDate": 743629954.550869,
+    "highlightStyle": 3
+  },
+  {
+    "assetId": "THBFYNJKTGFTTVCGSAE6",
+    "chapter": "Chapter 1",
+    "contextualText": "Highlight that was created second and modified third",
+    "highlight": "Highlight that was created second and modified third",
+    "highlightLocation": "epubcfi(/6/12[chapter1]!/4/2/10,/1:0,/3:76)",
+    "note": "Another modification note",
+    "highlightCreationDate": 743629937.38764,
+    "highlightModificationDate": 743640715.281904,
+    "highlightStyle": 3
+  },
+  {
+    "assetId": "THBFYNJKTGFTTVCGSAE6",
+    "chapter": "Chapter 1",
+    "contextualText": "Highlight that was created first and modified last",
+    "highlight": "Highlight that was created first and modified last",
+    "highlightLocation": "epubcfi(/6/12[chapter1]!/4/2/16/1,:0,:87)",
+    "note": "Modification note",
+    "highlightCreationDate": 743629925.898202,
+    "highlightModificationDate": 743640744.124985,
+    "highlightStyle": 3
+  },
+  {
+    "assetId": "THBFYNJKTGFTTVCGSAE6",
+    "chapter": "Chapter 1",
+    "contextualText": "Highlight that was created third and modified first",
+    "highlight": "Highlight that was created third and modified first",
+    "highlightLocation": "epubcfi(/6/12[chapter1]!/4/2/22/1,:0,:125)",
+    "note": null,
+    "highlightCreationDate": 743629949.224146,
+    "highlightModificationDate": 743629949.224197,
+    "highlightStyle": 3
+  },
+  {
+    "assetId": "THBFYNJKTGFTTVCGSAE1",
+    "chapter": "Introduction",
+    "contextualText": "This is a contextual text for the highlight from the iPhone User Guide",
+    "highlight": "highlight from the iPhone User Guide",
+    "highlightLocation": "epubcfi(/6/12[chapter1]!/4/2/32/2/1,:0,:48)",
+    "note": "Test note for the highlight from the iPhone User Guide",
+    "highlightCreationDate": 685151385.91602,
+    "highlightModificationDate": 685151385.91602,
+    "highlightStyle": 3
+  },
+  {
+    "assetId": "THBFYNJKTGFTTVCGSAE2",
+    "chapter": "Introduction",
+    "contextualText": "This is a contextual text for the highlight from the iPad User Guide",
+    "highlight": "highlight from the iPad User Guide",
+    "highlightLocation": "epubcfi(/6/12[chapter1]!/4/2/32/2/1,:0,:48)",
+    "note": "Test note for the highlight from the iPad User Guide",
+    "highlightCreationDate": 685151385.91602,
+    "highlightModificationDate": 685151385.91602,
+    "highlightStyle": 3
+  },
+  {
+    "assetId": "THBFYNJKTGFTTVCGSAE3",
+    "chapter": "Introduction",
+    "contextualText": "This is a contextual text for the highlight from the Mac User Guide",
+    "highlight": "highlight from the Mac User Guide",
+    "highlightLocation": "epubcfi(/6/12[chapter1]!/4/2/32/2/1,:0,:48)",
+    "note": "Test note for the highlight from the Mac User Guide",
+    "highlightCreationDate": 685151385.91602,
+    "highlightModificationDate": 685151385.91602,
+    "highlightStyle": 3
+  },
+  {
+    "assetId": "THBFYNJKTGFTTVCGSAE3",
+    "chapter": "Introduction duplicate",
+    "contextualText": "This is a contextual text for the duplicated highlight from the Mac User Guide",
+    "highlight": "duplicated highlight from the Mac User Guide",
+    "highlightLocation": "epubcfi(/6/12[chapter1]!/4/2/32/2/1,:0,:48)",
+    "note": "Test note for the duplicated highlight from the Mac User Guide",
+    "highlightCreationDate": 685151385.91602,
+    "highlightModificationDate": 685151385.91602,
+    "highlightStyle": 2
+  }  
+]

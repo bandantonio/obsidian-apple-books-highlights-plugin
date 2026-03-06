@@ -1,0 +1,52 @@
+[
+  {
+    "bookId": "THBFYNJKTGFTTVCGSAE1",
+    "bookTitle": "iPhone User Guide",
+    "bookAuthor": "Apple Inc.",
+    "bookGenre": "Technology",
+    "bookLanguage": "EN",
+    "bookLastOpenedDate": 726602576.413094,
+    "bookFinishedDate": 726602576.413094,
+    "bookCoverUrl": ""
+  },
+  {
+    "bookId": "THBFYNJKTGFTTVCGSAE2",
+    "bookTitle": "iPad User Guide",
+    "bookAuthor": "Apple Inc.",
+    "bookGenre": "Technology",
+    "bookLanguage": "EN",
+    "bookLastOpenedDate": 726602576.413094,
+    "bookFinishedDate": 726602576.413094,
+    "bookCoverUrl": ""
+  },
+  {
+    "bookId": "THBFYNJKTGFTTVCGSAE3",
+    "bookTitle": "Mac User Guide",
+    "bookAuthor": "Apple Inc.",
+    "bookGenre": "Technology",
+    "bookLanguage": "EN",
+    "bookLastOpenedDate": 726602576.413094,
+    "bookFinishedDate": 726602576.413094,
+    "bookCoverUrl": ""
+  },
+  {
+    "bookId": "THBFYNJKTGFTTVCGSAE5",
+    "bookTitle": "A book with no annotations",
+    "bookAuthor": "Jane Doe",
+    "bookGenre": "Non-Fiction",
+    "bookLanguage": "EN",
+    "bookLastOpenedDate": 726602576.413094,
+    "bookFinishedDate": 726602576.413094,
+    "bookCoverUrl": ""
+  },
+  {
+    "bookId": "THBFYNJKTGFTTVCGSAE6",
+    "bookTitle": "A book to test sorting feature",
+    "bookAuthor": "Joanne Doe",
+    "bookGenre": "Non-Fiction",
+    "bookLanguage": "EN",
+    "bookLastOpenedDate": 726602576.413094,
+    "bookFinishedDate": 726602576.413094,
+    "bookCoverUrl": ""
+  }
+]

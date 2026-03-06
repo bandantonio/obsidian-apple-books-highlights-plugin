@@ -2,7 +2,8 @@ import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 import type { IAnnotation, IBook } from '../../src/types';
-import { books, annotationsFromDb } from './dataFetch';
+import allBooksInDatabase from '../fixtures/dataFetching/allBooksInDatabase.json' assert { type: 'json' };
+import allAnnotationsInDatabase from '../fixtures/dataFetching/allAnnotationsInDatabase.json' assert { type: 'json' };
 
 export const setPathsForTestEnvironment = () => {
   const testDbPath = path.join(process.cwd(), 'test/mocks/mockedDatabase.sqlite');
@@ -113,8 +114,8 @@ export const insertTestData = (db: any) => {
     }
   });
   
-  insertBooksTransaction(books);
-  insertAnnotationsTransaction(annotationsFromDb);
+  insertBooksTransaction(allBooksInDatabase);
+  insertAnnotationsTransaction(allAnnotationsInDatabase);
 };
 
 export const destroyTestDatabaseTables = (db: any) => {

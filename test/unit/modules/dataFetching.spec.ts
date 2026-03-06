@@ -3,14 +3,12 @@ import os from 'os';
 import path from 'path';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, onTestFinished, test, vi } from 'vitest';
 import * as dataFetching from '../../../src/modules/dataFetching';
-import {
-  purchasedBooks,
-  notDeletedAnnotations,
-  annotationsSortedByCreationDateNewToOld,
-  annotationsSortedByLastModifiedDateOldToNew,
-  annotationsSortedByLastModifiedDateNewToOld,
-  annotationsSortedByLocation,
-} from '../../mocks/dataFetch'
+import purchasedBooks from '../../fixtures/dataFetching/purchasedBooks.json' assert { type: 'json' };
+import notDeletedAnnotations from '../../fixtures/dataFetching/notDeletedAnnotations.json' assert { type: 'json' };
+import annotationsSortedByCreationDateNewToOld from '../../fixtures/dataFetching/annotationsSortedByCreationDateNewToOld.json' assert { type: 'json' };
+import annotationsSortedByLastModifiedDateOldToNew from '../../fixtures/dataFetching/annotationsSortedByLastModifiedDateOldToNew.json' assert { type: 'json' };
+import annotationsSortedByLastModifiedDateNewToOld from '../../fixtures/dataFetching/annotationsSortedByLastModifiedDateNewToOld.json' assert { type: 'json' };
+import annotationsSortedByLocation from '../../fixtures/dataFetching/annotationsSortedByLocation.json' assert { type: 'json' };
 import {
   setPathsForTestEnvironment,
   createTestDatabaseAndTables,
