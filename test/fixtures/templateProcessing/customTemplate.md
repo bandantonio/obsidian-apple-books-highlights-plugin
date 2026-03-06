@@ -1,4 +1,4 @@
-export const rawCustomTemplateMock = `Title:: 📕 {{{bookTitle}}}
+Title:: 📕 {{{bookTitle}}}
 Author:: {{{bookAuthor}}}
 Genre:: {{#if bookGenre}}{{{bookGenre}}}{{else}}N/A{{/if}}
 Language:: {{#if bookLanguage}}{{bookLanguage}}{{else}}N/A{{/if}}
@@ -29,21 +29,3 @@ Number of annotations:: {{annotations.length}}
 - <small>📅 Highlight modified on:: {{dateFormat highlightModificationDate "YYYY-MM-DD hh:mm:ss A Z"}}</small>
 
 {{/each}}
-`;
-
-export const rawCustomTemplateMockWithWrappedTextBlockContainingNewlines = `Title:: 📕 {{{bookTitle}}}
-Author:: {{{bookAuthor}}}
-Link:: [Apple Books Link](ibooks://assetid/{{bookId}})
-
-## Annotations
-
-Number of annotations:: {{annotations.length}}
-
-{{#each annotations}}
-----
-
-> [!QUOTE]
->  {{{highlight}}}
-
-{{/each}}
-`;
