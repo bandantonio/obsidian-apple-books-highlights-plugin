@@ -19,22 +19,31 @@ export const importHighlights = async (vault: VaultManagement, settings: IBookHi
   const precompiledFilenameTemplate = compileTemplate(settings.filenameTemplate);  
   console.timeEnd('template-rendering');
   
-  const fileOperations = aggregatedBooksAndAnnotations.map(async (bookWithAnnotations) => {
+  const fileOperations = [];
+  
+  for await (const bookWithAnnotations of aggregatedBooksAndAnnotations) {
     const compiledContent = precompiledTemplate(bookWithAnnotations);
     const compiledFilename = precompiledFilenameTemplate(bookWithAnnotations);
     
+    
     if (importMode === "create") {
-      // console.time(`saving-${compiledFilename}`);
-      await vault.createBookFile(compiledFilename, compiledContent);
-      // console.timeEnd(`saving-${compiledFilename}`);
-    } else if (importMode === "modify") {
-      const filePath = vault.getFilePath(compiledFilename)!;
+      console.time(`saving-${compiledFilename}`);
+      fileOperations.push(vault.createBookFile(compiledFilename, compiledContent));
+      console.timeEnd(`saving-${compiledFilename}`);
       
-      console.time(`modifying-${compiledFilename}`);
-      await vault.modifyBookFile(filePath, compiledContent);
-      console.timeEnd(`modifying-${compiledFilename}`);
+    } else if (importMode === "modify") {
+      const filePath = vault.getFilePath(compiledFilename);
+      
+      if (filePath) {
+        console.time(`modifying-${compiledFilename}`);
+        fileOperations.push(vault.modifyBookFile(filePath, compiledContent))
+        console.timeEnd(`modifying-${compiledFilename}`);
+      } else {
+        console.warn(`Apple Books - Import Highlights: Can't modify "${compiledFilename}". Book does not exist. Creating a new book instead.`);
+        fileOperations.push(vault.createBookFile(compiledFilename, compiledContent));
+      }
     }
-  });
+  }
   
   console.time('total-saving');
   await Promise.allSettled(fileOperations);

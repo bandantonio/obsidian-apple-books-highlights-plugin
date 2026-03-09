@@ -21,8 +21,7 @@ export default class IBookHighlightsPlugin extends Plugin {
     addImportOneBookCommand(this);
 
     if (settings.importOnStart) {
-      console.log('Action: import all highlights on start');
-      // await importHighlights(this.vault, settings);
+      await importHighlights(this.vault, settings);
     }
   }
 
