@@ -8,7 +8,7 @@ describe('Default settings', () => {
     expect(defaultPluginSettings).toBeDefined();
     expect(defaultTemplate).toBeDefined();
   });
-  
+
   test('Should check that default settings have the expected properties', () => {
     expect(defaultPluginSettings).toHaveProperty('highlightsFolder');
     expect(defaultPluginSettings).toHaveProperty('backup');
@@ -17,7 +17,7 @@ describe('Default settings', () => {
     expect(defaultPluginSettings).toHaveProperty('template');
     expect(defaultPluginSettings).toHaveProperty('filenameTemplate');
   });
-  
+
   test('Should check that default settings have the expected default values', () => {
     expect(defaultPluginSettings.highlightsFolder).toBe('ibooks-highlights');
     expect(defaultPluginSettings.backup).toBe(false);
@@ -26,7 +26,7 @@ describe('Default settings', () => {
     expect(defaultPluginSettings.template).toBe(defaultTemplate);
     expect(defaultPluginSettings.filenameTemplate).toBe('bookTitle');
   });
-  
+
   test('Should check that default template contains the expected variables with proper escaping', () => {
     const expectedVariables = [
       '{{bookTitle}}',
@@ -39,10 +39,10 @@ describe('Default settings', () => {
       '{{{highlight}}}',
       '{{#if note}}{{{note}}}{{else}}N/A{{/if}}',
       '{{#if highlightLocation}}[Apple Books Highlight Link](ibooks://assetid/{{../bookId}}#{{highlightLocation}}){{else}}N/A{{/if}}',
-      '{{/each}}'
+      '{{/each}}',
     ];
-    
-    expectedVariables.forEach(variable => {
+
+    expectedVariables.forEach((variable) => {
       expect(defaultTemplate).toContain(variable);
     });
   });
@@ -53,18 +53,18 @@ describe('Settings tab', () => {
     const mockApp = {} as obsidian.App;
     const mockPlugin = { settings: { ...defaultPluginSettings }, saveSettings: vi.fn() } as unknown as IBookHighlightsPlugin;
     const settingsTab = new IBookHighlightsSettingTab(mockApp, mockPlugin);
-    
+
     expect(settingsTab).toBeInstanceOf(IBookHighlightsSettingTab);
     expect(settingsTab.plugin).toBe(mockPlugin);
   });
-  
+
   test.skip('Should check that settings tab registers all the expected settings', () => {
     const mockApp = {} as obsidian.App;
     const mockPlugin = { settings: { ...defaultPluginSettings }, saveSettings: vi.fn() } as unknown as IBookHighlightsPlugin;
     const settingsTab = new IBookHighlightsSettingTab(mockApp, mockPlugin);
-    
+
     const mockContainerEl = {} as HTMLElement;
-    
+
     const addHighlightsFolderSettingSpy = vi.spyOn(settingsTab, 'addHighlightsFolderSetting');
     const addImportOnStartSettingSpy = vi.spyOn(settingsTab, 'addImportOnStartSetting');
     const addBackupSettingSpy = vi.spyOn(settingsTab, 'addBackupSetting');
@@ -72,12 +72,12 @@ describe('Settings tab', () => {
     const addTemplateSettingSpy = vi.spyOn(settingsTab, 'addTemplateSetting');
     const addFilenameTemplateSettingSpy = vi.spyOn(settingsTab, 'addFilenameTemplateSetting');
     const addResetTemplateSettingSpy = vi.spyOn(settingsTab, 'addResetTemplateSetting');
-    
+
     // Assign the mock containerEl directly before calling display
     settingsTab.containerEl = mockContainerEl;
     // Call the display method to trigger the settings registration
     // settingsTab.display();
-    
+
     // Check that all the expected settings methods were called
     expect(addHighlightsFolderSettingSpy).toHaveBeenCalledWith(mockContainerEl);
     expect(addImportOnStartSettingSpy).toHaveBeenCalledWith(mockContainerEl);

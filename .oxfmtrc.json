@@ -7,7 +7,7 @@
     "coverage/**",
     "dist/**",
     "docs/**",
-    "test/**",
+    "test/fixtures/**",
     "package.json",
     "vitest.config.mjs",
   ],

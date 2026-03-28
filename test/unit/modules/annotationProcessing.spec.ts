@@ -1,10 +1,17 @@
 import { describe, expect, test, vi } from 'vitest';
-import purchasedBooks from '../../fixtures/dataFetching/purchasedBooks.json' assert { type: 'json' };
-import notDeletedAnnotations from '../../fixtures/dataFetching/notDeletedAnnotations.json' assert { type: 'json' };
-import aggregatedBooksAndAnnotations from '../../fixtures/annotationProcessing/aggregatedBooksAndAnnotations.json' assert { type: 'json' };
-import { cleanUpTitle, mapAnnotationsToBooks, enrichBooksWithAnnotations, preserveNewlineIndentation, removeTrailingSpaces, aggregateBooksWithAnnotations } from '../../../src/modules/annotationsProcessing';
-import * as dataFetching from '../../../src/modules/dataFetching';
 import type { IAnnotation, IBookWithAnnotations } from '../../../src/types';
+import {
+  cleanUpTitle,
+  mapAnnotationsToBooks,
+  enrichBooksWithAnnotations,
+  preserveNewlineIndentation,
+  removeTrailingSpaces,
+  aggregateBooksWithAnnotations,
+} from '../../../src/modules/annotationsProcessing';
+import * as dataFetching from '../../../src/modules/dataFetching';
+import aggregatedBooksAndAnnotations from '../../fixtures/annotationProcessing/aggregatedBooksAndAnnotations.json' with { type: 'json' };
+import notDeletedAnnotations from '../../fixtures/dataFetching/notDeletedAnnotations.json' with { type: 'json' };
+import purchasedBooks from '../../fixtures/dataFetching/purchasedBooks.json' with { type: 'json' };
 
 describe('annotationsProcessing', () => {
   describe('mapAnnotationsToBooks', () => {
@@ -37,14 +44,12 @@ describe('annotationsProcessing', () => {
 
   describe('enrichBooksWithAnnotations', () => {
     test('Should correctly add books information to annotations based on an empty map', () => {
-      const annotationsMap = new Map(
-        [
-          ['THBFYNJKTGFTTVCGSAE1', [notDeletedAnnotations[0]]],
-          ['THBFYNJKTGFTTVCGSAE2', [notDeletedAnnotations[1]]],
-          ['THBFYNJKTGFTTVCGSAE3', [notDeletedAnnotations[2], notDeletedAnnotations[3]]],
-          ['THBFYNJKTGFTTVCGSAE6', [notDeletedAnnotations[4], notDeletedAnnotations[5], notDeletedAnnotations[6], notDeletedAnnotations[7]]]
-        ]
-      );
+      const annotationsMap = new Map([
+        ['THBFYNJKTGFTTVCGSAE1', [notDeletedAnnotations[0]]],
+        ['THBFYNJKTGFTTVCGSAE2', [notDeletedAnnotations[1]]],
+        ['THBFYNJKTGFTTVCGSAE3', [notDeletedAnnotations[2], notDeletedAnnotations[3]]],
+        ['THBFYNJKTGFTTVCGSAE6', [notDeletedAnnotations[4], notDeletedAnnotations[5], notDeletedAnnotations[6], notDeletedAnnotations[7]]],
+      ]);
       const booksWithAnnotations: IBookWithAnnotations[] = [];
 
       enrichBooksWithAnnotations(purchasedBooks, annotationsMap, booksWithAnnotations);
@@ -52,13 +57,11 @@ describe('annotationsProcessing', () => {
       expect(booksWithAnnotations.length).toBe(4);
       expect(booksWithAnnotations).toEqual(aggregatedBooksAndAnnotations);
     });
-    
+
     test('Should pass null if annotation does not have a note', () => {
-      const annotationsMap = new Map(
-        [
-          ['THBFYNJKTGFTTVCGSAE6', [notDeletedAnnotations[4], notDeletedAnnotations[5], notDeletedAnnotations[6], notDeletedAnnotations[7]]]
-        ]
-      );
+      const annotationsMap = new Map([
+        ['THBFYNJKTGFTTVCGSAE6', [notDeletedAnnotations[4], notDeletedAnnotations[5], notDeletedAnnotations[6], notDeletedAnnotations[7]]],
+      ]);
       const booksWithAnnotations: IBookWithAnnotations[] = [];
 
       enrichBooksWithAnnotations(purchasedBooks, annotationsMap, booksWithAnnotations);
@@ -68,14 +71,14 @@ describe('annotationsProcessing', () => {
     });
   });
 
-  describe('aggregateBooksAndAnnotations', () => {    
+  describe('aggregateBooksAndAnnotations', () => {
     test('Should correctly aggregate books and annotations information', async () => {
       vi.spyOn(dataFetching, 'getBooks').mockResolvedValue(purchasedBooks);
       vi.spyOn(dataFetching, 'getAnnotations').mockResolvedValue(notDeletedAnnotations);
-      
+
       const booksWithAnnotations = await aggregateBooksWithAnnotations('creationDateOldToNew');
       expect(booksWithAnnotations.length).toBe(4);
-      
+
       expect(booksWithAnnotations).toEqual(aggregatedBooksAndAnnotations);
     });
   });
@@ -296,7 +299,7 @@ describe('annotationsProcessing', () => {
       const actual = preserveNewlineIndentation(text);
       const expected =
         'This is an example text to test the preservation of triple newline characters within the text.\nHere is a new line after triple newline characters.';
-      
+
       expect(actual).toEqual(expected);
     });
 
@@ -331,8 +334,7 @@ describe('annotationsProcessing', () => {
     });
 
     test('Should return the text when no newline characters exist within text', () => {
-      const text =
-        'This is an example text to test that the text is returned when no newline characters exist within the text.';
+      const text = 'This is an example text to test that the text is returned when no newline characters exist within the text.';
       const actual = preserveNewlineIndentation(text);
       const expected = text;
 

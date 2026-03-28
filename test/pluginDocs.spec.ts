@@ -19,7 +19,7 @@ describe('Plugin documentation', () => {
       bookFinishedDate: 1234567890,
       bookCoverUrl: 'string',
     } as IBook;
-    
+
     const allowedAnnotationVariables = {
       assetId: 'string',
       chapter: 'string',
@@ -31,21 +31,21 @@ describe('Plugin documentation', () => {
       highlightCreationDate: 1234567890,
       highlightModificationDate: 1234567890,
     } as IAnnotation;
-    
+
     const allAllowedVariables = { ...allowedBookVariables, annotations: [allowedAnnotationVariables], ...allowedAnnotationVariables };
-    
+
     const customizationDocPath = path.join(process.cwd(), 'docs', 'customization', 'templates-and-variables.md');
     const customizationDocContent = await fs.readFile(customizationDocPath, 'utf-8');
 
     const templateVariablesSection = customizationDocContent.split('## Template variables')[1]?.split('## ')[0];
     const listedVariablesInDoc = templateVariablesSection.match(/- `\{{2,3}(\w+)\}{2,3}`/gm)!;
-    
+
     expect(templateVariablesSection).toBeDefined();
-    
+
     for (const listedVariable of listedVariablesInDoc) {
       const variableName = listedVariable.match(/- `\{{2,3}(\w+)\}{2,3}`/)?.[1];
       const isVariableInIBook = Object.keys(allAllowedVariables).includes(variableName!);
-      
+
       expect(variableName).toBeDefined();
       expect(isVariableInIBook).toBeTruthy();
     }
