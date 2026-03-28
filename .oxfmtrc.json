@@ -1,0 +1,36 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [
+    ".git-hooks/**",
+    ".github/**",
+    ".vscode/**",
+    "coverage/**",
+    "dist/**",
+    "docs/**",
+    "test/**",
+    "CONTRIBUTING.md",
+    "README.md",
+    "esbuild.config.mjs",
+    "vitest.config.mjs",
+    "manifest.json",
+    "package.json",
+    "tsconfig.json",
+    "versions.json"
+  ],
+  "printWidth": 140,
+  "useTabs": false,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "sortImports": {
+    "newlinesBetween": false,
+    "groups": [
+      "type-import",
+      ["value-builtin", "value-external"],
+      "type-internal",
+      "value-internal",
+      ["type-parent", "type-sibling", "type-index"],
+      ["value-parent", "value-sibling", "value-index"],
+      "unknown"
+    ]
+  }
+}

@@ -9,9 +9,9 @@ import { importHighlights } from '../importHighlights';
 // to overwrite all the books
 export class OverwriteBookModal extends Modal {
   plugin: IBookHighlightsPlugin;
-  fileDetails?: { file: TFile, compiledContent: string };
+  fileDetails?: { file: TFile; compiledContent: string };
 
-  constructor(app: App, plugin: IBookHighlightsPlugin, fileDetails?: { file: TFile, compiledContent: string }) {
+  constructor(app: App, plugin: IBookHighlightsPlugin, fileDetails?: { file: TFile; compiledContent: string }) {
     super(app);
     this.plugin = plugin;
     this.fileDetails = fileDetails;
@@ -20,12 +20,11 @@ export class OverwriteBookModal extends Modal {
   onOpen() {
     const { contentEl } = this;
     const bookToOverwrite = this.fileDetails;
-    
+
     if (bookToOverwrite) {
       contentEl.createEl('p', { text: 'The selected book already exists in your highlights folder:' });
       contentEl.createEl('p', { text: `${bookToOverwrite.file.name}`, cls: 'modal-rewrite-book-title' });
       contentEl.createEl('p', { text: 'Would you like to proceed with the overwrite?' });
-      
     } else {
       contentEl.createEl('span', { text: 'Bulk import will overwrite' });
       contentEl.createEl('span', { text: ' ALL THE BOOKS ', cls: 'modal-rewrite-all-books' });
@@ -38,10 +37,11 @@ export class OverwriteBookModal extends Modal {
         YesButton.setButtonText('Yes, overwrite')
           .setCta()
           .onClick(async () => {
-            bookToOverwrite
-              ? await this.plugin.vault.modifyBookFile(bookToOverwrite.file, bookToOverwrite.compiledContent)
-              : await importHighlights(this.plugin.vault, this.plugin.settings, "modify");
-            
+            if (bookToOverwrite) {
+              await this.plugin.vault.modifyBookFile(bookToOverwrite.file, bookToOverwrite.compiledContent);
+            } else {
+              await importHighlights(this.plugin.vault, this.plugin.settings, 'modify');
+            }
             this.close();
           });
       })

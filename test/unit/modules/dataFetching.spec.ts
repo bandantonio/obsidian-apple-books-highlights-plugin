@@ -1,7 +1,7 @@
 import { Database } from 'better-sqlite3';
 import os from 'os';
 import path from 'path';
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, onTestFinished, test, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
 import * as dataFetching from '../../../src/modules/dataFetching';
 import purchasedBooks from '../../fixtures/dataFetching/purchasedBooks.json' assert { type: 'json' };
 import notDeletedAnnotations from '../../fixtures/dataFetching/notDeletedAnnotations.json' assert { type: 'json' };

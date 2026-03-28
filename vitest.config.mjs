@@ -1,4 +1,3 @@
-/** biome-ignore-all assist/source/useSortedKeys: <Sorting is not required here> */
 import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 

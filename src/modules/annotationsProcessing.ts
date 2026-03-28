@@ -2,11 +2,8 @@ import type { IBook, IAnnotation, IBookWithAnnotations, IHighlightsSortingCriter
 import { getBooks, getAnnotations } from './dataFetching';
 
 export const aggregateBooksWithAnnotations = async (sortingCriterion: IHighlightsSortingCriterion): Promise<IBookWithAnnotations[]> => {
-  const [books, annotations] = await Promise.all([
-    getBooks(),
-    getAnnotations(sortingCriterion)
-  ]);
-  
+  const [books, annotations] = await Promise.all([getBooks(), getAnnotations(sortingCriterion)]);
+
   const annotationsMap = new Map<string, IAnnotation[]>();
   mapAnnotationsToBooks(annotations, annotationsMap);
 
@@ -16,10 +13,14 @@ export const aggregateBooksWithAnnotations = async (sortingCriterion: IHighlight
   return booksWithAnnotations;
 };
 
-export function enrichBooksWithAnnotations(books: IBook[], annotationsMap: Map<string, IAnnotation[]>, booksWithAnnotations: IBookWithAnnotations[]) {
-  for (const book of books) {   
+export function enrichBooksWithAnnotations(
+  books: IBook[],
+  annotationsMap: Map<string, IAnnotation[]>,
+  booksWithAnnotations: IBookWithAnnotations[],
+) {
+  for (const book of books) {
     const { bookId, bookTitle, bookAuthor, bookGenre, bookLanguage, bookLastOpenedDate, bookFinishedDate, bookCoverUrl } = book;
-    
+
     const bookRelatedAnnotations = annotationsMap.get(bookId) || [];
     if (bookRelatedAnnotations.length > 0) {
       const normalizedBookTitle = cleanUpTitle(bookTitle);
@@ -33,7 +34,17 @@ export function enrichBooksWithAnnotations(books: IBook[], annotationsMap: Map<s
         bookFinishedDate,
         bookCoverUrl,
         annotations: bookRelatedAnnotations.map((annotation) => {
-          const { assetId, chapter, contextualText: rawContextualText, highlight: rawHighlight, note: rawNote, highlightLocation, highlightStyle, highlightCreationDate, highlightModificationDate } = annotation;
+          const {
+            assetId,
+            chapter,
+            contextualText: rawContextualText,
+            highlight: rawHighlight,
+            note: rawNote,
+            highlightLocation,
+            highlightStyle,
+            highlightCreationDate,
+            highlightModificationDate,
+          } = annotation;
 
           return {
             assetId,
@@ -66,6 +77,7 @@ export function cleanUpTitle(title: string): string {
   // Obsidian forbids adding certain characters to the title of a note, so they must be replaced with a dash (-)
   // | # ^ [] \ / :
   // after the replacement, two or more spaces are replaced with a single one
+  // oxfmt-ignore
   return title
     .replace(/[|#^[\]\\/:]+/g, '-')
     .replace(/\s{2,}/g, ' ');
@@ -87,18 +99,18 @@ export const preserveNewlineIndentation = (textBlock: string): string => {
 
 export const normalizeAnnotationLocation = (location: string): string => {
   const normalizedLocation = location
-    .slice(8, -1)	              // Get rid of the epubcfi() wrapper
-    .replace(/\[.*?\]/g, '')    // Get rid of bracketed assertions
-    .replace(/\d+/g, (num) => num.padStart(4, '0'))   // Pad numbers to 4 digits for consistent comparison
-  
+    .slice(8, -1) // Get rid of the epubcfi() wrapper
+    .replace(/\[.*?\]/g, '') // Get rid of bracketed assertions
+    .replace(/\d+/g, (num) => num.padStart(4, '0')); // Pad numbers to 4 digits for consistent comparison
+
   return normalizedLocation;
 };
 
 export const sortByLocation = (annotations: IAnnotation[]) => {
   return annotations.sort((a, b) => {
-      const normalizedFirstLocation = normalizeAnnotationLocation(a.highlightLocation);
-      const normalizedSecondLocation = normalizeAnnotationLocation(b.highlightLocation);
-      
-      return normalizedFirstLocation.localeCompare(normalizedSecondLocation);
-    });
-}
+    const normalizedFirstLocation = normalizeAnnotationLocation(a.highlightLocation);
+    const normalizedSecondLocation = normalizeAnnotationLocation(b.highlightLocation);
+
+    return normalizedFirstLocation.localeCompare(normalizedSecondLocation);
+  });
+};

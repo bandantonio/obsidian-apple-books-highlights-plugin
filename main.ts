@@ -1,11 +1,11 @@
 import { Notice, Plugin } from 'obsidian';
+import type { IBookHighlightsPluginSettings } from './src/types';
 // import { aggregateBooksWithAnnotations } from './src/modules/annotationsProcessing';
 import { importHighlights } from './src/importHighlights';
-import { VaultManagement } from './src/modules/vaultManagement';
-import { IBookHighlightsPluginSearchModal } from './src/modals/searchSuggestions';
 import { OverwriteBookModal } from './src/modals/overwriteConsent';
+import { IBookHighlightsPluginSearchModal } from './src/modals/searchSuggestions';
+import { VaultManagement } from './src/modules/vaultManagement';
 import { defaultPluginSettings, IBookHighlightsSettingTab } from './src/settings';
-import type { IBookHighlightsPluginSettings } from './src/types';
 
 export default class IBookHighlightsPlugin extends Plugin {
   vault: VaultManagement;
@@ -25,7 +25,6 @@ export default class IBookHighlightsPlugin extends Plugin {
     }
   }
 
-  // biome-ignore lint/suspicious/noEmptyBlockStatements: The block is required for the plugin lifecycle.
   onunload() {}
 
   async loadSettings() {
@@ -44,11 +43,12 @@ function addRibbonAction(plugin: IBookHighlightsPlugin, settings: IBookHighlight
     if (settings.backup) {
       try {
         await plugin.vault.backupAllHighlights();
-        await importHighlights(plugin.vault, settings)
-          .then(() => {
-            new Notice('Apple Books highlights imported successfully');
-          })
-      } catch(error) {
+        await importHighlights(plugin.vault, settings).then(() => {
+          // oxlint-disable-next-line
+          new Notice('Apple Books highlights imported successfully');
+        });
+      } catch (error) {
+        // oxlint-disable-next-line
         new Notice(`[${plugin.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
         console.error(`[${plugin.manifest.name}]: ${error}`);
       }
@@ -69,6 +69,7 @@ function addImportAllBooksCommand(plugin: IBookHighlightsPlugin, settings: IBook
           // this.settings.backup ? await this.aggregateAndSaveHighlights() : new OverwriteBookModal(this.app, this).open();
           await importHighlights(plugin.vault, settings);
         } catch (error) {
+          // oxlint-disable-next-line
           new Notice(`[${plugin.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
           console.error(`[${plugin.manifest.name}]: ${error}`);
         }
@@ -85,6 +86,7 @@ function addImportOneBookCommand(plugin: IBookHighlightsPlugin) {
       try {
         new IBookHighlightsPluginSearchModal(plugin.app, plugin).open();
       } catch (error) {
+        // oxlint-disable-next-line
         new Notice(`[${plugin.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
         console.error(`[${plugin.manifest.name}]: ${error}`);
       }

@@ -50,5 +50,6 @@ if (prod) {
     metafile: true,
   });
 
+  // oxlint-disable-next-line
   console.log(await esbuild.analyzeMetafile(devBuild.metafile));
 }

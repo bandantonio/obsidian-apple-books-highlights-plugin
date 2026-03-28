@@ -1,2 +1,2 @@
-npm run lint
+npm run lint:staged
 npm test -- --no-watch

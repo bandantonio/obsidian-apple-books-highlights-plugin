@@ -25,12 +25,14 @@ export interface IBookWithAnnotations extends IBook {
   annotations: IAnnotation[];
 }
 
+// oxfmt-ignore
 export type IHighlightsSortingCriterion =
   | 'creationDateOldToNew'      // Default. The highlights that were created first will be at the top.
   | 'creationDateNewToOld'      // The highlights that were created last will be at the top.
   | 'lastModifiedDateOldToNew'  // The highlights that were modified first will be at the top.
   | 'lastModifiedDateNewToOld'  // The highlights that were modified last will be at the top.
-  | 'book';                     // Highlights are sorted by their location in a book.
+  | 'book'                      // Highlights are sorted by their location in a book.
+;
 
 export interface IBookHighlightsPluginSettings {
   highlightsFolder: string;

@@ -1,8 +1,7 @@
-import * as Handlebars from 'handlebars';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-
+import * as Handlebars from 'handlebars';
 
 export const compileTemplate = (template: string): Handlebars.TemplateDelegate => {
   return Handlebars.compile(template);
@@ -15,8 +14,7 @@ export const calculateAppleDate = (date: number) => {
   const timeZone = dayjs.tz.guess();
 
   const APPLE_EPOCH_START = new Date('2001-01-01').getTime();
-  
-  // biome-ignore lint/style/noMagicNumbers: Temporarily ignore hardcoded numbers until refactored.
+
   const dateInMilliseconds = date * 1000;
   const calculatedDate = dayjs(APPLE_EPOCH_START)
     .add(dateInMilliseconds, 'ms')

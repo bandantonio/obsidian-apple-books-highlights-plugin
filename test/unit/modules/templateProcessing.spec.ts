@@ -137,7 +137,6 @@ describe('Handlebars helpers', () => {
       });
     });
 
-    // biome-ignore-start lint/style/noMagicNumbers: Number values are explicitly described in 'toEqual' part
     describe('dateFormat', () => {
       dayjs.extend(utc);
       dayjs.extend(timezone);
@@ -171,7 +170,6 @@ describe('Handlebars helpers', () => {
         expect(helpers.dateFormat(731876693.002279, 'dddd, MMMM D, YYYY [at] hh:mm A')).toEqual('Tuesday, March 12, 2024 at 06:04 AM');
       });
     });
-    // biome-ignore-end lint/style/noMagicNumbers: Number values are explicitly described in 'toEqual' part
   });
 });
   

@@ -23,11 +23,11 @@ Number of annotations:: {{annotations.length}}
 `;
 
 const allowedFilenameTemplateVariables = [
-  'bookTitle',  // Dwfault
+  'bookTitle', // Dwfault
   'bookId',
   'bookAuthor',
   'bookGenre',
-  'bookLanguage'
+  'bookLanguage',
 ];
 
 export const defaultPluginSettings: IBookHighlightsPluginSettings = {
@@ -59,9 +59,9 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
     this.addTemplateSetting(containerEl);
     this.addFilenameTemplateSetting(containerEl);
     this.addResetTemplateSetting(containerEl);
-    this.addCredits(containerEl);    
+    this.addCredits(containerEl);
   }
-  
+
   addHighlightsFolderSetting(containerEl: HTMLElement): void {
     const folder = new Setting(containerEl)
       .setName('Highlights folder')
@@ -85,7 +85,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
         }),
     );
   }
-  
+
   addImportOnStartSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Import highlights on start')
@@ -98,7 +98,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
         });
       });
   }
-  
+
   addBackupSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Backup highlights')
@@ -114,6 +114,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
       .addToggle((toggle) => {
         toggle.setValue(this.plugin.settings.backup).onChange(async (value) => {
           if (!value) {
+            // oxlint-disable-next-line
             new Notice('Disabling backups imposes a risk of data loss. Please use with caution.', 0);
           }
           this.plugin.settings.backup = value;
@@ -122,7 +123,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
         });
       });
   }
-  
+
   addHighlightsSortingCriterionSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Highlights sorting criterion')
@@ -147,7 +148,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           });
       });
   }
-  
+
   addTemplateSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Template')
@@ -166,7 +167,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
         return text;
       });
   }
-  
+
   addFilenameTemplateSetting(containerEl: HTMLElement): void {
     const filenameTemplate = new Setting(containerEl)
       .setName('Template for naming highlight files')
@@ -202,7 +203,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
       return text;
     });
   }
-  
+
   addResetTemplateSetting(containerEl: HTMLElement): void {
     new Setting(containerEl)
       .setName('Reset template')
@@ -216,7 +217,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
         });
       });
   }
-  
+
   addCredits(containerEl: HTMLElement): void {
     containerEl.createEl('hr');
     containerEl
