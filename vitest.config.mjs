@@ -11,6 +11,32 @@ export default defineConfig({
       ...configDefaults.exclude,
       '.direnv/**/*'
     ],
+    projects: [
+      {
+        test: {
+          include: ['test/unit/**/*.spec.ts'],
+          name: { label: 'unit', color: 'green' },
+          alias: {
+            obsidian: path.resolve(__dirname, 'test/mocks/obsidian.ts'),
+          },
+        }
+      },
+      {
+        test: {
+          include: ['test/integration/*.spec.ts'],
+          name: { label: 'integration', color: 'green' },
+          alias: {
+            obsidian: path.resolve(__dirname, 'test/mocks/obsidian.ts'),
+          },
+        }
+      },
+      {
+        test: {
+          include: ['test/*.spec.ts'],
+          name: { label: 'uncategorized', color: 'green' },
+        }
+      }
+    ],
     coverage: {
       enabled: true,
       provider: 'v8',
@@ -20,13 +46,10 @@ export default defineConfig({
         'src/**/*.ts'
       ],
       exclude: [
-        'src/search.ts',
-        'src/db/**/*',
-        'src/settings.ts'
+        // 'main.ts',
+        'src/modals/*.ts',
+        'src/settings/*.ts'
       ],
-    },
-    alias: {
-      obsidian: path.resolve(__dirname, 'test/mocks/obsidian.ts'),
-    },
+    }
   },
 });
