@@ -1,7 +1,7 @@
 name: Feature Request
 description: If you want to suggest an idea or a feature
-title: "[Request]: <Summary of your request>"
-labels: [ "enhancement", "question" ]
+title: '[Request]: <Summary of your request>'
+labels: ['enhancement', 'question']
 body:
   - type: markdown
     attributes:

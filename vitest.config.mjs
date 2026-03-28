@@ -18,7 +18,7 @@ export default defineConfig({
           alias: {
             obsidian: path.resolve(__dirname, 'test/mocks/obsidian.ts'),
           },
-        }
+        },
       },
       {
         test: {
@@ -27,14 +27,14 @@ export default defineConfig({
           alias: {
             obsidian: path.resolve(__dirname, 'test/mocks/obsidian.ts'),
           },
-        }
+        },
       },
       {
         test: {
           include: ['test/*.spec.ts'],
           name: { label: 'uncategorized', color: 'green' },
-        }
-      }
+        },
+      },
     ],
     coverage: {
       enabled: true,
@@ -49,6 +49,6 @@ export default defineConfig({
         'src/modals/*.ts',
         'src/settings/*.ts'
       ],
-    }
+    },
   },
 });

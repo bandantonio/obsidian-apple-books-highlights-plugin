@@ -1,7 +1,7 @@
 name: Bug Report
 description: If you encountered an error or faulty behavior
-title: "[Bug]: <Summary of your issue>"
-labels: [ "bug" ]
+title: '[Bug]: <Summary of your issue>'
+labels: ['bug']
 body:
   - type: markdown
     attributes:
@@ -69,10 +69,10 @@ body:
       label: How many books do you have in your Apple Books library?
       description: An approximate number is fine. May help identify potential performance issues.
       options:
-        - "20 or less"
-        - "21 - 50"
-        - "51 - 100"
-        - "100+"
+        - '20 or less'
+        - '21 - 50'
+        - '51 - 100'
+        - '100+'
     validations:
       required: true
   - type: checkboxes

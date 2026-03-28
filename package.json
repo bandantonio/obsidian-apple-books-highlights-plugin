@@ -1,67 +1,64 @@
 {
-	"name": "obsidian-apple-books-highlights-plugin",
-	"version": "1.7.1",
-	"description": "Import highlights and notes from your Apple Books to Obsidian",
-	"main": "main.js",
-	"scripts": {
-		"dev": "node esbuild.config.mjs",
-		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production && npm run copy-assets",
-		"copy-assets": "cp manifest.json dist/manifest.json && cp styles.css dist/styles.css",
+  "name": "obsidian-apple-books-highlights-plugin",
+  "version": "1.7.1",
+  "description": "Import highlights and notes from your Apple Books to Obsidian",
+  "main": "main.js",
+  "scripts": {
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production && npm run copy-assets",
+    "check": "oxlint --config ./.oxlintrc.json",
+    "copy-assets": "cp manifest.json dist/manifest.json && cp styles.css dist/styles.css",
+    "coverage": "vitest run --coverage",
+    "dev": "node esbuild.config.mjs",
+    "docs:build": "vitepress build docs",
+    "docs:dev": "vitepress dev docs --port 3000",
+    "docs:preview": "vitepress preview docs",
+    "fmt": "oxfmt --config ./.oxfmtrc.json",
     "lint": "npm run check && npm run fmt",
     "lint:ci": "npm run check -- --format=stylish",
     "lint:staged": "oxfmt --config ./.oxfmtrc.json --no-error-on-unmatched-pattern",
-    "check": "oxlint --config ./.oxlintrc.json",
-    "fmt": "oxfmt --config ./.oxfmtrc.json",
-    "version": "node version-bump.mjs",
-		"test": "vitest",
-		"coverage": "vitest run --coverage",
-		"db:generate": "drizzle-kit generate",
-		"db:migrate": "npx tsx src/db/migrate.ts",
-		"db:seed": "npx tsx src/db/seed.ts",
-		"docs:dev": "vitepress dev docs --port 3000",
-		"docs:build": "vitepress build docs",
-		"docs:preview": "vitepress preview docs",
-		"setup:git-hooks": "git config core.hooksPath .git-hooks",
-		"postinstall": "npm run setup:git-hooks"
-	},
-	"keywords": [
-		"obsidian",
-		"plugin",
-		"apple",
-		"books",
-		"applebooks",
-		"iBooks",
-		"highlights",
-		"notes",
-		"importer"
-	],
-	"author": "bandantonio",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/bandantonio/obsidian-apple-books-highlights-plugin.git"
-	},
-	"engines": {
-		"node": ">=24.0.0",
-		"npm": ">=11.0.0"
-	},
+    "postinstall": "npm run setup:git-hooks",
+    "setup:git-hooks": "git config core.hooksPath .git-hooks",
+    "test": "vitest",
+    "version": "node version-bump.mjs"
+  },
+  "author": "bandantonio",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bandantonio/obsidian-apple-books-highlights-plugin.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "apple",
+    "applebooks",
+    "books",
+    "highlights",
+    "iBooks",
+    "importer",
+    "notes",
+    "obsidian",
+    "plugin"
+  ],
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.13",
+    "handlebars": "^4.7.8"
+  },
   "devDependencies": {
-		"@types/better-sqlite3": "^7.6.13",
-		"@types/node": "^24.3.0",
-		"@vitest/coverage-v8": "^3.2.4",
-		"better-sqlite3": "^12.2.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^24.3.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "better-sqlite3": "^12.2.0",
     "builtin-modules": "3.3.0",
-		"esbuild": "0.25.9",
-		"obsidian": "latest",
+    "esbuild": "0.25.9",
+    "obsidian": "latest",
     "oxfmt": "^0.42.0",
     "oxlint": "^1.57.0",
-		"tslib": "2.8.1",
-		"typescript": "5.9.2",
-		"vitepress": "^1.6.4",
-		"vitest": "^3.2.4"
-	},
-	"dependencies": {
-		"dayjs": "^1.11.13",
-		"handlebars": "^4.7.8"
-	}
+    "tslib": "2.8.1",
+    "typescript": "5.9.2",
+    "vitepress": "^1.6.4",
+    "vitest": "^3.2.4"
+  }
 }

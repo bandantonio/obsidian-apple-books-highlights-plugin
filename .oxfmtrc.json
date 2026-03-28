@@ -1,21 +1,15 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "ignorePatterns": [
-    ".git-hooks/**",
-    ".github/**",
+    ".oxfmtrc.json",
+    ".oxlintrc.json",
     ".vscode/**",
     "coverage/**",
     "dist/**",
     "docs/**",
     "test/**",
-    "CONTRIBUTING.md",
-    "README.md",
-    "esbuild.config.mjs",
-    "vitest.config.mjs",
-    "manifest.json",
     "package.json",
-    "tsconfig.json",
-    "versions.json"
+    "vitest.config.mjs",
   ],
   "printWidth": 140,
   "useTabs": false,
@@ -32,5 +26,5 @@
       ["value-parent", "value-sibling", "value-index"],
       "unknown"
     ]
-  }
+  },
 }

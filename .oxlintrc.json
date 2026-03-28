@@ -1,6 +1,11 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "ignorePatterns": [".git-hooks/**", ".github/**", ".vscode/**", "coverage/**", "dist/**", "docs/**"],
+  "ignorePatterns": [
+    ".vscode/**",
+    "coverage/**",
+    "dist/**",
+    "docs/**"
+  ],
   "categories": {
     "correctness": "error",
     "suspicious": "warn"
