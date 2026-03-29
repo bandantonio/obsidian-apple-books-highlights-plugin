@@ -158,19 +158,34 @@ describe('VaultManagement', () => {
       const vaultManagement = new VaultManagement(mockApp, mockSettings);
       vi.spyOn(Date, 'now').mockReturnValue(1704060001); // January 1, 2024, 12:00:01 AM
       vi.mocked(mockApp.vault.getFolderByPath).mockReturnValue({ path: 'ibooks-highlights' } as TFolder);
-      vi.mocked(mockApp.vault.adapter.list).mockResolvedValue({
-        files: [
-          'ibooks-highlights/Book Title.md',
-          'ibooks-highlights/Another Book.md',
-        ], // oxfmt-ignore
-      } as any);
+      vi.mocked(mockApp.vault.adapter.list).mockImplementation(async (folder) => {
+        if (folder === 'ibooks-highlights') {
+          return {
+            files: [
+              'ibooks-highlights/Book Title.md',
+              'ibooks-highlights/Another Book.md',
+            ],
+            folders: [],
+          }; // oxfmt-ignore
+        }
+        if (folder === 'ibooks-highlights-bk-1704060001') {
+          return {
+            files: [
+              'ibooks-highlights-bk-1704060001/Book Title.md',
+              'ibooks-highlights-bk-1704060001/Another Book.md',
+            ], // oxfmt-ignore
+            folders: [],
+          };
+        }
+        return { files: [], folders: [] };
+      });
 
       await vaultManagement.backupAllHighlights();
       expect(mockApp.vault.adapter.rename).toHaveBeenCalledWith('ibooks-highlights', 'ibooks-highlights-bk-1704060001');
       expect((await mockApp.vault.adapter.list('ibooks-highlights-bk-1704060001')).files).toHaveLength(2);
       expect((await mockApp.vault.adapter.list('ibooks-highlights-bk-1704060001')).files).toEqual([
-        'ibooks-highlights/Book Title.md',
-        'ibooks-highlights/Another Book.md',
+        'ibooks-highlights-bk-1704060001/Book Title.md',
+        'ibooks-highlights-bk-1704060001/Another Book.md',
       ]);
     });
 
@@ -179,13 +194,29 @@ describe('VaultManagement', () => {
       const vaultManagement = new VaultManagement(mockApp, customSettings);
       vi.spyOn(Date, 'now').mockReturnValue(1704060001);
       vi.mocked(mockApp.vault.getFolderByPath).mockReturnValue({ path: '2 - Literature Notes 📝/Apple Books' } as TFolder);
-      vi.mocked(mockApp.vault.adapter.list).mockResolvedValue({
-        files: [
-          '2 - Literature Notes 📝/Apple Books/Book Title.md',
-          '2 - Literature Notes 📝/Apple Books/Another Book.md',
-          '2 - Literature Notes 📝/Apple Books/Nested Folder/Book in Nested Folder.md',
-        ],
-      } as any);
+      vi.mocked(mockApp.vault.adapter.list).mockImplementation(async (folder) => {
+        if (folder === '2 - Literature Notes 📝/Apple Books') {
+          return {
+            files: [
+              '2 - Literature Notes 📝/Apple Books/Book Title.md',
+              '2 - Literature Notes 📝/Apple Books/Another Book.md',
+              '2 - Literature Notes 📝/Apple Books/Nested Folder/Book in Nested Folder.md',
+            ],
+            folders: ['2 - Literature Notes 📝/Apple Books/Nested Folder'],
+          };
+        }
+        if (folder === '2 - Literature Notes 📝/Apple Books-bk-1704060001') {
+          return {
+            files: [
+              '2 - Literature Notes 📝/Apple Books-bk-1704060001/Book Title.md',
+              '2 - Literature Notes 📝/Apple Books-bk-1704060001/Another Book.md',
+              '2 - Literature Notes 📝/Apple Books-bk-1704060001/Nested Folder/Book in Nested Folder.md',
+            ],
+            folders: ['2 - Literature Notes 📝/Apple Books-bk-1704060001/Nested Folder'],
+          };
+        }
+        return { files: [], folders: [] };
+      });
 
       await vaultManagement.backupAllHighlights();
 
@@ -196,9 +227,9 @@ describe('VaultManagement', () => {
 
       expect((await mockApp.vault.adapter.list('2 - Literature Notes 📝/Apple Books-bk-1704060001')).files).toHaveLength(3);
       expect((await mockApp.vault.adapter.list('2 - Literature Notes 📝/Apple Books-bk-1704060001')).files).toEqual([
-        '2 - Literature Notes 📝/Apple Books/Book Title.md',
-        '2 - Literature Notes 📝/Apple Books/Another Book.md',
-        '2 - Literature Notes 📝/Apple Books/Nested Folder/Book in Nested Folder.md',
+        '2 - Literature Notes 📝/Apple Books-bk-1704060001/Book Title.md',
+        '2 - Literature Notes 📝/Apple Books-bk-1704060001/Another Book.md',
+        '2 - Literature Notes 📝/Apple Books-bk-1704060001/Nested Folder/Book in Nested Folder.md',
       ]);
     });
 
