@@ -23,7 +23,7 @@ Number of annotations:: {{annotations.length}}
 `;
 
 const allowedFilenameTemplateVariables = [
-  'bookTitle', // Dwfault
+  'bookTitle', // Default
   'bookId',
   'bookAuthor',
   'bookGenre',
