@@ -3,23 +3,20 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import * as Handlebars from 'handlebars';
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 export const compileTemplate = (template: string): Handlebars.TemplateDelegate => {
   return Handlebars.compile(template);
 };
 
 export const calculateAppleDate = (date: number) => {
-  dayjs.extend(utc);
-  dayjs.extend(timezone);
-
   const timeZone = dayjs.tz.guess();
-
   const APPLE_EPOCH_START = new Date('2001-01-01').getTime();
-
   const dateInMilliseconds = date * 1000;
   const calculatedDate = dayjs(APPLE_EPOCH_START)
     .add(dateInMilliseconds, 'ms')
     .tz(timeZone || 'UTC');
-
   return calculatedDate;
 };
 
