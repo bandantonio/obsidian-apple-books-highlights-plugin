@@ -87,10 +87,26 @@ export const dbRequest = async (dbPath: string, sqlQuery: string): Promise<IBook
   const dbQueryResult = spawn('sqlite3', [dbPath, sqlQuery, '-json']);
 
   const chunks: string[] = [];
+  const errorChunks: string[] = [];
+
   for await (const chunk of dbQueryResult.stdout) {
     chunks.push(chunk);
   }
+  for await (const chunk of dbQueryResult.stderr) {
+    errorChunks.push(chunk);
+  }
+
   const result = chunks.join('');
+  const errorResult = errorChunks.join('');
+
+  const exitCode: number = await new Promise((resolve, reject) => {
+    dbQueryResult.on('close', resolve);
+    dbQueryResult.on('error', reject);
+  });
+
+  if (exitCode !== 0) {
+    throw new Error(`sqlite3 process failed with code ${exitCode}: ${errorResult}`);
+  }
 
   try {
     return JSON.parse(result);
@@ -103,10 +119,26 @@ export const annotationsRequest = async (dbPath: string, sqlQuery: string): Prom
   const dbQueryResult = spawn('sqlite3', [dbPath, sqlQuery, '-json']);
 
   const chunks: string[] = [];
+  const errorChunks: string[] = [];
+
   for await (const chunk of dbQueryResult.stdout) {
     chunks.push(chunk);
   }
+  for await (const chunk of dbQueryResult.stderr) {
+    errorChunks.push(chunk);
+  }
+
   const result = chunks.join('');
+  const errorResult = errorChunks.join('');
+
+  const exitCode: number = await new Promise((resolve, reject) => {
+    dbQueryResult.on('close', resolve);
+    dbQueryResult.on('error', reject);
+  });
+
+  if (exitCode !== 0) {
+    throw new Error(`sqlite3 process failed with code ${exitCode}: ${errorResult}`);
+  }
 
   try {
     return JSON.parse(result);

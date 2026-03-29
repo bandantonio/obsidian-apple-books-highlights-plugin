@@ -140,4 +140,50 @@ describe('dataFetching', () => {
       expect(fetchedAnnotations).toEqual(annotationsSortedByLocation);
     });
   });
+
+  test('dbRequest should throw with stderr and non-zero exit code', async () => {
+    const mockStdout = {
+      [Symbol.asyncIterator]: async function* () {
+        yield '';
+      },
+    };
+    const mockStderr = {
+      [Symbol.asyncIterator]: async function* () {
+        yield 'SQLITE_ERROR: no such table: ZBKLIBRARYASSET';
+      },
+    };
+    const mockOn = vi.fn((event, cb) => {
+      if (event === 'close') setTimeout(() => cb(1), 0);
+      return mockOn;
+    });
+    vi.spyOn(require('child_process'), 'spawn').mockReturnValue({
+      stdout: mockStdout,
+      stderr: mockStderr,
+      on: mockOn,
+    } as any);
+    await expect(dataFetching.dbRequest('', 'SELECT * FROM ZBKLIBRARYASSET')).rejects.toThrow(/sqlite3 process failed/);
+  });
+
+  test('annotationsRequest should throw with stderr and non-zero exit code', async () => {
+    const mockStdout = {
+      [Symbol.asyncIterator]: async function* () {
+        yield '';
+      },
+    };
+    const mockStderr = {
+      [Symbol.asyncIterator]: async function* () {
+        yield 'SQLITE_ERROR: no such table: ZAEANNOTATION';
+      },
+    };
+    const mockOn = vi.fn((event, cb) => {
+      if (event === 'close') setTimeout(() => cb(1), 0);
+      return mockOn;
+    });
+    vi.spyOn(require('child_process'), 'spawn').mockReturnValue({
+      stdout: mockStdout,
+      stderr: mockStderr,
+      on: mockOn,
+    } as any);
+    await expect(dataFetching.annotationsRequest('', 'SELECT * FROM ZAEANNOTATION')).rejects.toThrow(/sqlite3 process failed/);
+  });
 });
