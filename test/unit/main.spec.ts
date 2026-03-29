@@ -148,6 +148,19 @@ describe('IBookHighlightsPlugin', () => {
     expect(NoticeMock).toHaveBeenCalledWith('[Apple Books Test Mock]:\nError importing highlights. Check console for details (⌥ ⌘ I)', 0);
   });
 
+  test('Should show OverwriteBookModal on addImportAllBooksCommand if backup setting is disabled', async () => {
+    mockLoadData.mockResolvedValueOnce({ backup: false } as any);
+
+    const openMock = vi.fn();
+    const { OverwriteBookModal } = await import('../../src/modals/overwriteConsent');
+    vi.spyOn(OverwriteBookModal.prototype, 'open').mockImplementation(openMock);
+
+    await plugin.onload();
+    const commandCallback = mockAddCommand.mock.calls[0][0].callback;
+    await commandCallback({} as any);
+    expect(openMock).toHaveBeenCalled();
+  });
+
   test('Should show book search modal on addImportOneBookCommand', async () => {
     mockLoadData.mockResolvedValueOnce({} as any);
 

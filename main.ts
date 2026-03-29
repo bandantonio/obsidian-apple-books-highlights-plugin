@@ -66,13 +66,14 @@ function addImportAllBooksCommand(plugin: IBookHighlightsPlugin, settings: IBook
       if (plugin.settings.backup) {
         try {
           await plugin.vault.backupAllHighlights();
-          // this.settings.backup ? await this.aggregateAndSaveHighlights() : new OverwriteBookModal(this.app, this).open();
           await importHighlights(plugin.vault, settings);
         } catch (error) {
           // oxlint-disable-next-line
           new Notice(`[${plugin.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
           console.error(`[${plugin.manifest.name}]: ${error}`);
         }
+      } else {
+        new OverwriteBookModal(plugin.app, plugin).open();
       }
     },
   });
