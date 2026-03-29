@@ -1,4 +1,5 @@
 import { Database } from 'better-sqlite3';
+import * as child_process from 'child_process';
 import os from 'os';
 import path from 'path';
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
@@ -156,7 +157,8 @@ describe('dataFetching', () => {
       if (event === 'close') setTimeout(() => cb(1), 0);
       return mockOn;
     });
-    vi.spyOn(require('child_process'), 'spawn').mockReturnValue({
+    vi.mock('child_process', { spy: true });
+    vi.mocked(child_process.spawn).mockReturnValue({
       stdout: mockStdout,
       stderr: mockStderr,
       on: mockOn,
@@ -179,7 +181,8 @@ describe('dataFetching', () => {
       if (event === 'close') setTimeout(() => cb(1), 0);
       return mockOn;
     });
-    vi.spyOn(require('child_process'), 'spawn').mockReturnValue({
+    vi.mock('child_process', { spy: true });
+    vi.mocked(child_process.spawn).mockReturnValue({
       stdout: mockStdout,
       stderr: mockStderr,
       on: mockOn,
