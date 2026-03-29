@@ -46,7 +46,6 @@
     "unicorn/consistent-function-scoping": "error",
     "unicorn/error-message": "error",
     "unicorn/no-array-reverse": "error",
-    "unicorn/no-array-sort": "error",
     "unicorn/no-instanceof-builtins": "error",
     "unicorn/no-useless-collection-argument": "error",
     "unicorn/no-useless-promise-resolve-reject": "error",

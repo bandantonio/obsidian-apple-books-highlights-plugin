@@ -1,4 +1,3 @@
-import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -16,7 +15,7 @@ export default defineConfig({
           include: ['test/unit/**/*.spec.ts'],
           name: { label: 'unit', color: 'green' },
           alias: {
-            obsidian: path.resolve(__dirname, 'test/mocks/obsidian.ts'),
+            obsidian: new URL('./test/mocks/obsidian.ts', import.meta.url).pathname,
           },
         },
       },
@@ -25,7 +24,7 @@ export default defineConfig({
           include: ['test/integration/*.spec.ts'],
           name: { label: 'integration', color: 'green' },
           alias: {
-            obsidian: path.resolve(__dirname, 'test/mocks/obsidian.ts'),
+            obsidian: new URL('./test/mocks/obsidian.ts', import.meta.url).pathname,
           },
         },
       },
