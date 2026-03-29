@@ -41,5 +41,14 @@ export const importHighlights = async (
     }
   }
 
-  await Promise.allSettled(fileOperations);
+  const results = await Promise.allSettled(fileOperations);
+
+  const rejected = results.filter((result): result is PromiseRejectedResult => result.status === 'rejected');
+
+  if (rejected.length > 0) {
+    const aggregatedError = new Error(`Apple Books - Import Highlights: ${rejected.length} file operation(s) failed during import.`);
+
+    (aggregatedError as any).causes = rejected.map((r) => r.reason);
+    throw aggregatedError;
+  }
 };

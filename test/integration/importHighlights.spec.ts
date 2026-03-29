@@ -16,6 +16,7 @@ describe('importHighlights', () => {
       getFileByPath: vi.fn(),
       createFolder: vi.fn(),
       create: vi.fn(),
+      modify: vi.fn(),
       adapter: {
         list: vi.fn(),
         rename: vi.fn(),
@@ -82,5 +83,13 @@ describe('importHighlights', () => {
     await importHighlights(vaultManagement, mockSettings, 'modify');
 
     expect(createBookFileSpy).toHaveBeenCalledWith('iPhone User Guide', renderedBookOne);
+  });
+
+  test('Should throw aggregated error if any file operation fails', async () => {
+    const vaultManagement = new VaultManagement(mockApp, mockSettings);
+    vi.spyOn(annotationProcessing, 'aggregateBooksWithAnnotations').mockResolvedValue([aggregatedBooksAndAnnotations[0]]);
+    vi.spyOn(vaultManagement, 'createBookFile').mockRejectedValueOnce(new Error('File write failed'));
+
+    await expect(importHighlights(vaultManagement, mockSettings)).rejects.toThrow(/file operation\(s\) failed during import/);
   });
 });
