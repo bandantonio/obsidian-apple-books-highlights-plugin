@@ -35,7 +35,7 @@ export class VaultManagement {
     const highlightsFolderPath = this.getHighlightsFolderPath();
 
     if (!highlightsFolderPath) {
-      this.vault.createFolder(this.getHighlightsFolder());
+      await this.vault.createFolder(this.getHighlightsFolder());
     }
   }
 
