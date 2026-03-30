@@ -1,6 +1,5 @@
 import { Notice, Plugin } from 'obsidian';
 import type { IBookHighlightsPluginSettings } from './src/types';
-// import { aggregateBooksWithAnnotations } from './src/modules/annotationsProcessing';
 import { importHighlights } from './src/importHighlights';
 import { OverwriteBookModal } from './src/modals/overwriteConsent';
 import { IBookHighlightsPluginSearchModal } from './src/modals/searchSuggestions';
@@ -21,7 +20,9 @@ export default class IBookHighlightsPlugin extends Plugin {
     addImportOneBookCommand(this);
 
     if (settings.importOnStart) {
-      await importHighlights(this.vault, settings);
+      this.app.workspace.onLayoutReady(async () => {
+        await importHighlights(this.vault, settings, 'modify');
+      });
     }
   }
 

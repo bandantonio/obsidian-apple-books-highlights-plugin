@@ -49,6 +49,9 @@ describe('IBookHighlightsPlugin', () => {
         createFolder: vi.fn(),
         create: vi.fn(),
       },
+      workspace: {
+        onLayoutReady: vi.fn().mockImplementation((cb: () => void) => cb()),
+      },
     } as any;
   });
 
