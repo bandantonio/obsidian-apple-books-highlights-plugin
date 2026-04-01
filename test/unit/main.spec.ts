@@ -50,7 +50,8 @@ describe('IBookHighlightsPlugin', () => {
         create: vi.fn(),
       },
       workspace: {
-        onLayoutReady: vi.fn().mockImplementation((cb: () => void) => cb()),
+        // Fix: support async callbacks in onLayoutReady
+        onLayoutReady: vi.fn().mockImplementation(async (cb: () => Promise<void> | void) => await cb()),
       },
     } as any;
   });
@@ -187,6 +188,62 @@ describe('IBookHighlightsPlugin', () => {
 
     const commandCallback = mockAddCommand.mock.calls[1][0].callback;
     await commandCallback({} as any);
+    expect(NoticeMock).toHaveBeenCalledWith('[Apple Books Test Mock]:\nError importing highlights. Check console for details (⌥ ⌘ I)', 0);
+  });
+
+  test('Should import all highlights on start and ensure that backup is created when importOnStart is enabled and backup is enabled', async () => {
+    mockLoadData.mockResolvedValueOnce({ importOnStart: true, backup: true } as any);
+    importHighlightsMock.mockResolvedValueOnce(aggregatedBooksAndAnnotations);
+    // Await the onLayoutReady callback to finish
+    const onLayoutReadyPromise = new Promise<void>((resolve) => {
+      (plugin.app.workspace.onLayoutReady as any).mockImplementationOnce(async (cb: () => Promise<void> | void) => {
+        await cb();
+        resolve();
+      });
+    });
+
+    await plugin.onload();
+    await onLayoutReadyPromise;
+
+    expect(backupAllHighlightsMock).toHaveBeenCalled();
+    expect(importHighlightsMock).toHaveBeenCalledWith(plugin.vault, expect.anything(), 'modify');
+    expect(NoticeMock).toHaveBeenCalledWith('Apple Books highlights imported successfully');
+  });
+
+  test('Should import all highlights on start and update files in place without creating a backup when importOnStart is enabled and backup is disabled', async () => {
+    mockLoadData.mockResolvedValueOnce({ importOnStart: true, backup: false } as any);
+    importHighlightsMock.mockResolvedValueOnce(aggregatedBooksAndAnnotations);
+
+    const onLayoutReadyPromise = new Promise<void>((resolve) => {
+      (plugin.app.workspace.onLayoutReady as any).mockImplementationOnce(async (cb: () => Promise<void> | void) => {
+        await cb();
+        resolve();
+      });
+    });
+
+    await plugin.onload();
+    await onLayoutReadyPromise;
+
+    expect(backupAllHighlightsMock).not.toHaveBeenCalled();
+    expect(importHighlightsMock).toHaveBeenCalledWith(plugin.vault, expect.anything(), 'modify');
+  });
+
+  test('Should show error notice if import fails on start and backup is enabled', async () => {
+    mockLoadData.mockResolvedValueOnce({ importOnStart: true, backup: true } as any);
+    importHighlightsMock.mockRejectedValueOnce(new Error('Import failed'));
+
+    const onLayoutReadyPromise = new Promise<void>((resolve) => {
+      (plugin.app.workspace.onLayoutReady as any).mockImplementationOnce(async (cb: () => Promise<void> | void) => {
+        await cb();
+        resolve();
+      });
+    });
+
+    await plugin.onload();
+    await onLayoutReadyPromise;
+
+    expect(backupAllHighlightsMock).toHaveBeenCalled();
+    expect(importHighlightsMock).toHaveBeenCalledWith(plugin.vault, expect.anything(), 'modify');
     expect(NoticeMock).toHaveBeenCalledWith('[Apple Books Test Mock]:\nError importing highlights. Check console for details (⌥ ⌘ I)', 0);
   });
 });
