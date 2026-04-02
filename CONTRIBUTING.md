@@ -43,19 +43,20 @@ Use the instructions in the section above to find an issue that you want to work
 1. Fork the repository.
 2. Create a new branch. Stick to the following naming convention:
 
-	```
-	<type>/<short-summary-of-your-changes>
-	```
-	where `<type>` is one of the following:
-	- `feat`
-	- `fix`
-	- `docs`
-	- `test`
-	- `chore`
-	- `refactor`
+   ```
+   <type>/<short-summary-of-your-changes>
+   ```
+
+   where `<type>` is one of the following:
+   - `feat`
+   - `fix`
+   - `docs`
+   - `test`
+   - `chore`
+   - `refactor`
 
 3. Make your changes.
-	- If your changes are related to the plugin's functionality, make sure to write the required tests, and (yes!) make sure they pass.
+   - If your changes are related to the plugin's functionality, make sure to write the required tests, and (yes!) make sure they pass.
 
 > [!IMPORTANT]
 > Please, don't change the plugin's version either in the `manifest.json` or `package.json` files. This may lead to conflicts when merging your PR and disrupt the release process. The version will be updated by the code owner.
@@ -82,16 +83,16 @@ Push the changes to your fork.
 ## Pull request
 
 6. When you're finished with the changes, create a pull request (PR) to the `master` branch of the upstream repository.
-	- Don't forget to link PR to issue, if you are solving one. You can do this by adding `Fixes #<issue-number>` to the PR description.
-	- Enable the checkbox to allow maintainer edits so the branch can be updated for a merge.
-	- Once you submit your PR, the code owner will review your proposal.
-		- If you're the first-time contributor, your PR will require approval before the CI checks will be triggered.
-		- If not, the CI checks will be triggered automatically.
-	- During the review, please be ready to answer questions about your changes and provide additional information if needed.
-	- You may be asked for changes to be made before your PR can be merged, either using suggested changes or pull request comments.
-	- As you update your PR and apply changes, mark each conversation as resolved.
-	- After your changes are approved, you can merge your PR.
-		- Make sure to resolve all the conflicts before merging the PR.
+   - Don't forget to link PR to issue, if you are solving one. You can do this by adding `Fixes #<issue-number>` to the PR description.
+   - Enable the checkbox to allow maintainer edits so the branch can be updated for a merge.
+   - Once you submit your PR, the code owner will review your proposal.
+     - If you're the first-time contributor, your PR will require approval before the CI checks will be triggered.
+     - If not, the CI checks will be triggered automatically.
+   - During the review, please be ready to answer questions about your changes and provide additional information if needed.
+   - You may be asked for changes to be made before your PR can be merged, either using suggested changes or pull request comments.
+   - As you update your PR and apply changes, mark each conversation as resolved.
+   - After your changes are approved, you can merge your PR.
+     - Make sure to resolve all the conflicts before merging the PR.
 
 ## Your PR is merged!
 

@@ -1,0 +1,83 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": [
+    ".vscode/**",
+    "coverage/**",
+    "dist/**",
+    "docs/**"
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+    // "pedantic": "warn",
+    // "perf": "warn",
+    // "style": "warn",
+    // "restriction": "warn",
+    // "nursery": "warn",
+  },
+  "plugins": ["import"],
+  "rules": {
+    "import/default": "error",
+    "no-console": [
+      "error",
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
+    "no-extend-native": "warn",
+    "no-extra-bind": "warn",
+    "no-shadow": "error",
+    "no-unexpected-multiline": "error",
+    "no-unmodified-loop-condition": "error",
+    "no-unneeded-ternary": "error",
+    "no-useless-concat": "error",
+    "preserve-caught-error": "error",
+    "import/no-absolute-path": "error",
+    "import/no-empty-named-blocks": "error",
+    "import/no-named-as-default": "error",
+    "import/no-named-as-default-member": "error",
+    "import/no-self-import": "error",
+    "import/no-unassigned-import": "error",
+    "oxc/misrefactored-assign-op": "error",
+    "oxc/no-async-endpoint-handlers": "error",
+    "oxc/no-this-in-exported-function": "error",
+    "typescript/no-confusing-non-null-assertion": "error",
+    "typescript/no-unnecessary-type-constraint": "error",
+    "unicorn/consistent-function-scoping": "error",
+    "unicorn/error-message": "error",
+    "unicorn/no-array-reverse": "error",
+    "unicorn/no-instanceof-builtins": "error",
+    "unicorn/no-useless-collection-argument": "error",
+    "unicorn/no-useless-promise-resolve-reject": "error",
+    "no-useless-return": "error",
+    "unicorn/no-useless-switch-case": "error",
+    "unicorn/no-useless-undefined": "error",
+    "no-var": "error",
+    "unicorn/prefer-add-event-listener": "warn",
+    "unicorn/require-module-specifiers": "error",
+    "vitest/consistent-each-for": "error",
+    "vitest/consistent-test-filename": "error",
+    "vitest/consistent-vitest-vi": "error",
+    "vitest/no-import-node-test": "error",
+    "vitest/hoisted-apis-on-top": "warn",
+    "vitest/no-conditional-tests": "error",
+    "vitest/prefer-called-once": "error",
+    "vitest/prefer-describe-function-title": "error",
+    "vitest/prefer-expect-type-of": "error",
+    "vitest/prefer-import-in-mock": "error",
+    "vitest/prefer-to-be-falsy": "error",
+    "vitest/prefer-to-be-truthy": "error",
+    "vitest/prefer-to-be-object": "error",
+    "vitest/require-local-test-context-for-concurrent-snapshots": "error",
+    "vitest/warn-todo": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["test/**/*.spec.ts"],
+      "rules": {
+        "max-lines": "off",
+        "max-lines-per-function": "off"
+      }
+    }
+  ]
+}

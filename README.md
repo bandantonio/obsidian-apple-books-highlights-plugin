@@ -25,21 +25,21 @@ This plugin aims to be a **fast**, **customizable**, **reliable**, and **up-to-d
 
 ## What users say
 
-- 💬 *Nice work. This is really quick.* - **cmyplay**
-- 💬 *I just wanted to say that I love your plugin. It’s exactly what I need with no frills*. - **civilserf**
-- 💬 *Your plugin is super fast and useful!* - **weslau**
-- 💬 *Love this! great work!* - **dschense**
-- 💬 *Thanks for sharing this nice plugin* - **modatwork**
-- 💬 *Thanks for a nice PlugIn* - **gul-iMac**
-- 💬 *I am very grateful for the plugin you developed, which has made organizing my reading notes much more convenient* - **JeffreyGH10**
-- 💬 *I've used three or four other methods of keeping my Apple Books highlights and notes updated in Obsidian over the past few years. I'm moving to your plugin, it seems to be the best (fast, dependable, with a user editable template(!!!), and with selective single book importing/overwriting). Thanks for creating and sharing it!* - **mbarritt**
-- 💬 *Thank you for creating a great, fast plugin! I'm so glad I found it. Thank you for making it so customizable.* - **banj**
-- 💬 *Thanks for an awesome plugin!* - **thorbjaelk**
-- 💬 *Excellent plugin!* - **davidishee**
-- 💬 *Thanks for developing this extension. It suites very nice to my workflow!* - **camilogarciabotero**
-- 💬 *This plugin is very useful and particularly fast to use* - **isdamir**
-- 💬 *Thanks for this plug-in. Exactly what I was looking for.* - **Edouard_M**
-- 💬 *This is an absolutely amazing plugin* - **dkkb**
+- 💬 _Nice work. This is really quick._ - **cmyplay**
+- 💬 _I just wanted to say that I love your plugin. It’s exactly what I need with no frills_. - **civilserf**
+- 💬 _Your plugin is super fast and useful!_ - **weslau**
+- 💬 _Love this! great work!_ - **dschense**
+- 💬 _Thanks for sharing this nice plugin_ - **modatwork**
+- 💬 _Thanks for a nice PlugIn_ - **gul-iMac**
+- 💬 _I am very grateful for the plugin you developed, which has made organizing my reading notes much more convenient_ - **JeffreyGH10**
+- 💬 _I've used three or four other methods of keeping my Apple Books highlights and notes updated in Obsidian over the past few years. I'm moving to your plugin, it seems to be the best (fast, dependable, with a user editable template(!!!), and with selective single book importing/overwriting). Thanks for creating and sharing it!_ - **mbarritt**
+- 💬 _Thank you for creating a great, fast plugin! I'm so glad I found it. Thank you for making it so customizable._ - **banj**
+- 💬 _Thanks for an awesome plugin!_ - **thorbjaelk**
+- 💬 _Excellent plugin!_ - **davidishee**
+- 💬 _Thanks for developing this extension. It suites very nice to my workflow!_ - **camilogarciabotero**
+- 💬 _This plugin is very useful and particularly fast to use_ - **isdamir**
+- 💬 _Thanks for this plug-in. Exactly what I was looking for._ - **Edouard_M**
+- 💬 _This is an absolutely amazing plugin_ - **dkkb**
 
 ## Try it out
 
@@ -56,6 +56,7 @@ This plugin aims to be a **fast**, **customizable**, **reliable**, and **up-to-d
 Ready to contribute? Check the [Contributing guidelines](CONTRIBUTING.md) to get started.
 
 Your feedback and ideas are more than welcome and highly appreciated! Join the discussion in:
+
 - [Obsidian Forum][obsidian-forum]
 - [GitHub Discussions][gh-discussions]
 

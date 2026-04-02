@@ -1,0 +1,30 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [
+    ".oxfmtrc.json",
+    ".oxlintrc.json",
+    ".vscode/**",
+    "coverage/**",
+    "dist/**",
+    "docs/**",
+    "test/fixtures/**",
+    "package.json",
+    "vitest.config.mjs",
+  ],
+  "printWidth": 140,
+  "useTabs": false,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "sortImports": {
+    "newlinesBetween": false,
+    "groups": [
+      "type-import",
+      ["value-builtin", "value-external"],
+      "type-internal",
+      "value-internal",
+      ["type-parent", "type-sibling", "type-index"],
+      ["value-parent", "value-sibling", "value-index"],
+      "unknown"
+    ]
+  },
+}

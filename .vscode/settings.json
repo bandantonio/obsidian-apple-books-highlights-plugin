@@ -1,15 +1,13 @@
 {
-  "editor.detectIndentation": false,
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "oxc.fmt.configPath": ".oxfmtrc.json",
   "editor.formatOnSave": true,
+  "editor.detectIndentation": false,
   "editor.formatOnSaveMode": "modifications",
   "editor.indentSize": "tabSize",
   "editor.insertSpaces": true,
   "editor.tabSize": 2,
-  // "editor.codeActionsOnSave": {
-  //   "source.fixAll": "explicit",
-  //   "source.organizeImports.biome": "explicit",
-  //   "source.useSortedAttributes.biome": "explicit",
-  //   "source.useSortedKeys.biome": "explicit",
-  //   "source.useSortedProperties.biome": "explicit"
-  // }
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "explicit"
+  }
 }

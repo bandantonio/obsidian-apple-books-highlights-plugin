@@ -8,10 +8,10 @@ Description of the feature update goes here. This should be a concise summary of
 
 ## Bug Fixes
 
-* Description of the bug fix goes here. This should detail the issue that was resolved in this release.
+- Description of the bug fix goes here. This should detail the issue that was resolved in this release.
 
 ## New contributors
 
-* Name of the new contributor (`@username`) goes here.
+- Name of the new contributor (`@username`) goes here.
 
-----
+---
