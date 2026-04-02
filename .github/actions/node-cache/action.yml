@@ -3,9 +3,9 @@ description: 'Setup Node.js packages and restore cache'
 
 inputs:
   node-version:
-    description: 'Node version to use, default to 20'
+    description: 'Node version to use, default to 24'
     required: true
-    default: '20'
+    default: '24'
 outputs:
   cache-hit:
     description: 'Forward actions/cache cache-hit output'
@@ -15,13 +15,13 @@ runs:
   using: 'composite'
   steps:
     - name: ⚙️ Setup node.js ${{ inputs.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ inputs.node-version }}
 
     - name: 📦 Cache node modules
       id: node-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: node_modules
         key: node-modules-${{ inputs.node-version }}-${{ hashFiles('package-lock.json') }}

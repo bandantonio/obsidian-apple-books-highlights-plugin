@@ -10,12 +10,12 @@ jobs:
     name: ⚙️ Setup Node.js
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/node-cache
         id: cache-node-modules
         with:
-          node-version: '20'
-      - run: npm i
+          node-version: '24'
+      - run: npm ci
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
 
   run-lint:
@@ -23,11 +23,11 @@ jobs:
     needs: node-setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/node-cache
         id: cache-node-modules
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: ✅ Run code style linter
         id: linter
@@ -38,11 +38,11 @@ jobs:
     needs: node-setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/node-cache
         id: cache-node-modules
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: 🧪 Run tests
         id: tests
@@ -60,11 +60,11 @@ jobs:
     needs: [run-lint, run-tests]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/node-cache
         id: cache-node-modules
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: 📗 Build plugin
         id: build_plugin
