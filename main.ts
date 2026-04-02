@@ -34,7 +34,16 @@ export default class IBookHighlightsPlugin extends Plugin {
             console.error(`[${this.manifest.name}]: ${error}`);
           }
         } else {
-          await importHighlights(this.vault, settings, 'modify');
+          try {
+            await importHighlights(this.vault, settings, 'modify').then(() => {
+              // oxlint-disable-next-line
+              new Notice('Apple Books highlights imported successfully');
+            });
+          } catch (error) {
+            // oxlint-disable-next-line
+            new Notice(`[${this.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
+            console.error(`[${this.manifest.name}]: ${error}`);
+          }
         }
       });
     }
