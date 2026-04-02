@@ -59,8 +59,33 @@ describe('dataFetching', () => {
       vi.resetAllMocks();
     });
 
-    test('Should throw an error when books library is empty', async () => {
+    test('Should throw parsing error when database results processing fails', async () => {
       db.prepare('DELETE FROM ZBKLIBRARYASSET;').run();
+
+      await expect(dataFetching.getBooks()).rejects.toThrow('Failed to parse database result');
+    });
+
+    test('Should throw an error when no books are found', async () => {
+      vi.mock('child_process', { spy: true });
+      const mockStdout = {
+        [Symbol.asyncIterator]: async function* () {
+          yield '[]';
+        },
+      };
+      const mockStderr = {
+        [Symbol.asyncIterator]: async function* () {
+          yield '';
+        },
+      };
+      const mockOn = vi.fn((event, cb) => {
+        if (event === 'close') setTimeout(() => cb(0), 0);
+        return mockOn;
+      });
+      vi.mocked(child_process.spawn).mockReturnValue({
+        stdout: mockStdout,
+        stderr: mockStderr,
+        on: mockOn,
+      } as any);
 
       await expect(dataFetching.getBooks()).rejects.toThrow('No books found. Looks like your Apple Books library is empty.');
     });
@@ -94,8 +119,33 @@ describe('dataFetching', () => {
 
     const defaultSortingCriterion = 'creationDateOldToNew';
 
-    test('Should throw an error when annotations database is empty', async () => {
+    test('Should throw parsing error when database results processing fails', async () => {
       db.prepare('DELETE FROM ZAEANNOTATION;').run();
+
+      await expect(dataFetching.getAnnotations(defaultSortingCriterion)).rejects.toThrow('Failed to parse database result');
+    });
+
+    test('Should throw an error when no highlights are found', async () => {
+      vi.mock('child_process', { spy: true });
+      const mockStdout = {
+        [Symbol.asyncIterator]: async function* () {
+          yield '[]';
+        },
+      };
+      const mockStderr = {
+        [Symbol.asyncIterator]: async function* () {
+          yield '';
+        },
+      };
+      const mockOn = vi.fn((event, cb) => {
+        if (event === 'close') setTimeout(() => cb(0), 0);
+        return mockOn;
+      });
+      vi.mocked(child_process.spawn).mockReturnValue({
+        stdout: mockStdout,
+        stderr: mockStderr,
+        on: mockOn,
+      } as any);
 
       await expect(dataFetching.getAnnotations(defaultSortingCriterion)).rejects.toThrow(
         'No highlights found. Make sure you made some highlights in your Apple Books.',

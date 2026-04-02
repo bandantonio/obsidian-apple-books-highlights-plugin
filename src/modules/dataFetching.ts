@@ -33,11 +33,13 @@ export const getBooks = async (): Promise<IBook[]> => {
   FROM ZBKLIBRARYASSET
   WHERE ZPURCHASEDATE IS NOT NULL`;
 
-  try {
-    return await dbRequest(BOOKS_DB_PATH, dbQuery);
-  } catch (error) {
-    throw new Error('No books found. Looks like your Apple Books library is empty.', { cause: error });
+  const books = await dbRequest(BOOKS_DB_PATH, dbQuery);
+
+  if (books.length === 0) {
+    throw new Error('No books found. Looks like your Apple Books library is empty.');
   }
+
+  return books;
 };
 
 export const getAnnotations = async (sortingCriterion: IHighlightsSortingCriterion): Promise<IAnnotation[]> => {
@@ -69,17 +71,16 @@ export const getAnnotations = async (sortingCriterion: IHighlightsSortingCriteri
 
   const fullQuery = baseQuery + ' ' + sortingQueryPart;
 
-  try {
-    if (sortingCriterion !== 'book') {
-      return await annotationsRequest(HIGHLIGHTS_DB_PATH, fullQuery);
-    } else {
-      const retrievedAnnotations = await annotationsRequest(HIGHLIGHTS_DB_PATH, fullQuery);
-      const sortedAnnotations = sortByLocation(retrievedAnnotations);
+  const retrievedAnnotations = await annotationsRequest(HIGHLIGHTS_DB_PATH, fullQuery);
 
-      return sortedAnnotations;
-    }
-  } catch (error) {
-    throw new Error('No highlights found. Make sure you made some highlights in your Apple Books.', { cause: error });
+  if (retrievedAnnotations.length === 0) {
+    throw new Error('No highlights found. Make sure you made some highlights in your Apple Books.');
+  }
+
+  if (sortingCriterion !== 'book') {
+    return retrievedAnnotations;
+  } else {
+    return sortByLocation(retrievedAnnotations);
   }
 };
 
