@@ -274,6 +274,11 @@ describe('VaultManagement', () => {
       vi.spyOn(Date, 'now').mockReturnValue(1704060001);
 
       await vaultManagement.backupBookFile({ path: '2 - Literature Notes 📝/Apple Books/Book Title.md', basename: 'Book Title' } as any);
+
+      expect(mockApp.vault.adapter.rename).toHaveBeenCalledWith(
+        '2 - Literature Notes 📝/Apple Books/Book Title.md',
+        '2 - Literature Notes 📝/Apple Books/Book Title-bk-1704060001.md',
+      );
     });
   });
 });
