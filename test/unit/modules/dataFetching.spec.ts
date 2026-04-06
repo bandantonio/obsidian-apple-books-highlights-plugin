@@ -69,12 +69,12 @@ describe('dataFetching', () => {
       vi.mock('child_process', { spy: true });
       const mockStdout = {
         [Symbol.asyncIterator]: async function* () {
-          yield '[]';
+          yield Buffer.from('[]');
         },
       };
       const mockStderr = {
         [Symbol.asyncIterator]: async function* () {
-          yield '';
+          yield Buffer.from('');
         },
       };
       const mockOn = vi.fn((event, cb) => {
@@ -129,12 +129,12 @@ describe('dataFetching', () => {
       vi.mock('child_process', { spy: true });
       const mockStdout = {
         [Symbol.asyncIterator]: async function* () {
-          yield '[]';
+          yield Buffer.from('[]');
         },
       };
       const mockStderr = {
         [Symbol.asyncIterator]: async function* () {
-          yield '';
+          yield Buffer.from('');
         },
       };
       const mockOn = vi.fn((event, cb) => {
@@ -195,12 +195,12 @@ describe('dataFetching', () => {
   test('dbRequest should throw with stderr and non-zero exit code', async () => {
     const mockStdout = {
       [Symbol.asyncIterator]: async function* () {
-        yield '';
+        yield Buffer.from('');
       },
     };
     const mockStderr = {
       [Symbol.asyncIterator]: async function* () {
-        yield 'SQLITE_ERROR: no such table: ZBKLIBRARYASSET';
+        yield Buffer.from('SQLITE_ERROR: no such table: ZBKLIBRARYASSET');
       },
     };
     const mockOn = vi.fn((event, cb) => {
@@ -219,12 +219,12 @@ describe('dataFetching', () => {
   test('annotationsRequest should throw with stderr and non-zero exit code', async () => {
     const mockStdout = {
       [Symbol.asyncIterator]: async function* () {
-        yield '';
+        yield Buffer.from('');
       },
     };
     const mockStderr = {
       [Symbol.asyncIterator]: async function* () {
-        yield 'SQLITE_ERROR: no such table: ZAEANNOTATION';
+        yield Buffer.from('SQLITE_ERROR: no such table: ZAEANNOTATION');
       },
     };
     const mockOn = vi.fn((event, cb) => {
