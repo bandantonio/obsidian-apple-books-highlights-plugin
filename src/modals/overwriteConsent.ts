@@ -1,6 +1,7 @@
-import { type App, Modal, Notice, Setting, TFile } from 'obsidian';
+import { type App, Modal, Setting, TFile } from 'obsidian';
 import type IBookHighlightsPlugin from '../../main';
 import { importHighlights } from '../importHighlights';
+import { showFailedImportNotice, showSuccessfulImportNotice, showErrorInConsole } from '../utils/notificationCenter';
 
 // This class is used to display a modal that asks for the user's consent
 // to overwrite the existing book in the highlights folder
@@ -43,13 +44,11 @@ export class OverwriteBookModal extends Modal {
               } else {
                 await importHighlights(this.plugin.vault, this.plugin.settings, 'modify');
               }
-              // oxlint-disable-next-line
-              new Notice('Apple Books highlights imported successfully');
+              showSuccessfulImportNotice();
               this.close();
             } catch (error) {
-              // oxlint-disable-next-line
-              new Notice(`[${this.plugin.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
-              console.error(`[${this.plugin.manifest.name}]: ${error}`);
+              showFailedImportNotice(this.plugin.manifest.name);
+              showErrorInConsole(this.plugin.manifest.name, error);
             }
           });
       })

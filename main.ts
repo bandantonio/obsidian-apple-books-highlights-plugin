@@ -1,11 +1,10 @@
-import { Notice, Plugin } from 'obsidian';
+import { Plugin } from 'obsidian';
 import type { IBookHighlightsPluginSettings } from './src/types';
-import { importHighlights } from './src/importHighlights';
-import { OverwriteBookModal } from './src/modals/overwriteConsent';
 import { IBookHighlightsPluginSearchModal } from './src/modals/searchSuggestions';
 import { VaultManagement } from './src/modules/vaultManagement';
 import { defaultPluginSettings, IBookHighlightsSettingTab } from './src/settings';
-
+import { backupAndImport } from './src/utils/backupAndImportFlow';
+import { showFailedImportNotice, showErrorInConsole } from './src/utils/notificationCenter';
 export default class IBookHighlightsPlugin extends Plugin {
   vault: VaultManagement;
   settings: IBookHighlightsPluginSettings;
@@ -21,30 +20,8 @@ export default class IBookHighlightsPlugin extends Plugin {
 
     if (settings.importOnStart) {
       this.app.workspace.onLayoutReady(async () => {
-        if (settings.backup) {
-          try {
-            await this.vault.backupAllHighlights();
-            await importHighlights(this.vault, settings, 'modify').then(() => {
-              // oxlint-disable-next-line
-              new Notice('Apple Books highlights imported successfully');
-            });
-          } catch (error) {
-            // oxlint-disable-next-line
-            new Notice(`[${this.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
-            console.error(`[${this.manifest.name}]: ${error}`);
-          }
-        } else {
-          try {
-            await importHighlights(this.vault, settings, 'modify').then(() => {
-              // oxlint-disable-next-line
-              new Notice('Apple Books highlights imported successfully');
-            });
-          } catch (error) {
-            // oxlint-disable-next-line
-            new Notice(`[${this.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
-            console.error(`[${this.manifest.name}]: ${error}`);
-          }
-        }
+        const pluginInstance = this;
+        await backupAndImport(pluginInstance, settings, 'modify');
       });
     }
   }
@@ -64,21 +41,7 @@ export default class IBookHighlightsPlugin extends Plugin {
 
 function addRibbonAction(plugin: IBookHighlightsPlugin, settings: IBookHighlightsPluginSettings) {
   plugin.addRibbonIcon('book-open', `${plugin.manifest.name}: Import all`, async () => {
-    if (settings.backup) {
-      try {
-        await plugin.vault.backupAllHighlights();
-        await importHighlights(plugin.vault, settings).then(() => {
-          // oxlint-disable-next-line
-          new Notice('Apple Books highlights imported successfully');
-        });
-      } catch (error) {
-        // oxlint-disable-next-line
-        new Notice(`[${plugin.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
-        console.error(`[${plugin.manifest.name}]: ${error}`);
-      }
-    } else {
-      new OverwriteBookModal(plugin.app, plugin).open();
-    }
+    await backupAndImport(plugin, settings);
   });
 }
 
@@ -87,18 +50,7 @@ function addImportAllBooksCommand(plugin: IBookHighlightsPlugin, settings: IBook
     id: 'import-all-highlights',
     name: 'Import all',
     callback: async () => {
-      if (plugin.settings.backup) {
-        try {
-          await plugin.vault.backupAllHighlights();
-          await importHighlights(plugin.vault, settings);
-        } catch (error) {
-          // oxlint-disable-next-line
-          new Notice(`[${plugin.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
-          console.error(`[${plugin.manifest.name}]: ${error}`);
-        }
-      } else {
-        new OverwriteBookModal(plugin.app, plugin).open();
-      }
+      await backupAndImport(plugin, settings);
     },
   });
 }
@@ -110,10 +62,9 @@ function addImportOneBookCommand(plugin: IBookHighlightsPlugin) {
     callback: () => {
       try {
         new IBookHighlightsPluginSearchModal(plugin.app, plugin).open();
-      } catch (error) {
-        // oxlint-disable-next-line
-        new Notice(`[${plugin.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
-        console.error(`[${plugin.manifest.name}]: ${error}`);
+      } catch (error: any) {
+        showFailedImportNotice(plugin.manifest.name);
+        showErrorInConsole(plugin.manifest.name, error);
       }
     },
   });
