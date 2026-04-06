@@ -1,7 +1,7 @@
 import type IBookHighlightsPlugin from '../../main';
 import type { IBookHighlightsPluginSettings } from '../types';
-import { OverwriteBookModal } from '../../src/modals/overwriteConsent';
 import { importHighlights } from '../importHighlights';
+import { OverwriteBookModal } from '../modals/overwriteConsent';
 import { showSuccessfulImportNotice, showFailedImportNotice, showErrorInConsole } from './notificationCenter';
 
 export const backupAndImport = async (plugin: IBookHighlightsPlugin, settings: IBookHighlightsPluginSettings, importMode?: 'modify') => {
