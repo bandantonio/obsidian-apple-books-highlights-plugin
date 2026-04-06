@@ -123,6 +123,8 @@ describe('templateProcessing', () => {
     const compiledContent = preCompiledTemplate(modifiedBookOne);
     expect(compiledContent).toEqual(renderedTemplateWithPreservedNewlines);
   });
+
+  test.todo('template compilation errors or invalid templates');
 });
 
 describe('Handlebars helpers', () => {
@@ -172,6 +174,8 @@ describe('Handlebars helpers', () => {
         expect(helpers.dateFormat(726187452.01369, 'ddd, MMM DD YYYY, hh:mm:ss Z')).toEqual('Sat, Jan 06 2024, 09:44:12 +11:00');
         expect(helpers.dateFormat(731876693.002279, 'dddd, MMMM D, YYYY [at] hh:mm A')).toEqual('Tuesday, March 12, 2024 at 06:04 AM');
       });
+
+      test.todo('timezone/date formatting edge cases');
     });
   });
 });

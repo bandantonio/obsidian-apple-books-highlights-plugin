@@ -11,4 +11,5 @@ describe.todo('IBookHighlightsPluginSearchModal', () => {
 describe.todo('OverwriteBookModal', () => {
   test.todo('Should show a modal window for bulk import');
   test.todo('Should show a modal window with book details');
+  test.todo('Modal open/close lifecycle with user interaction (overwrite, cancel, click outside)');
 });
