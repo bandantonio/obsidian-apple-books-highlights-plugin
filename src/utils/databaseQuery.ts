@@ -8,7 +8,13 @@ export const executeDbQuery = async <T>(dbPath: string, sqlQuery: string): Promi
 
   // Create exit code promise immediately to attach listeners right away and prevent race conditions
   const exitCodePromise: Promise<number> = new Promise((resolve, reject) => {
-    dbQueryResult.on('close', resolve);
+    dbQueryResult.on('close', (code: number | null, signal: NodeJS.Signals | null) => {
+      if (code !== null) {
+        resolve(code);
+        return;
+      }
+      reject(new Error(`sqlite3 process terminated by signal ${signal ?? 'unknown'}`));
+    });
     dbQueryResult.on('error', reject);
   });
 
@@ -16,13 +22,13 @@ export const executeDbQuery = async <T>(dbPath: string, sqlQuery: string): Promi
   const [, , exitCode] = await Promise.all([
     (async () => {
       for await (const chunk of dbQueryResult.stdout) {
-        chunks.push(chunk);
+        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
       }
     })(),
 
     (async () => {
       for await (const chunk of dbQueryResult.stderr) {
-        errorChunks.push(chunk);
+        errorChunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
       }
     })(),
 
