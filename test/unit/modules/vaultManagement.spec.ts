@@ -141,6 +141,8 @@ describe('VaultManagement', () => {
 
       expect(mockApp.vault.create).toHaveBeenCalledWith('2 - Literature Notes 📝/Apple Books/Book Title.md', 'File content');
     });
+
+    test.todo('edge-case filenames (unicode, emoji)');
   });
 
   describe('modifyBookFile', () => {

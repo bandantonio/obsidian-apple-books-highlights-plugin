@@ -69,12 +69,12 @@ describe('dataFetching', () => {
       vi.mock('child_process', { spy: true });
       const mockStdout = {
         [Symbol.asyncIterator]: async function* () {
-          yield '[]';
+          yield Buffer.from('[]');
         },
       };
       const mockStderr = {
         [Symbol.asyncIterator]: async function* () {
-          yield '';
+          yield Buffer.from('');
         },
       };
       const mockOn = vi.fn((event, cb) => {
@@ -129,12 +129,12 @@ describe('dataFetching', () => {
       vi.mock('child_process', { spy: true });
       const mockStdout = {
         [Symbol.asyncIterator]: async function* () {
-          yield '[]';
+          yield Buffer.from('[]');
         },
       };
       const mockStderr = {
         [Symbol.asyncIterator]: async function* () {
-          yield '';
+          yield Buffer.from('');
         },
       };
       const mockOn = vi.fn((event, cb) => {
@@ -195,12 +195,12 @@ describe('dataFetching', () => {
   test('dbRequest should throw with stderr and non-zero exit code', async () => {
     const mockStdout = {
       [Symbol.asyncIterator]: async function* () {
-        yield '';
+        yield Buffer.from('');
       },
     };
     const mockStderr = {
       [Symbol.asyncIterator]: async function* () {
-        yield 'SQLITE_ERROR: no such table: ZBKLIBRARYASSET';
+        yield Buffer.from('SQLITE_ERROR: no such table: ZBKLIBRARYASSET');
       },
     };
     const mockOn = vi.fn((event, cb) => {
@@ -219,12 +219,12 @@ describe('dataFetching', () => {
   test('annotationsRequest should throw with stderr and non-zero exit code', async () => {
     const mockStdout = {
       [Symbol.asyncIterator]: async function* () {
-        yield '';
+        yield Buffer.from('');
       },
     };
     const mockStderr = {
       [Symbol.asyncIterator]: async function* () {
-        yield 'SQLITE_ERROR: no such table: ZAEANNOTATION';
+        yield Buffer.from('SQLITE_ERROR: no such table: ZAEANNOTATION');
       },
     };
     const mockOn = vi.fn((event, cb) => {
@@ -238,5 +238,106 @@ describe('dataFetching', () => {
       on: mockOn,
     } as any);
     await expect(dataFetching.annotationsRequest('', 'SELECT * FROM ZAEANNOTATION')).rejects.toThrow(/sqlite3 process failed/);
+  });
+
+  test('executeDbQuery should handle non-buffer chunks from stdout', async () => {
+    const { executeDbQuery } = await import('../../../src/utils/databaseQuery');
+    vi.mock('child_process', { spy: true });
+    const mockStdout = {
+      [Symbol.asyncIterator]: async function* () {
+        yield '[]'; // string, not Buffer
+      },
+    };
+    const mockStderr = {
+      [Symbol.asyncIterator]: async function* () {
+        yield Buffer.from('');
+      },
+    };
+    const mockOn = vi.fn((event, cb) => {
+      if (event === 'close') setTimeout(() => cb(0), 0);
+      return mockOn;
+    });
+    vi.mocked(child_process.spawn).mockReturnValue({
+      stdout: mockStdout,
+      stderr: mockStderr,
+      on: mockOn,
+    } as any);
+    const result = await executeDbQuery<any[]>('', 'SELECT * FROM test');
+    expect(result).toEqual([]);
+  });
+
+  test('executeDbQuery should handle non-buffer chunks from stderr', async () => {
+    const { executeDbQuery } = await import('../../../src/utils/databaseQuery');
+    vi.mock('child_process', { spy: true });
+    const mockStdout = {
+      [Symbol.asyncIterator]: async function* () {
+        yield Buffer.from('');
+      },
+    };
+    const mockStderr = {
+      [Symbol.asyncIterator]: async function* () {
+        yield 'SQLITE_ERROR: test error'; // string, not Buffer
+      },
+    };
+    const mockOn = vi.fn((event, cb) => {
+      if (event === 'close') setTimeout(() => cb(1), 0);
+      return mockOn;
+    });
+    vi.mocked(child_process.spawn).mockReturnValue({
+      stdout: mockStdout,
+      stderr: mockStderr,
+      on: mockOn,
+    } as any);
+    await expect(executeDbQuery<any[]>('', 'SELECT * FROM test')).rejects.toThrow(/sqlite3 process failed.*SQLITE_ERROR: test error/);
+  });
+
+  test('executeDbQuery should handle process termination by signal', async () => {
+    const { executeDbQuery } = await import('../../../src/utils/databaseQuery');
+    vi.mock('child_process', { spy: true });
+    const mockStdout = {
+      [Symbol.asyncIterator]: async function* () {
+        yield Buffer.from('');
+      },
+    };
+    const mockStderr = {
+      [Symbol.asyncIterator]: async function* () {
+        yield Buffer.from('');
+      },
+    };
+    const mockOn = vi.fn((event, cb) => {
+      if (event === 'close') setTimeout(() => cb(null, 'SIGTERM'), 0);
+      return mockOn;
+    });
+    vi.mocked(child_process.spawn).mockReturnValue({
+      stdout: mockStdout,
+      stderr: mockStderr,
+      on: mockOn,
+    } as any);
+    await expect(executeDbQuery<any[]>('', 'SELECT * FROM test')).rejects.toThrow(/sqlite3 process terminated by signal SIGTERM/);
+  });
+
+  test('executeDbQuery should handle process termination by null signal', async () => {
+    const { executeDbQuery } = await import('../../../src/utils/databaseQuery');
+    vi.mock('child_process', { spy: true });
+    const mockStdout = {
+      [Symbol.asyncIterator]: async function* () {
+        yield Buffer.from('');
+      },
+    };
+    const mockStderr = {
+      [Symbol.asyncIterator]: async function* () {
+        yield Buffer.from('');
+      },
+    };
+    const mockOn = vi.fn((event, cb) => {
+      if (event === 'close') setTimeout(() => cb(null, null), 0);
+      return mockOn;
+    });
+    vi.mocked(child_process.spawn).mockReturnValue({
+      stdout: mockStdout,
+      stderr: mockStderr,
+      on: mockOn,
+    } as any);
+    await expect(executeDbQuery<any[]>('', 'SELECT * FROM test')).rejects.toThrow(/sqlite3 process terminated by signal unknown/);
   });
 });

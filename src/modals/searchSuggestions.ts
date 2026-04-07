@@ -1,8 +1,9 @@
-import { type App, Notice, SuggestModal } from 'obsidian';
+import { type App, SuggestModal } from 'obsidian';
 import type IBookHighlightsPlugin from '../../main';
 import type { IBookWithAnnotations } from '../types';
 import { aggregateBooksWithAnnotations } from '../modules/annotationsProcessing';
 import { compileTemplate } from '../modules/templateProcessing';
+import { showFailedImportNotice, showErrorInConsole } from '../utils/notificationCenter';
 import { OverwriteBookModal } from './overwriteConsent';
 
 abstract class IBookHighlightsPluginSuggestModal extends SuggestModal<IBookWithAnnotations> {
@@ -31,9 +32,8 @@ export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSugge
         return titleMatch || authorMatch;
       });
     } catch (error) {
-      // oxlint-disable-next-line
-      new Notice(`[${this.plugin.manifest.name}]:\nError importing highlights. Check console for details (⌥ ⌘ I)`, 0);
-      console.error(`[${this.plugin.manifest.name}]: ${error}`);
+      showFailedImportNotice(this.plugin.manifest.name);
+      showErrorInConsole(this.plugin.manifest.name, error);
       return [];
     }
   }

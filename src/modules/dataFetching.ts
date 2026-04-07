@@ -1,7 +1,7 @@
-import { spawn } from 'child_process';
 import os from 'os';
 import path from 'path';
 import type { IBook, IAnnotation, IHighlightsSortingCriterion } from '../types';
+import { executeDbQuery } from '../utils/databaseQuery';
 import { sortByLocation } from './annotationsProcessing';
 
 export const getBooksDbPath = (): string => {
@@ -85,65 +85,9 @@ export const getAnnotations = async (sortingCriterion: IHighlightsSortingCriteri
 };
 
 export const dbRequest = async (dbPath: string, sqlQuery: string): Promise<IBook[]> => {
-  const dbQueryResult = spawn('sqlite3', [dbPath, sqlQuery, '-json']);
-
-  const chunks: string[] = [];
-  const errorChunks: string[] = [];
-
-  for await (const chunk of dbQueryResult.stdout) {
-    chunks.push(chunk);
-  }
-  for await (const chunk of dbQueryResult.stderr) {
-    errorChunks.push(chunk);
-  }
-
-  const result = chunks.join('');
-  const errorResult = errorChunks.join('');
-
-  const exitCode: number = await new Promise((resolve, reject) => {
-    dbQueryResult.on('close', resolve);
-    dbQueryResult.on('error', reject);
-  });
-
-  if (exitCode !== 0) {
-    throw new Error(`sqlite3 process failed with code ${exitCode}: ${errorResult}`);
-  }
-
-  try {
-    return JSON.parse(result);
-  } catch (error) {
-    throw new Error('Failed to parse database result', { cause: error });
-  }
+  return executeDbQuery<IBook[]>(dbPath, sqlQuery);
 };
 
 export const annotationsRequest = async (dbPath: string, sqlQuery: string): Promise<IAnnotation[]> => {
-  const dbQueryResult = spawn('sqlite3', [dbPath, sqlQuery, '-json']);
-
-  const chunks: string[] = [];
-  const errorChunks: string[] = [];
-
-  for await (const chunk of dbQueryResult.stdout) {
-    chunks.push(chunk);
-  }
-  for await (const chunk of dbQueryResult.stderr) {
-    errorChunks.push(chunk);
-  }
-
-  const result = chunks.join('');
-  const errorResult = errorChunks.join('');
-
-  const exitCode: number = await new Promise((resolve, reject) => {
-    dbQueryResult.on('close', resolve);
-    dbQueryResult.on('error', reject);
-  });
-
-  if (exitCode !== 0) {
-    throw new Error(`sqlite3 process failed with code ${exitCode}: ${errorResult}`);
-  }
-
-  try {
-    return JSON.parse(result);
-  } catch (error) {
-    throw new Error('Failed to parse database result', { cause: error });
-  }
+  return executeDbQuery<IAnnotation[]>(dbPath, sqlQuery);
 };

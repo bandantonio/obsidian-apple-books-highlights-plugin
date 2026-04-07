@@ -67,10 +67,11 @@ describe('IBookHighlightsPlugin', () => {
     expect(() => plugin.onunload()).not.toThrow();
   });
 
-  test('Should import all highlights on start if setting is enabled', async () => {
-    mockLoadData.mockResolvedValueOnce({ importOnStart: true } as any);
+  test('Should register ribbon icon and commands', async () => {
+    mockLoadData.mockResolvedValueOnce({});
     await plugin.onload();
-    expect(importHighlightsMock).toHaveBeenCalled();
+    expect(mockAddRibbonIcon).toHaveBeenCalled();
+    expect(mockAddCommand).toHaveBeenCalled();
   });
 
   test('Should save settings', async () => {
@@ -87,163 +88,188 @@ describe('IBookHighlightsPlugin', () => {
     expect(mockSaveData).toHaveBeenCalledWith(validSettings);
   });
 
-  test('Should register ribbon icon and commands', async () => {
-    mockLoadData.mockResolvedValueOnce({});
-    await plugin.onload();
-    expect(mockAddRibbonIcon).toHaveBeenCalled();
-    expect(mockAddCommand).toHaveBeenCalled();
-  });
+  describe('Import on start', () => {
+    test('Should import all highlights on start and ensure that backup is created when backup is enabled', async () => {
+      mockLoadData.mockResolvedValueOnce({ importOnStart: true, backup: true } as any);
+      importHighlightsMock.mockResolvedValueOnce(aggregatedBooksAndAnnotations);
 
-  test('Should backup and import all highlights on ribbon icon click if backup setting is enabled', async () => {
-    mockLoadData.mockResolvedValueOnce({ backup: true } as any);
-    importHighlightsMock.mockResolvedValueOnce(aggregatedBooksAndAnnotations);
-    await plugin.onload();
-    const callback = mockAddRibbonIcon.mock.calls[0][2];
-    await callback({} as any);
-    expect(backupAllHighlightsMock).toHaveBeenCalled();
-    expect(importHighlightsMock).toHaveBeenCalled();
-    expect(NoticeMock).toHaveBeenCalledWith('Apple Books highlights imported successfully');
-  });
-
-  test('Should throw error notice if import fails on ribbon icon click if backup setting is enabled', async () => {
-    mockLoadData.mockResolvedValueOnce({ backup: true } as any);
-    importHighlightsMock.mockRejectedValueOnce(new Error('Import failed'));
-    await plugin.onload();
-    const callback = mockAddRibbonIcon.mock.calls[0][2];
-    await callback({} as any);
-    expect(backupAllHighlightsMock).toHaveBeenCalled();
-    expect(importHighlightsMock).toHaveBeenCalled();
-    expect(NoticeMock).toHaveBeenCalledWith('[Apple Books Test Mock]:\nError importing highlights. Check console for details (⌥ ⌘ I)', 0);
-  });
-
-  test('Should show OverwriteBookModal on ribbon icon click if backup setting is disabled', async () => {
-    mockLoadData.mockResolvedValueOnce({ backup: false } as any);
-
-    const openMock = vi.fn();
-    const { OverwriteBookModal } = await import('../../src/modals/overwriteConsent');
-    vi.spyOn(OverwriteBookModal.prototype, 'open').mockImplementation(openMock);
-
-    await plugin.onload();
-    const callback = mockAddRibbonIcon.mock.calls[0][2];
-    await callback({} as any);
-    expect(openMock).toHaveBeenCalled();
-  });
-
-  test('Should backup and import all highlights on addImportAllBooksCommand if backup setting is enabled', async () => {
-    mockLoadData.mockResolvedValueOnce({ backup: true } as any);
-    importHighlightsMock.mockResolvedValueOnce(aggregatedBooksAndAnnotations);
-    await plugin.onload();
-
-    const commandCallback = mockAddCommand.mock.calls[0][0].callback;
-    await commandCallback({} as any);
-    expect(backupAllHighlightsMock).toHaveBeenCalled();
-    expect(importHighlightsMock).toHaveBeenCalled();
-  });
-
-  test('Should throw error notice if import fails on addImportAllBooksCommand if backup setting is enabled', async () => {
-    mockLoadData.mockResolvedValueOnce({ backup: true } as any);
-    importHighlightsMock.mockRejectedValueOnce(new Error('Import failed'));
-    await plugin.onload();
-
-    const commandCallback = mockAddCommand.mock.calls[0][0].callback;
-    await commandCallback({} as any);
-    expect(backupAllHighlightsMock).toHaveBeenCalled();
-    expect(importHighlightsMock).toHaveBeenCalled();
-    expect(NoticeMock).toHaveBeenCalledWith('[Apple Books Test Mock]:\nError importing highlights. Check console for details (⌥ ⌘ I)', 0);
-  });
-
-  test('Should show OverwriteBookModal on addImportAllBooksCommand if backup setting is disabled', async () => {
-    mockLoadData.mockResolvedValueOnce({ backup: false } as any);
-
-    const openMock = vi.fn();
-    const { OverwriteBookModal } = await import('../../src/modals/overwriteConsent');
-    vi.spyOn(OverwriteBookModal.prototype, 'open').mockImplementation(openMock);
-
-    await plugin.onload();
-    const commandCallback = mockAddCommand.mock.calls[0][0].callback;
-    await commandCallback({} as any);
-    expect(openMock).toHaveBeenCalled();
-  });
-
-  test('Should show book search modal on addImportOneBookCommand', async () => {
-    mockLoadData.mockResolvedValueOnce({} as any);
-
-    const openMock = vi.fn();
-    const { IBookHighlightsPluginSearchModal } = await import('../../src/modals/searchSuggestions');
-    vi.spyOn(IBookHighlightsPluginSearchModal.prototype, 'open').mockImplementation(openMock);
-    await plugin.onload();
-
-    const commandCallback = mockAddCommand.mock.calls[1][0].callback;
-    await commandCallback({} as any);
-    expect(openMock).toHaveBeenCalled();
-  });
-
-  test('Should throw error notice if import fails on addImportOneBookCommand', async () => {
-    mockLoadData.mockResolvedValueOnce({} as any);
-    const { IBookHighlightsPluginSearchModal } = await import('../../src/modals/searchSuggestions');
-    vi.spyOn(IBookHighlightsPluginSearchModal.prototype, 'open').mockImplementation(() => {
-      throw new Error('Import failed');
-    });
-    await plugin.onload();
-
-    const commandCallback = mockAddCommand.mock.calls[1][0].callback;
-    await commandCallback({} as any);
-    expect(NoticeMock).toHaveBeenCalledWith('[Apple Books Test Mock]:\nError importing highlights. Check console for details (⌥ ⌘ I)', 0);
-  });
-
-  test('Should import all highlights on start and ensure that backup is created when importOnStart is enabled and backup is enabled', async () => {
-    mockLoadData.mockResolvedValueOnce({ importOnStart: true, backup: true } as any);
-    importHighlightsMock.mockResolvedValueOnce(aggregatedBooksAndAnnotations);
-    // Await the onLayoutReady callback to finish
-    const onLayoutReadyPromise = new Promise<void>((resolve) => {
-      (plugin.app.workspace.onLayoutReady as any).mockImplementationOnce(async (cb: () => Promise<void> | void) => {
-        await cb();
-        resolve();
+      const onLayoutReadyPromise = new Promise<void>((resolve) => {
+        (plugin.app.workspace.onLayoutReady as any).mockImplementationOnce(async (cb: () => Promise<void> | void) => {
+          await cb();
+          resolve();
+        });
       });
+
+      await plugin.onload();
+      await onLayoutReadyPromise;
+
+      expect(backupAllHighlightsMock).toHaveBeenCalled();
+      expect(importHighlightsMock).toHaveBeenCalledWith(plugin.vault, expect.anything(), 'modify');
+      expect(NoticeMock).toHaveBeenCalledWith('Apple Books highlights imported successfully');
     });
 
-    await plugin.onload();
-    await onLayoutReadyPromise;
+    test('Should show OverwriteBookModal on start without creating a backup when backup is disabled', async () => {
+      mockLoadData.mockResolvedValueOnce({ importOnStart: true, backup: false } as any);
 
-    expect(backupAllHighlightsMock).toHaveBeenCalled();
-    expect(importHighlightsMock).toHaveBeenCalledWith(plugin.vault, expect.anything(), 'modify');
-    expect(NoticeMock).toHaveBeenCalledWith('Apple Books highlights imported successfully');
+      const openMock = vi.fn();
+      const { OverwriteBookModal } = await import('../../src/modals/overwriteConsent');
+      vi.spyOn(OverwriteBookModal.prototype, 'open').mockImplementation(openMock);
+
+      const onLayoutReadyPromise = new Promise<void>((resolve) => {
+        (plugin.app.workspace.onLayoutReady as any).mockImplementationOnce(async (cb: () => Promise<void> | void) => {
+          await cb();
+          resolve();
+        });
+      });
+
+      await plugin.onload();
+      await onLayoutReadyPromise;
+
+      expect(backupAllHighlightsMock).not.toHaveBeenCalled();
+      expect(importHighlightsMock).not.toHaveBeenCalled();
+      expect(openMock).toHaveBeenCalled();
+    });
+
+    test('Should show success notice if import on start succeeds and backup is enabled', async () => {
+      mockLoadData.mockResolvedValueOnce({ importOnStart: true, backup: true } as any);
+      importHighlightsMock.mockResolvedValueOnce(aggregatedBooksAndAnnotations);
+
+      const onLayoutReadyPromise = new Promise<void>((resolve) => {
+        (plugin.app.workspace.onLayoutReady as any).mockImplementationOnce(async (cb: () => Promise<void> | void) => {
+          await cb();
+          resolve();
+        });
+      });
+
+      await plugin.onload();
+      await onLayoutReadyPromise;
+
+      expect(NoticeMock).toHaveBeenCalledWith('Apple Books highlights imported successfully');
+    });
+
+    test('Should show error notice if import fails on start and backup is enabled', async () => {
+      mockLoadData.mockResolvedValueOnce({ importOnStart: true, backup: true } as any);
+      importHighlightsMock.mockRejectedValueOnce(new Error('Import failed'));
+
+      const onLayoutReadyPromise = new Promise<void>((resolve) => {
+        (plugin.app.workspace.onLayoutReady as any).mockImplementationOnce(async (cb: () => Promise<void> | void) => {
+          await cb();
+          resolve();
+        });
+      });
+
+      await plugin.onload();
+      await onLayoutReadyPromise;
+
+      expect(backupAllHighlightsMock).toHaveBeenCalled();
+      expect(importHighlightsMock).toHaveBeenCalledWith(plugin.vault, expect.anything(), 'modify');
+      expect(NoticeMock).toHaveBeenCalledWith('[Apple Books Test Mock]:\nError importing highlights. Check console for details (⌥ ⌘ I)', 0);
+    });
+  });
+  describe('Ribbon action import', () => {
+    test('Should backup and import all highlights on ribbon icon click if backup setting is enabled', async () => {
+      mockLoadData.mockResolvedValueOnce({ backup: true } as any);
+      importHighlightsMock.mockResolvedValueOnce(aggregatedBooksAndAnnotations);
+      await plugin.onload();
+      const callback = mockAddRibbonIcon.mock.calls[0][2];
+      await callback({} as any);
+      expect(backupAllHighlightsMock).toHaveBeenCalled();
+      expect(importHighlightsMock).toHaveBeenCalled();
+      expect(NoticeMock).toHaveBeenCalledWith('Apple Books highlights imported successfully');
+    });
+
+    test('Should throw error notice if import fails on ribbon icon click if backup setting is enabled', async () => {
+      mockLoadData.mockResolvedValueOnce({ backup: true } as any);
+      importHighlightsMock.mockRejectedValueOnce(new Error('Import failed'));
+      await plugin.onload();
+      const callback = mockAddRibbonIcon.mock.calls[0][2];
+      await callback({} as any);
+      expect(backupAllHighlightsMock).toHaveBeenCalled();
+      expect(importHighlightsMock).toHaveBeenCalled();
+      expect(NoticeMock).toHaveBeenCalledWith('[Apple Books Test Mock]:\nError importing highlights. Check console for details (⌥ ⌘ I)', 0);
+    });
+
+    test('Should show OverwriteBookModal on ribbon icon click if backup setting is disabled', async () => {
+      mockLoadData.mockResolvedValueOnce({ backup: false } as any);
+
+      const openMock = vi.fn();
+      const { OverwriteBookModal } = await import('../../src/modals/overwriteConsent');
+      vi.spyOn(OverwriteBookModal.prototype, 'open').mockImplementation(openMock);
+
+      await plugin.onload();
+      const callback = mockAddRibbonIcon.mock.calls[0][2];
+      await callback({} as any);
+      expect(openMock).toHaveBeenCalled();
+    });
   });
 
-  test('Should import all highlights on start and update files in place without creating a backup when importOnStart is enabled and backup is disabled', async () => {
-    mockLoadData.mockResolvedValueOnce({ importOnStart: true, backup: false } as any);
-    importHighlightsMock.mockResolvedValueOnce(aggregatedBooksAndAnnotations);
+  describe('Import all highlights command', () => {
+    test('Should backup and import all highlights on addImportAllBooksCommand if backup setting is enabled', async () => {
+      mockLoadData.mockResolvedValueOnce({ backup: true } as any);
+      importHighlightsMock.mockResolvedValueOnce(aggregatedBooksAndAnnotations);
+      await plugin.onload();
 
-    const onLayoutReadyPromise = new Promise<void>((resolve) => {
-      (plugin.app.workspace.onLayoutReady as any).mockImplementationOnce(async (cb: () => Promise<void> | void) => {
-        await cb();
-        resolve();
-      });
+      const commandCallback = mockAddCommand.mock.calls[0][0].callback;
+      await commandCallback({} as any);
+      expect(backupAllHighlightsMock).toHaveBeenCalled();
+      expect(importHighlightsMock).toHaveBeenCalled();
     });
 
-    await plugin.onload();
-    await onLayoutReadyPromise;
+    test('Should throw error notice if import fails on addImportAllBooksCommand if backup setting is enabled', async () => {
+      mockLoadData.mockResolvedValueOnce({ backup: true } as any);
+      importHighlightsMock.mockRejectedValueOnce(new Error('Import failed'));
+      await plugin.onload();
 
-    expect(backupAllHighlightsMock).not.toHaveBeenCalled();
-    expect(importHighlightsMock).toHaveBeenCalledWith(plugin.vault, expect.anything(), 'modify');
+      const commandCallback = mockAddCommand.mock.calls[0][0].callback;
+      await commandCallback({} as any);
+      expect(backupAllHighlightsMock).toHaveBeenCalled();
+      expect(importHighlightsMock).toHaveBeenCalled();
+      expect(NoticeMock).toHaveBeenCalledWith('[Apple Books Test Mock]:\nError importing highlights. Check console for details (⌥ ⌘ I)', 0);
+    });
+
+    test('Should show OverwriteBookModal on addImportAllBooksCommand if backup setting is disabled', async () => {
+      mockLoadData.mockResolvedValueOnce({ backup: false } as any);
+
+      const openMock = vi.fn();
+      const { OverwriteBookModal } = await import('../../src/modals/overwriteConsent');
+      vi.spyOn(OverwriteBookModal.prototype, 'open').mockImplementation(openMock);
+
+      await plugin.onload();
+      const commandCallback = mockAddCommand.mock.calls[0][0].callback;
+      await commandCallback({} as any);
+      expect(openMock).toHaveBeenCalled();
+    });
+
+    test.todo('Trigger import via keyboard shortcut/command palette');
   });
+  describe('Import from a specific book command', () => {
+    test('Should show book search modal on addImportOneBookCommand', async () => {
+      mockLoadData.mockResolvedValueOnce({} as any);
 
-  test('Should show error notice if import fails on start and backup is enabled', async () => {
-    mockLoadData.mockResolvedValueOnce({ importOnStart: true, backup: true } as any);
-    importHighlightsMock.mockRejectedValueOnce(new Error('Import failed'));
+      const openMock = vi.fn();
+      const { IBookHighlightsPluginSearchModal } = await import('../../src/modals/searchSuggestions');
+      vi.spyOn(IBookHighlightsPluginSearchModal.prototype, 'open').mockImplementation(openMock);
+      await plugin.onload();
 
-    const onLayoutReadyPromise = new Promise<void>((resolve) => {
-      (plugin.app.workspace.onLayoutReady as any).mockImplementationOnce(async (cb: () => Promise<void> | void) => {
-        await cb();
-        resolve();
-      });
+      const commandCallback = mockAddCommand.mock.calls[1][0].callback;
+      await commandCallback({} as any);
+      expect(openMock).toHaveBeenCalled();
     });
 
-    await plugin.onload();
-    await onLayoutReadyPromise;
+    test('Should throw error notice if import fails on addImportOneBookCommand', async () => {
+      mockLoadData.mockResolvedValueOnce({} as any);
+      const { IBookHighlightsPluginSearchModal } = await import('../../src/modals/searchSuggestions');
+      vi.spyOn(IBookHighlightsPluginSearchModal.prototype, 'open').mockImplementation(() => {
+        throw new Error('Import failed');
+      });
+      await plugin.onload();
 
-    expect(backupAllHighlightsMock).toHaveBeenCalled();
-    expect(importHighlightsMock).toHaveBeenCalledWith(plugin.vault, expect.anything(), 'modify');
-    expect(NoticeMock).toHaveBeenCalledWith('[Apple Books Test Mock]:\nError importing highlights. Check console for details (⌥ ⌘ I)', 0);
+      const commandCallback = mockAddCommand.mock.calls[1][0].callback;
+      await commandCallback({} as any);
+      expect(NoticeMock).toHaveBeenCalledWith('[Apple Books Test Mock]:\nError importing highlights. Check console for details (⌥ ⌘ I)', 0);
+    });
+
+    test.todo('Trigger import via keyboard shortcut/command palette');
+    test.todo('Settings: UI interaction (changing settings, validation, reset to defaults).');
   });
 });
