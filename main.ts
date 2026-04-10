@@ -4,26 +4,32 @@ import { IBookHighlightsPluginSearchModal } from './src/modals/searchSuggestions
 import { VaultManagement } from './src/modules/vaultManagement';
 import { defaultPluginSettings, IBookHighlightsSettingTab } from './src/settings';
 import { backupAndImport } from './src/utils/backupAndImportFlow';
+import { saveKeepMeSectionData } from './src/utils/manageKeepMeSection';
 import { showFailedImportNotice, showErrorInConsole } from './src/utils/notificationCenter';
 export default class IBookHighlightsPlugin extends Plugin {
   vault: VaultManagement;
   settings: IBookHighlightsPluginSettings;
 
   async onload() {
-    const settings = await this.loadSettings();
-    this.vault = new VaultManagement(this.app, settings);
+    await this.loadSettings();
+    this.vault = new VaultManagement(this.app, this.settings);
 
     this.addSettingTab(new IBookHighlightsSettingTab(this.app, this));
-    addRibbonAction(this, settings);
-    addImportAllBooksCommand(this, settings);
+    addRibbonAction(this);
+    addImportAllBooksCommand(this);
     addImportOneBookCommand(this);
 
-    if (settings.importOnStart) {
+    if (this.settings.importOnStart) {
       this.app.workspace.onLayoutReady(async () => {
-        const pluginInstance = this;
-        await backupAndImport(pluginInstance, settings, 'modify');
+        await backupAndImport(this, this.settings, 'modify');
       });
     }
+
+    this.registerEvent(
+      this.app.workspace.on('quick-preview', async (file, data) => {
+        await saveKeepMeSectionData(file, data, this, this.settings);
+      }),
+    );
   }
 
   onunload() {}
@@ -37,20 +43,25 @@ export default class IBookHighlightsPlugin extends Plugin {
   async saveSettings() {
     await this.saveData(this.settings);
   }
+
+  async onExternalSettingsChange(): Promise<void> {
+    await this.loadSettings();
+    this.vault = new VaultManagement(this.app, this.settings);
+  }
 }
 
-function addRibbonAction(plugin: IBookHighlightsPlugin, settings: IBookHighlightsPluginSettings) {
+function addRibbonAction(plugin: IBookHighlightsPlugin) {
   plugin.addRibbonIcon('book-open', `${plugin.manifest.name}: Import all`, async () => {
-    await backupAndImport(plugin, settings);
+    await backupAndImport(plugin, plugin.settings);
   });
 }
 
-function addImportAllBooksCommand(plugin: IBookHighlightsPlugin, settings: IBookHighlightsPluginSettings) {
+function addImportAllBooksCommand(plugin: IBookHighlightsPlugin) {
   plugin.addCommand({
     id: 'import-all-highlights',
     name: 'Import all',
     callback: async () => {
-      await backupAndImport(plugin, settings);
+      await backupAndImport(plugin, plugin.settings);
     },
   });
 }

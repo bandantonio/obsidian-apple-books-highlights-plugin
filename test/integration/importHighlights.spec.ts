@@ -31,6 +31,9 @@ describe('importHighlights', () => {
     highlightsSortingCriterion: 'creationDateOldToNew',
     template: defaultTemplate,
     filenameTemplate: '{{{bookTitle}}}',
+    keepMeSectionOpeningDelimiter: '%% keep-me %%',
+    keepMeSectionClosingDelimiter: '%% /keep-me %%',
+    keepMeSectionData: {},
   };
 
   afterEach(() => {
@@ -83,6 +86,27 @@ describe('importHighlights', () => {
     await importHighlights(vaultManagement, mockSettings, 'modify');
 
     expect(createBookFileSpy).toHaveBeenCalledWith('iPhone User Guide', renderedBookOne);
+  });
+
+  test('Should embed Keep Me section data if it is stored in settings', async () => {
+    const defaultTemplateWithKeepMeSectionDelimiters = fs.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'templateProcessing', 'defaultTemplateWithKeepMeSectionDelimiters.md'), 'utf-8'); // oxfmt-ignore
+    const settingsWithKeepMeSection: IBookHighlightsPluginSettings = {
+      ...mockSettings,
+      template: defaultTemplateWithKeepMeSectionDelimiters,
+      keepMeSectionData: {
+        'iPhone User Guide': `This is a great guide!📕 I learned so much from it.\nDefinitely need to recommend it to Aaron. 😎🤜🤛😎`,
+      },
+    };
+    const vaultManagement = new VaultManagement(mockApp, settingsWithKeepMeSection);
+
+    vi.spyOn(annotationProcessing, 'aggregateBooksWithAnnotations').mockResolvedValue([aggregatedBooksAndAnnotations[0]]);
+
+    const createBookFileSpy = vi.spyOn(vaultManagement, 'createBookFile');
+    const renderedBookOneWithKeepMeSection = fs.readFileSync(path.join(process.cwd(), 'test', 'fixtures', 'manageKeepMeSection', 'bookOneWithKeepMeSection.md'), 'utf-8'); // oxfmt-ignore
+
+    await importHighlights(vaultManagement, settingsWithKeepMeSection);
+
+    expect(createBookFileSpy).toHaveBeenCalledWith('iPhone User Guide', renderedBookOneWithKeepMeSection);
   });
 
   test('Should throw aggregated error if any file operation fails', async () => {

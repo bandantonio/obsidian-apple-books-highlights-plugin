@@ -3,9 +3,9 @@ import type IBookHighlightsPlugin from '../../main';
 import type { IBookWithAnnotations } from '../types';
 import { aggregateBooksWithAnnotations } from '../modules/annotationsProcessing';
 import { compileTemplate } from '../modules/templateProcessing';
+import { getKeepMeSectionDataFromSettings, embedKeepMeSectionDataIntoBookFile } from '../utils/manageKeepMeSection';
 import { showFailedImportNotice, showErrorInConsole } from '../utils/notificationCenter';
 import { OverwriteBookModal } from './overwriteConsent';
-
 abstract class IBookHighlightsPluginSuggestModal extends SuggestModal<IBookWithAnnotations> {
   plugin: IBookHighlightsPlugin;
   constructor(app: App, plugin: IBookHighlightsPlugin) {
@@ -54,11 +54,18 @@ export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSugge
 
     const precompiledTemplate = compileTemplate(this.plugin.settings.template);
     const precompiledFilenameTemplate = compileTemplate(this.plugin.settings.filenameTemplate);
-    const compiledContent = precompiledTemplate(book);
+    const preCompiledContent = precompiledTemplate(book);
     const compiledFilename = precompiledFilenameTemplate(book);
 
     const file = this.plugin.vault.getFilePath(compiledFilename);
     const doesBookFileExist = Boolean(file);
+
+    const keepMeSectionContent = getKeepMeSectionDataFromSettings(compiledFilename, this.plugin.settings);
+
+    let compiledContent = preCompiledContent;
+    if (keepMeSectionContent) {
+      compiledContent = embedKeepMeSectionDataIntoBookFile(keepMeSectionContent, preCompiledContent, this.plugin.settings);
+    }
 
     // File may not exist when the filename template was changed between imports
     // or when the book was renamed to the title that doesn't match the defined template.

@@ -26,6 +26,9 @@ describe('VaultManagement', () => {
     highlightsSortingCriterion: 'creationDateOldToNew',
     template: defaultTemplate,
     filenameTemplate: '{{{bookTitle}}}',
+    keepMeSectionOpeningDelimiter: '%% keep-me %%',
+    keepMeSectionClosingDelimiter: '%% /keep-me %%',
+    keepMeSectionData: {},
   };
 
   afterEach(() => {

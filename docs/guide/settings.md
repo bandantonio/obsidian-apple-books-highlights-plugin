@@ -204,6 +204,47 @@ Let's consider an example book with the following highlights (callouts to the le
 
 Check the [Templates and variables](/customization/templates-and-variables) page for more information.
 
+## Template: Keep Me section
+
+Default delimiters:
+
+- Opening: `%% keep-me %%`
+- Closing: `%% /keep-me %%`
+
+You can use the Keep Me section to protect specific content (like summaries, thoughts and reflections, references, etc.) in your highlight files from being overwritten during the import process.
+
+::: details Example
+```md
+Title:: 📕 Building a Second Brain
+
+%% keep-me %%
+## My thoughts
+- This book helped me organize my knowledge and be more productive.
+- The PARA method was a game changer for my workflow.
+- I need to re-read the section about progressive summarization, I think I can implement it in my note-taking process.
+%% /keep-me %%
+
+## Annotations
+
+- 🎯 Highlight:: Information is the fundamental building block of everything you do.
+- 📝 Note:: This immediately reminds me of the need to document everything I do 😁
+
+```
+:::
+
+When you specify the Keep Me section in the template, it serves as a placeholder with the default content for new highlight files.
+When you update a highlight file, the current content of the Keep Me section is saved to the settings.
+During import, the plugin checks if there’s stored content for the highlight file and restores it to the Keep Me section if found.
+Otherwise, it keeps the placeholder.
+
+::: tip
+You can customize the opening and closing delimiters if they conflict with your notes or if you prefer different markers.
+:::
+
+::: info
+The plugin tracks the Keep Me section in the highlight files within the [highlight folder](#highlight-folder) only. [Backups of highlight files](#backup-highlights) (with `-bk-<timestamp>` in their names) are out of scope. Please keep this in mind when updating the Keep Me section content to avoid accidental data loss during backup and import.
+:::
+
 ## Template for naming highlight files
 
 <!-- Custom container to prevent Handlebars variables to be treated as Vue interpolations -->
