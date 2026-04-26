@@ -37,6 +37,9 @@ export const defaultPluginSettings: IBookHighlightsPluginSettings = {
   highlightsSortingCriterion: 'creationDateOldToNew',
   template: defaultTemplate,
   filenameTemplate: allowedFilenameTemplateVariables[0],
+  keepMeSectionOpeningDelimiter: '%% keep-me %%',
+  keepMeSectionClosingDelimiter: '%% /keep-me %%',
+  keepMeSectionData: {},
 };
 
 export class IBookHighlightsSettingTab extends PluginSettingTab {
@@ -57,6 +60,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
     this.addBackupSetting(containerEl);
     this.addHighlightsSortingCriterionSetting(containerEl);
     this.addTemplateSetting(containerEl);
+    this.addKeepMeSectionSetting(containerEl);
     this.addFilenameTemplateSetting(containerEl);
     this.addResetTemplateSetting(containerEl);
     this.addCredits(containerEl);
@@ -202,6 +206,46 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
         });
       return text;
     });
+  }
+
+  addKeepMeSectionSetting(containerEl: HTMLElement): void {
+    new Setting(containerEl)
+      .setName('Template: Keep Me section')
+      .setDesc(
+        createFragment((el) => {
+          el.appendText('Section that keeps your information from being overwritten during re-imports.');
+          el.createEl('br');
+          el.appendText('Default delimiters:');
+          const ul = el.createEl('ul');
+          ul.createEl('li', { text: 'Opening: %% keep-me %%' });
+          ul.createEl('li', { text: 'Closing: %% /keep-me %%' });
+        }),
+      )
+      .setClass('ibooks-highlights-keep-me-section')
+      .addText((text) => {
+        text
+          .setPlaceholder('Opening delimiter')
+          .setValue(this.plugin.settings.keepMeSectionOpeningDelimiter || defaultPluginSettings.keepMeSectionOpeningDelimiter)
+          .onChange(async (value) => {
+            const valueToSet = value === '' ? defaultPluginSettings.keepMeSectionOpeningDelimiter : value;
+            this.plugin.settings.keepMeSectionOpeningDelimiter = valueToSet;
+
+            await this.plugin.saveSettings();
+          });
+        return text;
+      })
+      .addText((text) => {
+        text
+          .setPlaceholder('Closing delimiter')
+          .setValue(this.plugin.settings.keepMeSectionClosingDelimiter || defaultPluginSettings.keepMeSectionClosingDelimiter)
+          .onChange(async (value) => {
+            const valueToSet = value === '' ? defaultPluginSettings.keepMeSectionClosingDelimiter : value;
+            this.plugin.settings.keepMeSectionClosingDelimiter = valueToSet;
+
+            await this.plugin.saveSettings();
+          });
+        return text;
+      });
   }
 
   addResetTemplateSetting(containerEl: HTMLElement): void {

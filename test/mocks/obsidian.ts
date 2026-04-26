@@ -16,6 +16,7 @@ export class Plugin {
     return {};
   }
   saveData() {}
+  registerEvent() {}
 }
 
 export class SuggestModal<T> {

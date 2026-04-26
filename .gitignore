@@ -23,3 +23,6 @@ data.json
 # Vitepress
 docs/.vitepress/dist
 docs/.vitepress/cache
+
+# VS Code
+.vscode/tasks.json

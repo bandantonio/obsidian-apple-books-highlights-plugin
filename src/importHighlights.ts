@@ -2,7 +2,7 @@ import type { IBookHighlightsPluginSettings } from './types';
 import { aggregateBooksWithAnnotations } from './modules/annotationsProcessing';
 import { compileTemplate } from './modules/templateProcessing';
 import { VaultManagement } from './modules/vaultManagement';
-
+import { getKeepMeSectionDataFromSettings, embedKeepMeSectionDataIntoBookFile } from './utils/manageKeepMeSection';
 export const importHighlights = async (
   vault: VaultManagement,
   settings: IBookHighlightsPluginSettings,
@@ -22,8 +22,16 @@ export const importHighlights = async (
   const fileOperations = [];
 
   for await (const bookWithAnnotations of aggregatedBooksAndAnnotations) {
-    const compiledContent = precompiledTemplate(bookWithAnnotations);
+    const preCompiledContent = precompiledTemplate(bookWithAnnotations);
     const compiledFilename = precompiledFilenameTemplate(bookWithAnnotations);
+
+    const keepMeSectionData = getKeepMeSectionDataFromSettings(compiledFilename, settings);
+
+    let compiledContent = preCompiledContent;
+
+    if (keepMeSectionData) {
+      compiledContent = embedKeepMeSectionDataIntoBookFile(keepMeSectionData, preCompiledContent, settings);
+    }
 
     if (importMode === 'create') {
       fileOperations.push(vault.createBookFile(compiledFilename, compiledContent));

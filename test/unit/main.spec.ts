@@ -52,6 +52,7 @@ describe('IBookHighlightsPlugin', () => {
       workspace: {
         // Fix: support async callbacks in onLayoutReady
         onLayoutReady: vi.fn().mockImplementation(async (cb: () => Promise<void> | void) => await cb()),
+        on: vi.fn(),
       },
     } as any;
   });
@@ -82,6 +83,9 @@ describe('IBookHighlightsPlugin', () => {
       highlightsSortingCriterion: 'creationDateOldToNew' as const,
       template: 'template',
       filenameTemplate: 'filename',
+      keepMeSectionOpeningDelimiter: '%% keep-me %%',
+      keepMeSectionClosingDelimiter: '%% /keep-me %%',
+      keepMeSectionData: {},
     };
     plugin.settings = validSettings;
     await plugin.saveSettings();
