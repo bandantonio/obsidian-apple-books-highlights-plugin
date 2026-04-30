@@ -1,0 +1,19 @@
+name: 💡 Feature
+description: If you have an idea for a new feature or an improvement to an existing one
+title: '[Feature]: <Summary of your feature request>'
+labels: ['feature']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to fill out this request! 🙏
+              
+        Before proceeding, please make sure to check [opened issues](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/issues?q=is%3Aissue%20state%3Aopen%20label%3Arequest) first. Maybe your request is already there 😌
+  - type: textarea
+    id: feature
+    attributes:
+      label: What feature would you like to request?
+      description: Also include links to any relevant resources, examples, or similar implementations that you know or like.
+      placeholder: Please provide an explicit description of your request, and why you think it would be beneficial.
+    validations:
+      required: true

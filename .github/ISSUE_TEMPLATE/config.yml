@@ -1,1 +1,5 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Not a 🐛 bug or 💡 feature? Welcome to discussions! 🙋‍♂️💬
+    url: https://github.com/bandantonio/obsidian-apple-books-highlights-plugin/discussions
+    about: Q&A, idea hub, stories and showcases, etc.
