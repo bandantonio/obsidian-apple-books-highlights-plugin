@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# Validate commit message according to Conventional Commits spec
+# Called by "git commit" with the commit message file as an argument
+#
+# Exits with non-zero status if the commit message is invalid
+#
+
+COMMIT_MSG_FILE="$1"
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE" | head -1)
+
+# Regex pattern for conventional commits
+# Format: type(scope)?: description
+# Types: feat, fix, docs, style, refactor, perf, test, chore, ci, build, revert
+PATTERN="^(feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert)(\(.+\))?: .{1,}"
+
+if ! echo "$COMMIT_MSG" | grep -qE "$PATTERN"; then
+	echo >&2 ""
+	echo >&2 " Git hook: Commit Message Validation"
+	echo >&2 "═════════════════════════════════════"
+	echo >&2 ""
+	echo -e >&2 "\033[0;31m❌ Commit rejected: Invalid commit message format\033[0m"
+	echo >&2 ""
+	echo >&2 "Expected format:"
+	echo >&2 "  <type>(<scope>)?: <description>"
+	echo >&2 ""
+	echo >&2 "Allowed types: feat, fix, docs, style, refactor, perf, test, chore, ci, build, revert"
+	echo >&2 ""
+	echo >&2 "Examples:"
+	echo >&2 "  feat: add new feature"
+	echo >&2 "  fix(plugin): resolve memory leak"
+	echo >&2 "  docs(readme): update installation steps"
+	echo >&2 ""
+	echo >&2 "Your commit message:"
+	echo -e >&2 "  \033[0;31m$COMMIT_MSG\033[0m"
+	echo >&2 ""
+	echo >&2 "══════════════════════════════════════════════════"
+	exit 1
+fi
+
+exit 0
