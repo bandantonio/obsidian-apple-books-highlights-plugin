@@ -16,9 +16,11 @@ vi.mock('../../src/modules/templateProcessing', () => ({
 }));
 const backupAllHighlightsMock = vi.fn();
 vi.mock('../../src/modules/vaultManagement', () => ({
-  VaultManagement: vi.fn().mockImplementation(() => ({
-    backupAllHighlights: backupAllHighlightsMock,
-  })),
+  VaultManagement: vi.fn(function (this: any) {
+    return {
+      backupAllHighlights: backupAllHighlightsMock,
+    };
+  }),
 }));
 const importHighlightsMock = vi.fn();
 vi.mock('../../src/importHighlights', () => ({
@@ -115,7 +117,7 @@ describe('IBookHighlightsPlugin', () => {
     test('Should show OverwriteBookModal on start without creating a backup when backup is disabled', async () => {
       mockLoadData.mockResolvedValueOnce({ importOnStart: true, backup: false } as any);
 
-      const openMock = vi.fn();
+      const openMock = vi.fn(function (this: any) {});
       const { OverwriteBookModal } = await import('../../src/modals/overwriteConsent');
       vi.spyOn(OverwriteBookModal.prototype, 'open').mockImplementation(openMock);
 
@@ -196,7 +198,7 @@ describe('IBookHighlightsPlugin', () => {
     test('Should show OverwriteBookModal on ribbon icon click if backup setting is disabled', async () => {
       mockLoadData.mockResolvedValueOnce({ backup: false } as any);
 
-      const openMock = vi.fn();
+      const openMock = vi.fn(function (this: any) {});
       const { OverwriteBookModal } = await import('../../src/modals/overwriteConsent');
       vi.spyOn(OverwriteBookModal.prototype, 'open').mockImplementation(openMock);
 
@@ -234,7 +236,7 @@ describe('IBookHighlightsPlugin', () => {
     test('Should show OverwriteBookModal on addImportAllBooksCommand if backup setting is disabled', async () => {
       mockLoadData.mockResolvedValueOnce({ backup: false } as any);
 
-      const openMock = vi.fn();
+      const openMock = vi.fn(function (this: any) {});
       const { OverwriteBookModal } = await import('../../src/modals/overwriteConsent');
       vi.spyOn(OverwriteBookModal.prototype, 'open').mockImplementation(openMock);
 
@@ -250,7 +252,7 @@ describe('IBookHighlightsPlugin', () => {
     test('Should show book search modal on addImportOneBookCommand', async () => {
       mockLoadData.mockResolvedValueOnce({} as any);
 
-      const openMock = vi.fn();
+      const openMock = vi.fn(function (this: any) {});
       const { IBookHighlightsPluginSearchModal } = await import('../../src/modals/searchSuggestions');
       vi.spyOn(IBookHighlightsPluginSearchModal.prototype, 'open').mockImplementation(openMock);
       await plugin.onload();

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { App, TFile } from 'obsidian';
+import { App, TFile, TFolder } from 'obsidian';
 import path from 'path';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import type { IBookHighlightsPluginSettings } from '../../src/types';
@@ -115,5 +115,34 @@ describe('importHighlights', () => {
     vi.spyOn(vaultManagement, 'createBookFile').mockRejectedValueOnce(new Error('File write failed'));
 
     await expect(importHighlights(vaultManagement, mockSettings)).rejects.toThrow(/file operation\(s\) failed during import/);
+  });
+
+  test('Should not create highlights folder if it already exists', async () => {
+    const vaultManagement = new VaultManagement(mockApp, mockSettings);
+
+    vi.spyOn(annotationProcessing, 'aggregateBooksWithAnnotations').mockResolvedValue([aggregatedBooksAndAnnotations[0]]);
+    vi.spyOn(vaultManagement, 'getHighlightsFolderPath').mockReturnValue({ path: 'ibooks-highlights' } as TFolder);
+
+    const createHighlightsFolderSpy = vi.spyOn(vaultManagement, 'createHighlightsFolder');
+    const createBookFileSpy = vi.spyOn(vaultManagement, 'createBookFile');
+
+    await importHighlights(vaultManagement, mockSettings);
+
+    expect(createHighlightsFolderSpy).not.toHaveBeenCalled();
+    expect(createBookFileSpy).toHaveBeenCalled();
+  });
+
+  test('Should not process files if importMode is neither create nor modify', async () => {
+    const vaultManagement = new VaultManagement(mockApp, mockSettings);
+
+    vi.spyOn(annotationProcessing, 'aggregateBooksWithAnnotations').mockResolvedValue([aggregatedBooksAndAnnotations[0]]);
+
+    const createBookFileSpy = vi.spyOn(vaultManagement, 'createBookFile');
+    const modifyBookFileSpy = vi.spyOn(vaultManagement, 'modifyBookFile');
+
+    await importHighlights(vaultManagement, mockSettings, 'invalid' as any);
+
+    expect(createBookFileSpy).not.toHaveBeenCalled();
+    expect(modifyBookFileSpy).not.toHaveBeenCalled();
   });
 });
