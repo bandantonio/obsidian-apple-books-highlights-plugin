@@ -24,7 +24,7 @@ describe('Default settings', () => {
     expect(defaultPluginSettings.importOnStart).toBe(false);
     expect(defaultPluginSettings.highlightsSortingCriterion).toBe('creationDateOldToNew');
     expect(defaultPluginSettings.template).toBe(defaultTemplate);
-    expect(defaultPluginSettings.filenameTemplate).toBe('bookTitle');
+    expect(defaultPluginSettings.filenameTemplate).toBe('{{{bookTitle}}}');
   });
 
   test('Should check that default template contains the expected variables with proper escaping', () => {
