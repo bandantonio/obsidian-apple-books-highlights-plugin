@@ -1,10 +1,10 @@
 {
-  "id": "apple-books-import-highlights",
-  "name": "Apple Books - Import Highlights",
-  "version": "1.8.0",
-  "minAppVersion": "0.15.0",
-  "description": "Import your Apple Books highlights and notes to Obsidian.",
-  "author": "bandantonio",
-  "authorUrl": "https://github.com/bandantonio",
-  "isDesktopOnly": true
+	"id": "apple-books-import-highlights",
+	"name": "Apple Books - Import Highlights",
+	"version": "1.8.1",
+	"minAppVersion": "0.15.0",
+	"description": "Import your Apple Books highlights and notes to Obsidian.",
+	"author": "bandantonio",
+	"authorUrl": "https://github.com/bandantonio",
+	"isDesktopOnly": true
 }

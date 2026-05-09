@@ -36,7 +36,7 @@ export const defaultPluginSettings: IBookHighlightsPluginSettings = {
   importOnStart: false,
   highlightsSortingCriterion: 'creationDateOldToNew',
   template: defaultTemplate,
-  filenameTemplate: allowedFilenameTemplateVariables[0],
+  filenameTemplate: `{{{${allowedFilenameTemplateVariables[0]}}}}`,
   keepMeSectionOpeningDelimiter: '%% keep-me %%',
   keepMeSectionClosingDelimiter: '%% /keep-me %%',
   keepMeSectionData: {},
@@ -189,7 +189,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
           }
           el.createEl('br');
           // The first variable is the default one
-          el.appendText(`Default: {{{${defaultPluginSettings.filenameTemplate}}}}`);
+          el.appendText(`Default: ${defaultPluginSettings.filenameTemplate}`);
         }),
       )
       .setClass('ibooks-highlights-file-naming-template');
@@ -199,7 +199,7 @@ export class IBookHighlightsSettingTab extends PluginSettingTab {
         .setPlaceholder('Naming template for highlight files')
         .setValue(this.plugin.settings.filenameTemplate)
         .onChange(async (value) => {
-          const valueToSet = value === '' ? `{{{${defaultPluginSettings.filenameTemplate}}}}` : value;
+          const valueToSet = value === '' ? defaultPluginSettings.filenameTemplate : value;
           this.plugin.settings.filenameTemplate = valueToSet;
 
           await this.plugin.saveSettings();
