@@ -26,7 +26,7 @@ describe('Plugin information', () => {
   });
 
   test('check minimum Obsidian version', ({ manifest }) => {
-    expect(manifest.minAppVersion).toEqual('0.15.0');
+    expect(manifest.minAppVersion).toEqual('1.5.7');
   });
 
   test('Check plugin id, name and description', ({ manifest }) => {
