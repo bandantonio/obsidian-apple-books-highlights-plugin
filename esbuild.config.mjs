@@ -1,5 +1,5 @@
-import builtins from 'builtin-modules';
 import * as esbuild from 'esbuild';
+import { builtinModules } from 'node:module';
 import process from 'process';
 
 const banner = `/*
@@ -30,7 +30,7 @@ const buildOptions = {
     '@lezer/common',
     '@lezer/highlight',
     '@lezer/lr',
-    ...builtins,
+    ...builtinModules,
   ],
   format: 'cjs',
   logLevel: 'info',
