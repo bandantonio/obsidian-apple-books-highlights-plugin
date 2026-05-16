@@ -10,7 +10,7 @@ export const backupAndImport = async (plugin: IBookHighlightsPlugin, settings: I
       await plugin.vault.backupAllHighlights();
       await importHighlights(plugin.vault, settings, importMode);
       showSuccessfulImportNotice();
-    } catch (error: any) {
+    } catch (error) {
       showFailedImportNotice(plugin.manifest.name);
       showErrorInConsole(plugin.manifest.name, error);
     }

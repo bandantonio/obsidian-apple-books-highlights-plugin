@@ -21,7 +21,7 @@ export const importHighlights = async (
 
   const fileOperations = [];
 
-  for await (const bookWithAnnotations of aggregatedBooksAndAnnotations) {
+  for (const bookWithAnnotations of aggregatedBooksAndAnnotations) {
     const preCompiledContent = precompiledTemplate(bookWithAnnotations);
     const compiledFilename = precompiledFilenameTemplate(bookWithAnnotations);
 
@@ -54,9 +54,9 @@ export const importHighlights = async (
   const rejected = results.filter((result): result is PromiseRejectedResult => result.status === 'rejected');
 
   if (rejected.length > 0) {
-    const aggregatedError = new Error(`Apple Books - Import Highlights: ${rejected.length} file operation(s) failed during import.`);
-
-    (aggregatedError as any).causes = rejected.map((r) => r.reason);
-    throw aggregatedError;
+    throw new AggregateError(
+      rejected.map((result) => result.reason),
+      `Apple Books - Import Highlights: ${rejected.length} file operation(s) failed during import.`,
+    );
   }
 };

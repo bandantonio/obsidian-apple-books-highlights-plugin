@@ -39,52 +39,61 @@ export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSugge
   }
 
   renderSuggestion(book: IBookWithAnnotations, el: HTMLElement) {
-    el.createEl('div', { text: book.bookTitle });
+    el.createDiv({ text: book.bookTitle });
     el.createEl('small', { text: book.bookAuthor });
   }
 
-  async onChooseSuggestion(book: IBookWithAnnotations) {
-    const isBackupEnabled = this.plugin.settings.backup;
+  onChooseSuggestion(book: IBookWithAnnotations, _evt: MouseEvent | KeyboardEvent): void {
+    void this.handleChooseSuggestion(book);
+  }
 
-    const doesHighlightsFolderExist = Boolean(this.plugin.vault.getHighlightsFolderPath());
+  private async handleChooseSuggestion(book: IBookWithAnnotations): Promise<void> {
+    try {
+      const isBackupEnabled = this.plugin.settings.backup;
 
-    if (!doesHighlightsFolderExist) {
-      await this.plugin.vault.createHighlightsFolder();
-    }
+      const doesHighlightsFolderExist = Boolean(this.plugin.vault.getHighlightsFolderPath());
 
-    const precompiledTemplate = compileTemplate(this.plugin.settings.template);
-    const precompiledFilenameTemplate = compileTemplate(this.plugin.settings.filenameTemplate);
-    const preCompiledContent = precompiledTemplate(book);
-    const compiledFilename = precompiledFilenameTemplate(book);
+      if (!doesHighlightsFolderExist) {
+        await this.plugin.vault.createHighlightsFolder();
+      }
 
-    const file = this.plugin.vault.getFilePath(compiledFilename);
-    const doesBookFileExist = Boolean(file);
+      const precompiledTemplate = compileTemplate(this.plugin.settings.template);
+      const precompiledFilenameTemplate = compileTemplate(this.plugin.settings.filenameTemplate);
+      const preCompiledContent = precompiledTemplate(book);
+      const compiledFilename = precompiledFilenameTemplate(book);
 
-    const keepMeSectionContent = getKeepMeSectionDataFromSettings(compiledFilename, this.plugin.settings);
+      const file = this.plugin.vault.getFilePath(compiledFilename);
+      const doesBookFileExist = Boolean(file);
 
-    let compiledContent = preCompiledContent;
-    if (keepMeSectionContent) {
-      compiledContent = embedKeepMeSectionDataIntoBookFile(keepMeSectionContent, preCompiledContent, this.plugin.settings);
-    }
+      const keepMeSectionContent = getKeepMeSectionDataFromSettings(compiledFilename, this.plugin.settings);
 
-    // File may not exist when the filename template was changed between imports
-    // or when the book was renamed to the title that doesn't match the defined template.
-    if (!doesBookFileExist) {
-      await this.plugin.vault.createBookFile(compiledFilename, compiledContent);
-    }
+      let compiledContent = preCompiledContent;
+      if (keepMeSectionContent) {
+        compiledContent = embedKeepMeSectionDataIntoBookFile(keepMeSectionContent, preCompiledContent, this.plugin.settings);
+      }
 
-    if (isBackupEnabled && doesBookFileExist) {
-      await this.plugin.vault.backupBookFile(file!);
-      await this.plugin.vault.createBookFile(compiledFilename, compiledContent);
-    }
+      // File may not exist when the filename template was changed between imports
+      // or when the book was renamed to the title that doesn't match the defined template.
+      if (!doesBookFileExist) {
+        await this.plugin.vault.createBookFile(compiledFilename, compiledContent);
+      }
 
-    if (!isBackupEnabled && doesBookFileExist) {
-      const fileDetails = {
-        file: file!,
-        compiledContent,
-      };
+      if (isBackupEnabled && doesBookFileExist) {
+        await this.plugin.vault.backupBookFile(file!);
+        await this.plugin.vault.createBookFile(compiledFilename, compiledContent);
+      }
 
-      new OverwriteBookModal(this.app, this.plugin, fileDetails).open();
+      if (!isBackupEnabled && doesBookFileExist) {
+        const fileDetails = {
+          file: file!,
+          compiledContent,
+        };
+
+        new OverwriteBookModal(this.app, this.plugin, fileDetails).open();
+      }
+    } catch (error) {
+      showFailedImportNotice(this.plugin.manifest.name);
+      showErrorInConsole(this.plugin.manifest.name, error);
     }
   }
 }
