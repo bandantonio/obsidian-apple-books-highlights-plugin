@@ -39,7 +39,7 @@ export class IBookHighlightsPluginSearchModal extends IBookHighlightsPluginSugge
   }
 
   renderSuggestion(book: IBookWithAnnotations, el: HTMLElement) {
-    el.createEl('div', { text: book.bookTitle });
+    el.createDiv({ text: book.bookTitle });
     el.createEl('small', { text: book.bookAuthor });
   }
 

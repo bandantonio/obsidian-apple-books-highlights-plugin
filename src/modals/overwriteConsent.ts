@@ -27,9 +27,9 @@ export class OverwriteBookModal extends Modal {
       contentEl.createEl('p', { text: `${bookToOverwrite.file.name}`, cls: 'modal-rewrite-book-title' });
       contentEl.createEl('p', { text: 'Would you like to proceed with the overwrite?' });
     } else {
-      contentEl.createEl('span', { text: 'Bulk import will overwrite' });
-      contentEl.createEl('span', { text: ' ALL THE BOOKS ', cls: 'modal-rewrite-all-books' });
-      contentEl.createEl('span', { text: 'in your highlights folder' });
+      contentEl.createSpan({ text: 'Bulk import will overwrite' });
+      contentEl.createSpan({ text: ' ALL THE BOOKS ', cls: 'modal-rewrite-all-books' });
+      contentEl.createSpan({ text: 'in your highlights folder' });
       contentEl.createEl('p', { text: 'Would you like to proceed with the overwrite?' });
     }
 
