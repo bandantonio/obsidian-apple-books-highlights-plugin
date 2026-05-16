@@ -73,7 +73,7 @@ function addImportOneBookCommand(plugin: IBookHighlightsPlugin) {
     callback: () => {
       try {
         new IBookHighlightsPluginSearchModal(plugin.app, plugin).open();
-      } catch (error: any) {
+      } catch (error) {
         showFailedImportNotice(plugin.manifest.name);
         showErrorInConsole(plugin.manifest.name, error);
       }
