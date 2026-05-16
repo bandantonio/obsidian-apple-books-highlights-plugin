@@ -21,7 +21,7 @@ export const importHighlights = async (
 
   const fileOperations = [];
 
-  for await (const bookWithAnnotations of aggregatedBooksAndAnnotations) {
+  for (const bookWithAnnotations of aggregatedBooksAndAnnotations) {
     const preCompiledContent = precompiledTemplate(bookWithAnnotations);
     const compiledFilename = precompiledFilenameTemplate(bookWithAnnotations);
 
